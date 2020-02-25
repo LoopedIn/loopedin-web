@@ -1,0 +1,60 @@
+{
+  "name": "cookie-crumbs-final-project",
+  "version": "1.0.0",
+  "description": "Duplicate repo created by mistake.",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test mocha",
+    "grade": "cross-env NODE_ENV=test mocha test/regression_tests.js",
+    "test-for-coverage": "npm test -- -R min || exit 0",
+    "style": "npm run test -- test/style.js",
+    "coverage": "cross-env NODE_ENV=test nyc --check-coverage=true --reporter=lcov --reporter=text npm run test-for-coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckanich-classrooms/cookie-crumbs-final-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ckanich-classrooms/cookie-crumbs-final-project/issues"
+  },
+  "homepage": "https://github.com/ckanich-classrooms/cookie-crumbs-final-project#readme",
+  "dependencies": {
+    "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
+    "express": "~4.16.1",
+    "express-handlebars": "^3.1.0",
+    "express-session": "^1.17.0",
+    "express-sessions": "^1.0.6",
+    "hbs": "^4.1.0",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "axios": "^0.19.2",
+    "axios-cookiejar-support": "^0.5.1",
+    "cross-env": "^7.0.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "glob": "^7.1.6",
+    "mocha": "^7.0.1",
+    "nyc": "^15.0.0",
+    "prettier": "1.19.1",
+    "tough-cookie": "^3.0.1"
+  },
+  "nyc": {
+    "branches": 80,
+    "lines": 80,
+    "functions": 100,
+    "statements": 80
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always"
+  }
+}
