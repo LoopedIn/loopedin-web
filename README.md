@@ -91,8 +91,10 @@ By this checkpoint we will add UI functionalities for the API end points we crea
 
 ## Specialization deliverables
 
- 1. Cloud: Documentation of steps to structuring app to communicate with cloud
-   environment
+ 1. **Cloud**: Adding GCP libraries to app, Documentation of steps to structuring app to communicate with cloud
+   environment. We will use mongoDB atlas integrated with GCP.
+ 2. **DevOps**: We will implement a CI/CD pipeline for smooth deployment using Docker and Kubernetes.
+ 3. **FrontEnd**: We will use a JS framework like React and explore styling frameworks Bootstrap/Material UI.
    
 ## Security analysis
 
