@@ -1,26 +1,29 @@
 {
-  "name": "cookie-crumbs-final-project",
+  "name": "final-project-cookie-crumbs-1",
   "version": "1.0.0",
-  "description": "Duplicate repo created by mistake.",
-  "main": "index.js",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha",
-    "grade": "cross-env NODE_ENV=test mocha test/regression_tests.js",
+    "regression": "cross-env NODE_ENV=test mocha test/regression_tests.js",
     "test-for-coverage": "npm test -- -R min || exit 0",
     "style": "npm run test -- test/style.js",
     "coverage": "cross-env NODE_ENV=test nyc --check-coverage=true --reporter=lcov --reporter=text npm run test-for-coverage"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ckanich-classrooms/cookie-crumbs-final-project.git"
+    "url": "git+https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ckanich-classrooms/cookie-crumbs-final-project/issues"
+    "url": "https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1/issues"
   },
-  "homepage": "https://github.com/ckanich-classrooms/cookie-crumbs-final-project#readme",
+  "homepage": "https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1#readme",
   "dependencies": {
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
