@@ -1,0 +1,34 @@
+name: code quality
+
+on: [pull_request]
+
+jobs:
+  eslint_clean:
+    name: no linter problems
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - run: cd server    
+    - run: npm ci
+    - run: npm run style
+      env:
+        CI: true
+
+  coverage:
+    name: sufficient code coverage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - run: cd server    
+    - run: npm ci
+    - run: npm run coverage --silent
+      env:
+        CI: true

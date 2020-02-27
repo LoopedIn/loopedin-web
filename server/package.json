@@ -1,0 +1,35 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint ./",
+    "regression": "cross-env NODE_ENV=test mocha",
+    "start": "cross-env DEBUG=homework1* node lib/server.js",
+    "dboff": "killall mongod",
+    "watch": "nodemon index.js",
+    "db-init": "mkdir \\db",
+    "dbon-windows": "mongod --dbpath \\db",
+    "dbon": "mkdir -p ./db && mongod --dbpath ./db"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "http-errors": "^1.7.3",
+    "mocha": "^7.0.1",
+    "mongoose": "^5.9.2",
+    "prettier": "^1.19.1",
+    "superagent": "^5.2.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.0",
+    "eslint": "^6.8.0",
+    "jest": "^25.1.0"
+  }
+}
