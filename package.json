@@ -4,7 +4,8 @@
   "description": "TODO: Fill out this file with the following information",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "regression": "cross-env NODE_ENV=test mocha"
   },
   "repository": {
     "type": "git",
