@@ -1,60 +1,102 @@
-# {{TEAMNAME}} Final Project
 
-TODO: Fill out this file with the following information
+# Cookie-crumbs Final Project
 
+# LoopedIn
 
 ## Description
 
-TODO: An English language description of what your application does, intended for a developer
-audience. Pretend this is the real `README.md` for your app that will show up on GitHub: what do you
-want people to know about it? What does it do? Why should they use it/check it out/hack on it? This
-should be approximately two paragraphs. Take a look at the description of your favorite software
-repository for inspiration.
+The project is a lightweight social network that attempts to solve some of the problems with existing social network platforms by cutting down on features that make existing social networks unhealthy. LoopedIn remodels the UX behind sharing a post or information to make it easier for users to retain their privacy. Each post has to be tied to who they want to share it with (kind of like Google+ and circles).
+
+We also force the engagement with a post to be personal and organic. This means removing the idea of a ‘like’ button, and making a comment to a post as a personal message.
+
+To keep our target app realistic, the features we will provide our:-
+-   Post sharing
+-   Private messaging
+
+## We will support:
+
+-   User registration
+-   User authentication
+-   After a user logs in:-
+    -   User can send a message to another user (using an id)
+    -   User can view historical chat with another user
+    -   User can view all posts shared to them by other users (newsfeed equivalent).
+    -   User can respond to a post they see on the news feed. Response is taken to private chat. (Like whatsapp).
+    -   User can create a loop of friends.
+    -   User can edit/delete a loop.
+    -   User can make a post and choose the loops they want to share the post with.
+    -   User can view their own posts.
+    -   User can edit/delete their own post.
 
 ## Authors
 
-TODO: List group members, each group member must EITHER be marked "web programming novice" OR list a
-specialization - you don't need to implement it all yourself, but you do need to be in charge of
-getting it described and added. Your expertise self-evaluation is completely on the honor system.
-
-For instance:
 
 | Member | Web dev level | Specialization |
 | --- | --- | --- |
-| Ned the Novice | web programming novice | |
-| Isaac the Intermediate | Took IT 202, built something in php once | I want to learn about website performance so I will be adding performance tests and keeping a performance log. |
-| Edith the Expert | Interned as a web dev for the last 2 semesters | I will containerize the app and configure it to run within Kubernetes, integrate it with a CI/CD platform so that the deployed version is updated once all tests pass, and I will run a load test with several synthetic long-session users to demonstrate rolling updates to the code. |
+| **Shiva** | worked as a backend developer for 3 year | **DevOps** I want to implement a CI/CD pipeline for smooth deployment using Docker and Kubernetes |
+| **Suhan** | Worked as a Front End Developer for 2 years | **FrontEnd** I would like to learn a new JS framework like React and explore styling frameworks Bootstrap/Material UI |
+| **Arvind** | Performed Full-Stack web development for 1.8 years | **Cloud**: I would like to explore migrating an application to google cloud and check the performance difference |
+| **Krunal**| Web Programming Intermediate | **Security** I would like to learn about how to improve the security of the application |
+
+## Terminology:-
+
+-   **Loop:-**  A group (sort of like a mailing list) but visible only to the creator
+-   **Post:-** A message shared from user to a Loop (only text for now, media sharing will be explored)
+-   **Message:-** From user to user (traditional message)
 
 ## Deliverables for checkpoint 2
 
-Outline in English what the deliverables will be for checkpoint 2. Provide a concise list that is
-amenable to being translated into specific tests. Pro-tip: if you write that concise list here, you
-should be able to easily translate it into a collection of test suites.
 
-For each specialization, you must list specific checkpoints that are relevant to that particular specialization.
+The deliverables for checkpoint 2 will support a few functionalities via API and a few basic functionalities via UI.
+
+**Functionalities supported via API only:-**
+1.  Register user
+2.  Login user
+3.  Create/Read and Update a loop
+4.  Send a message from one user to another
+5.  Create a post
+6.  Read posts shared to user
+7.  Delete a post shared by the user.  
+      
+**Functionalities  supported via UI:-**
+1.  Register user
+2.  Login user
 
 ## Deliverables for checkpoint 4
 
-Outline in English what the deliverables will be for checkpoint 4. Reminder that this is not *due*
-until checkpoint 2, but failing to plan is planning to fail.
+By this checkpoint we will add UI functionalities for the API end points we created for checkpoint 2, and a few more features.
 
-For each specialization, you must list specific checkpoints that are relevant to that particular specialization.
+**New functionalities that will be supported via UI:-**
+ - Create/Read and Update a loop
+ - Create a post
+ - Send a message from one user to another (no socket/notification)
+ - Delete a post shared by the user.
+ - Messages accept plain text, with urls automatically converted into links (No other HTML is accepted in messages).
+ - Show unread messages
+
+**Other deliverables:-**
+ - Adding required test cases 
+ - Boilerplate for migrating app to use cloud resources
+
 
 ## Deliverables for final project
 
-Outline in English what the deliverables will be for the final checkpoint. This will should be
-similar to the **Description** above, but written out as an explicit checklist rather than a human
-readable description. Reminder that this is not *due* until checkpoint 4, but failing to plan is
-planning to fail.
-
-For each specialization, you must list specific checkpoints that are relevant to that particular specialization.
+**New functionalities that will be supported via UI:-**
+-   View news feed
+-   Reply to a post in the news feed
+-   Chat will use socket for instant messaging
+-   Deploying apps using DevOps and Testing
+-   Using Cloud-Native Functions
+    
 
 ## Specialization deliverables
 
-For each student/team adding a specialization, name that specialization and describe what
-functionality you will be adding.
-
+ 1. **Cloud**: Adding GCP libraries to app, Documentation of steps to structuring app to communicate with cloud
+   environment. We will use mongoDB atlas integrated with GCP.
+ 2. **DevOps**: We will implement a CI/CD pipeline for smooth deployment using Docker and Kubernetes.
+ 3. **FrontEnd**: We will use a JS framework like React and explore styling frameworks Bootstrap/Material UI.
+ 4. **Security**: We will implement security features mentioned in the Security analysis. Additionally, we will implement role-management, strong password security, configuring IAM roles in GCP, keeping secrets in secret store using GitHub actions.
+ 
 # Installation
 
-By the time you get to the end of the final project, this section should have a full set of
-instructions for how to spin up your app.
+We will fill this section in the future.
