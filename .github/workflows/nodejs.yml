@@ -12,8 +12,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - run: npm ci
-    - run: npm run style
+    - run: |
+          cd server   
+          npm ci
+          npm run style
       env:
         CI: true
 
@@ -26,7 +28,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - run: npm ci
-    - run: npm run coverage --silent
+    - run:  |
+          cd server     
+          npm ci
+          npm run coverage --silent
       env:
         CI: true
