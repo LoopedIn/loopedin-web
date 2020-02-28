@@ -1,0 +1,58 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint ./",
+    "test": "cross-env NODE_ENV=test mocha",
+    "regression": "cross-env NODE_ENV=test mocha test/regression_test.js",
+    "start": "cross-env DEBUG=homework1* node lib/server.js",
+    "dboff": "killall mongod",
+    "watch": "nodemon index.js",
+    "db-init": "mkdir \\db",
+    "dbon-windows": "mongod --dbpath \\db",
+    "dbon": "mkdir -p ./db && mongod --dbpath ./db",
+    "test-for-coverage": "npm test -- -R min || exit 0",
+    "style": "npm run test -- test/style.js",
+    "coverage": "cross-env NODE_ENV=test nyc --check-coverage=true --reporter=lcov --reporter=text npm run test-for-coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "http-errors": "^1.7.3",
+    "mongoose": "^5.9.2",
+    "superagent": "^5.2.2"
+  },
+  "devDependencies": {
+    "axios": "^0.19.2",
+    "axios-cookiejar-support": "^0.5.1",
+    "cross-env": "^7.0.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "glob": "^7.1.6",
+    "mocha": "^7.0.1",
+    "nyc": "^15.0.0",
+    "prettier": "1.19.1",
+    "tough-cookie": "^3.0.1"
+  },
+  "nyc": {
+    "branches": 80,
+    "lines": 80,
+    "functions": 100,
+    "statements": 80
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always"
+  }
+}
