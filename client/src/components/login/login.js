@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +13,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { loginUser } from "../../actions/";
 
 function Copyright() {
   return (
@@ -73,35 +76,48 @@ const CustomSignInSVG = withStyles({
   }
 })(LockOutlinedIcon);
 
-export default function loginSide() {
+const loginSide = props => {
   const classes = useStyles();
 
-  return (
-    <Grid container component="main" className={classes.root}>
-      <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Grid container>
-            <Grid item>
-              <Typography component="h1" variant="h3">
-                LoopedIn
-              </Typography>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    const { dispatch } = props;
+
+    dispatch(loginUser(email, password));
+  };
+
+  const { loginError, isAuthenticated } = props;
+
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
+  } else {
+    return (
+      <Grid container component="main" className={classes.root}>
+        <CssBaseline />
+        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <div className={classes.paper}>
+            <Grid container>
+              <Grid item>
+                <Typography component="h1" variant="h3">
+                  LoopedIn
+                </Typography>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item>
-              <Avatar className={classes.avatar}>
-                <CustomSignInSVG />
-              </Avatar>
+            <Grid container>
+              <Grid item>
+                <Avatar className={classes.avatar}>
+                  <CustomSignInSVG />
+                </Avatar>
+              </Grid>
+              <Grid item>
+                <Typography component="h1" variant="h5">
+                  Sign in
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Typography component="h1" variant="h5">
-                Sign in
-              </Typography>
-            </Grid>
-          </Grid>
-          <form className={classes.form} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
@@ -112,6 +128,7 @@ export default function loginSide() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={event => setEmail(event.target.value)}
             />
             <TextField
               variant="outlined"
@@ -123,6 +140,7 @@ export default function loginSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={event => setPassword(event.target.value)}
             />
             <Button
               type="submit"
@@ -130,6 +148,7 @@ export default function loginSide() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={handleSubmit}
             >
               Sign In
             </Button>
@@ -143,9 +162,18 @@ export default function loginSide() {
             <Box mt={5}>
               <Copyright />
             </Box>
-          </form>
-        </div>
+          </div>
+        </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+  }
+};
+
+function mapStateToProps(state) {
+  return {
+    isLoggingIn: state.auth.isLoggingIn,
+    loginError: state.auth.loginError,
+    isAuthenticated: state.auth.isAuthenticated
+  };
 }
+export default connect(mapStateToProps)(loginSide);
