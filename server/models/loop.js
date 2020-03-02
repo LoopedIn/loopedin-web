@@ -1,9 +1,11 @@
-const userConnectionsSchema = mongoose.Schema({
+const mongoose = require('mongoose');
+
+const userConnection = mongoose.Schema({
     userId: { type: String, required: true ,unique: true },
     friendIds: [String],
     listOfLoops: [String]
   });
-const loopSchema = mongoose.Schema({
+const loop = mongoose.Schema({
     loopId: { type: String, required: true ,unique: true },
     userId: { type: String, required: true },
     loopName: { type: String, required: true},
@@ -11,5 +13,6 @@ const loopSchema = mongoose.Schema({
     createdAt: { type: Date, default: () => new Date() }
 });
 
-const UserConnection = (module.exports = mongoose.model("userConnection", userConnectionsSchema));
-const Loop = (module.exports = mongoose.model("loop", loopSchema));
+const userConnectionSchema = mongoose.model("userConnection", userConnection);
+  const loopSchema = mongoose.model("loop", loop);
+module.exports = { Loop: loopSchema, userConnection: userConnectionSchema}

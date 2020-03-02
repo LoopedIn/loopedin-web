@@ -1,12 +1,11 @@
-let mongoose = require('mongoose'),
-  express = require('express'),
-  router = express.Router();
+let express = require('express');
+let router = express.Router();
 
-let postSchema = require('../models/post.js');
+// eslint-disable-next-line no-unused-vars
+let { Post, Message, PostAccess}  = require('../models/post.js');
 
 router.route('/create-post').post((req, res, next) => {
-    console.log(req.body)
-  postSchema.create(req.body, (error, data) => {
+    Post.create(req.body, (error, data) => {
     if (error) {
         console.log(error)
       return next(error)
@@ -17,8 +16,8 @@ router.route('/create-post').post((req, res, next) => {
   })
 });
 
-router.route('/').get((req, res) => {
-  postSchema.find((error, data) => {
+router.route('/').get((req, res,next) => {
+  Post.find((error, data) => {
     if (error) {
       return next(error)
     } else {
@@ -28,12 +27,11 @@ router.route('/').get((req, res) => {
 })
 
 router.route('/update-post/:id').put((req, res, next) => {
-  postSchema.findByIdAndUpdate(req.params.id, {
+  Post.findOneAndUpdate({"postId": req.params.id}, {
     $set: req.body
   }, (error, data) => {
     if (error) {
       return next(error);
-      console.log(error)
     } else {
       res.json(data)
       console.log('Post updated successfully !')
@@ -42,7 +40,7 @@ router.route('/update-post/:id').put((req, res, next) => {
 })
 
 router.route('/delete-post/:id').delete((req, res, next) => {
-  postSchema.findByIdAndRemove(req.params.id, (error, data) => {
+  Post.findOneAndDelete({'postId': req.params.id} , (error, data) => {
     if (error) {
       return next(error);
     } else {

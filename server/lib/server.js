@@ -1,6 +1,6 @@
 'use strict';
 
-const cors = require('cors');
+//const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -11,6 +11,7 @@ const app = express();
 const router = express.Router();
 const indexRouter = require('../routes/post.routes');
 const loginTestsRouter = require('../routes/login_test');
+
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -38,6 +39,8 @@ function normalizePort(val) {
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 app.use('/login/', loginTestsRouter);
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
 app.use("/", indexRouter);
 
 /**

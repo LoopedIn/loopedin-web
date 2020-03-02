@@ -1,30 +1,36 @@
 const mongoose = require('mongoose');
 
-const postSchema = mongoose.Schema({
+const post = mongoose.Schema({
     postId: { type: String, required: true ,unique: true },
     senderId: { type: String, required: true},
     receivingUserIds: [ String ] ,
     receivingLoopIds: [ String ],
     postType: {type: String, required: true, enum: ['text', 'image', 'video']},
-    postContent: {type: String, reuired: true },
+    postContent: {type: String, required: true },
     created: { type: Date, default: () => new Date() }
   });
   
-  const messageSchema = mongoose.Schema({
+  const message = mongoose.Schema({
     messageId: { type: String, required: true ,unique: true },
     senderId: { type: String, required: true},
     receivingUserId: {type:  String , required: true},
     messageType: {type: String, required: true, enum: ['text', 'yo', 'reply']},
-    messageContent: {type: String, reuired: true },
+    messageContent: {type: String, required: true },
     created: { type: Date, default: () => new Date() },
     readAt: {type: Date}
   });
   
-  const postAccessSchema = mongoose.Schema({
+  const postAccess = mongoose.Schema({
     postId: { type: String, required: true },
     userId: { type: String, required: true},
   });
 
-  const Post = (module.exports = mongoose.model("post", postSchema));
-  const Message = (module.exports = mongoose.model("message", messageSchema));
-  const PostAccess = (module.exports = mongoose.model("postAccess", postAccessSchema));
+  const postSchema = mongoose.model("post", post);
+  const messageSchema = mongoose.model("message", message);
+  const postAccessSchema = mongoose.model("postAccess", postAccess);
+
+module.exports = { 
+  Post: postSchema, 
+  Message: messageSchema , 
+  PostAccess: postAccessSchema
+}
