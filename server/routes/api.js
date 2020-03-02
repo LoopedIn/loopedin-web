@@ -1,28 +1,15 @@
 let express = require('express');
 let router = express.Router();
-const admin = require('firebase-admin');
+// const admin = require('firebase-admin');
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB2yQRZalYfdWRL9dFZMuSrRAAkxYyCEUE",
-  authDomain: "loopedin-269607.firebaseapp.com",
-  databaseURL: "https://loopedin-269607.firebaseio.com",
-  projectId: "loopedin-269607",
-  storageBucket: "loopedin-269607.appspot.com",
-  messagingSenderId: "547626597392",
-  appId: "1:547626597392:web:8e8db58b889a8ffc779e95",
-  measurementId: "G-MXT552M6F7"
-};
-
-admin.initializeApp({
-  databaseURL: 'https://<DATABASE_NAME>.firebaseio.com',
-  credential: admin.credential.cert({
-      projectId: '<PROJECT_ID>',
-      clientEmail: 'foo@<PROJECT_ID>.iam.gserviceaccount.com',
-      privateKey: '-----BEGIN PRIVATE KEY-----\n<KEY>\n-----END PRIVATE KEY-----\n'
-  })
-});
-
-admin.initializeApp(firebaseConfig);
+// admin.initializeApp({
+//   databaseURL: 'https://<DATABASE_NAME>.firebaseio.com',
+//   credential: admin.credential.cert({
+//       projectId: '<PROJECT_ID>',
+//       clientEmail: 'foo@<PROJECT_ID>.iam.gserviceaccount.com',
+//       privateKey: '-----BEGIN PRIVATE KEY-----\n<KEY>\n-----END PRIVATE KEY-----\n'
+//   })
+// });
 
 // let auth = require('../auth_modules/server_auth');
 
@@ -30,37 +17,37 @@ admin.initializeApp(firebaseConfig);
 // router.use(auth);
 
 // eslint-disable-next-line no-unused-vars
-let { Post, Message, PostAccess}  = require('../models/post.js');
+let { Post, Message, PostAccess, Test}  = require('../models/post.js');
 
-router.route('/login/sessionLogin').post((req, res) => {
-  // Get the ID token passed and the CSRF token.
-  const idToken = req.body.idToken.toString();
-  // const csrfToken = req.body.csrfToken.toString();
-  // // Guard against CSRF attacks.
-  // if (csrfToken !== req.cookies.csrfToken) {
-  //   res.status(401).send('UNAUTHORIZED REQUEST!');
-  //   return;
-  // }
-  console.log(idToken);
-  // Set session expiration to 5 days.
-  const expiresIn = 60 * 60 * 24 * 5 * 1000;
+// router.route('/login/sessionLogin').post((req, res) => {
+//   // Get the ID token passed and the CSRF token.
+//   const idToken = req.body.idToken.toString();
+//   // const csrfToken = req.body.csrfToken.toString();
+//   // // Guard against CSRF attacks.
+//   // if (csrfToken !== req.cookies.csrfToken) {
+//   //   res.status(401).send('UNAUTHORIZED REQUEST!');
+//   //   return;
+//   // }
+//   console.log(idToken);
+//   // Set session expiration to 5 days.
+//   const expiresIn = 60 * 60 * 24 * 5 * 1000;
 
-  admin
-    .auth()
-    .createSessionCookie(idToken, { expiresIn })
-    .then(
-      (sessionCookie) => {
-        // Set cookie policy for session cookie.
-        const options = { maxAge: expiresIn, httpOnly: true, secure: true };
-        res.cookie('session', sessionCookie, options);
-        res.end(JSON.stringify({ status: 'success' }));
-      },
-      (error) => {
-        console.log(error);
-        res.status(401).send('UNAUTHORIZED REQUEST!');
-      },
-    );
-});
+//   admin
+//     .auth()
+//     .createSessionCookie(idToken, { expiresIn })
+//     .then(
+//       (sessionCookie) => {
+//         // Set cookie policy for session cookie.
+//         const options = { maxAge: expiresIn, httpOnly: true, secure: true };
+//         res.cookie('session', sessionCookie, options);
+//         res.end(JSON.stringify({ status: 'success' }));
+//       },
+//       (error) => {
+//         console.log(error);
+//         res.status(401).send('UNAUTHORIZED REQUEST!');
+//       },
+//     );
+// });
 
 
 router.route('/create-post').post((req, res, next) => {
@@ -72,6 +59,18 @@ router.route('/create-post').post((req, res, next) => {
       console.log(data)
       res.json(data)
     }
+  })
+});
+
+router.route('/test').post((req, res, next) =>{
+  Test.create(req.body, (error, data) =>{
+    if (error) {
+      console.log(error)
+    return next(error)
+  } else {
+    console.log(data)
+    res.json(data)
+  }
   })
 });
 
