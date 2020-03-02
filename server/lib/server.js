@@ -9,7 +9,7 @@ const http = require('http');
 
 const app = express();
 const router = express.Router();
-
+var indexRouter = require('../routes/post.routes');
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -36,7 +36,7 @@ function normalizePort(val) {
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-
+app.use("/", indexRouter);
 /**
  * Create HTTP server.
  */
@@ -86,3 +86,9 @@ function onListening() {
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+/*
+* Creating Mongodb connection
+*/
+mongoose.connect('mongodb://localhost/InLooped', { useNewUrlParser: true,useUnifiedTopology: true  })
+  .then(() =>  console.log('connection succesful'))
+  .catch((err) => console.error(err));
