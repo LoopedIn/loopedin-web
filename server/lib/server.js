@@ -2,14 +2,15 @@
 
 //const cors = require('cors');
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const debug = require('debug')('homework1-server');
 const http = require('http');
 
 const app = express();
-const router = express.Router();
-const indexRouter = require('../routes/post.routes');
+app.use(cors());
+const indexRouter = require('../routes/api');
 const loginTestsRouter = require('../routes/login_test');
 
 /**
