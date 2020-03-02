@@ -89,6 +89,7 @@ export const loginUser = (email, password) => dispatch => {
     .signInWithEmailAndPassword(email, password)
     .then(user => {
       console.log(user);
+      await loginTester(user);
       dispatch(receiveLogin(user));
     })
     .catch(error => {
@@ -96,6 +97,15 @@ export const loginUser = (email, password) => dispatch => {
       dispatch(loginError());
     });
 };
+
+const loginTester = async (user) =>{
+  const csrfToken = getCookie('csrfToken')
+  postIdTokenToSessionLogin('/sessionLogin', idToken, csrfToken)
+    .then(() => {
+      fetch('http://localhost:3000/login/post_login_req/')
+        .then(response => console.log(response));
+    });
+}
 
 export const logoutUser = () => dispatch => {
   dispatch(requestLogout());

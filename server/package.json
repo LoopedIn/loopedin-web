@@ -25,6 +25,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "firebase-admin": "^8.9.2",
     "http-errors": "^1.7.3",
     "mongoose": "^5.9.2",
     "superagent": "^5.2.2"
