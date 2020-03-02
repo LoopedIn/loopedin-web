@@ -9,7 +9,7 @@ const http = require('http');
 
 const app = express();
 const router = express.Router();
-
+var indexRouter = require('../routes/post.routes');
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -36,7 +36,7 @@ function normalizePort(val) {
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-
+app.use("/", indexRouter);
 /**
  * Create HTTP server.
  */

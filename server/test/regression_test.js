@@ -54,7 +54,7 @@ describe('application', async () => {
 
     describe('Post sharing', async () => {
       it(' Create a post and share with a list of loops', async () => {
-        return client.post("/creat-post", { postId: "testpost", postId: "test",
+        return client.post("/create-post", { postId: "testpost", postId: "test",
         senderId: "sender",
         receivingUserIds: "receiver" ,
         receivingLoopIds: "loop",

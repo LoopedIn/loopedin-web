@@ -5,8 +5,10 @@ let mongoose = require('mongoose'),
 let postSchema = require('../models/post.js');
 
 router.route('/create-post').post((req, res, next) => {
+    console.log(req.body)
   postSchema.create(req.body, (error, data) => {
     if (error) {
+        console.log(error)
       return next(error)
     } else {
       console.log(data)
