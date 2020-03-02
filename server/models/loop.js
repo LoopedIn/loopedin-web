@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const userConnection = mongoose.Schema({
     userId: { type: String, required: true ,unique: true },
     friendIds: [String],

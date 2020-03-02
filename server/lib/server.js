@@ -1,6 +1,6 @@
 'use strict';
 
-const cors = require('cors');
+//const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -8,7 +8,7 @@ const debug = require('debug')('homework1-server');
 const http = require('http');
 
 const app = express();
-const router = express.Router();
+//const router = express.Router();
 var indexRouter = require('../routes/post.routes');
 /**
  * Normalize a port into a number, string, or false.

@@ -29,4 +29,8 @@ const post = mongoose.Schema({
   const messageSchema = mongoose.model("message", message);
   const postAccessSchema = mongoose.model("postAccess", postAccess);
 
-  module.exports = { Post: postSchema, Message: messageSchema , PostAccess: postAccessSchema}
+module.exports = { 
+  Post: postSchema, 
+  Message: messageSchema , 
+  PostAccess: postAccessSchema
+}
