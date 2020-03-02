@@ -1,3 +1,14 @@
+var axios = require("axios");
+
+const PORT = 3000;
+const client = axios.create({
+  withCredentials: true,
+  baseURL: `http://localhost:${PORT}/`,
+  validateStatus: function(status) {
+    /* always resolve on any HTTP status */
+    return true;
+  }
+});
 describe('application', async () => {
   describe('sanity', async () => {
     it('can successfully send an index', async () => {});
@@ -42,7 +53,15 @@ describe('application', async () => {
     });
 
     describe('Post sharing', async () => {
-      it(' Create a post and share with a list of loops', async () => {});
+      it(' Create a post and share with a list of loops', async () => {
+        return client.post("/creat-post", { postId: "testpost", postId: "test",
+        senderId: "sender",
+        receivingUserIds: "receiver" ,
+        receivingLoopIds: "loop",
+        postType: "image",
+        postContent:"helloworld"});
+
+      });
       it('Incorrect loop names in above request (not allowed)', async () => {});
       it('User views their own posts ', async () => {});
       it('User deletes their post', async () => {});

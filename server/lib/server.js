@@ -86,3 +86,9 @@ function onListening() {
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+/*
+* Creating Mongodb connection
+*/
+mongoose.connect('mongodb://localhost/InLooped', { useNewUrlParser: true,useUnifiedTopology: true  })
+  .then(() =>  console.log('connection succesful'))
+  .catch((err) => console.error(err));
