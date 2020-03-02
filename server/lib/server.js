@@ -1,9 +1,7 @@
 'use strict';
 
-//const cors = require('cors');
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const debug = require('debug')('homework1-server');
 const http = require('http');
