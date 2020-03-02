@@ -18,23 +18,6 @@ describe('application', async () => {
     it('sends the raw index.html', async () => {});
   });
 
-  describe('unauthenticated state', async () => {
-    describe('registration', async () => {
-      describe('user attempts to register with invalid credentials', async () => {
-        it('duplicate user name (not allowed)', async () => {});
-        it('incorrect user name (not allowed)', async () => {});
-        it('weak password (not allowed)', async () => {});
-      });
-
-      it('user registers with sufficient information ', async () => {});
-    });
-
-    describe('login', async () => {
-      it('user attempts to login with incorrect password (not allowed)', async () => {});
-      it('user logs in with correct password', async () => {});
-    });
-  });
-
   describe('authenticated state', async () => {
     describe('Managing friends and loops', async () => {
       it('Add a user who is missing (not allowed)', async () => {});
@@ -54,7 +37,7 @@ describe('application', async () => {
 
     describe('Post sharing', async () => {
       it(' Create a post and share with a list of loops', async () => {
-        return client.post("/create-post", { postId: "testpost", postId: "test",
+        return client.post("/create-post", { postId: "testpost",
         senderId: "sender",
         receivingUserIds: "receiver" ,
         receivingLoopIds: "loop",

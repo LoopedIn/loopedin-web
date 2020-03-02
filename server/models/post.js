@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const post = mongoose.Schema({
+  const post = mongoose.Schema({
     postId: { type: String, required: true ,unique: true },
     senderId: { type: String, required: true},
     receivingUserIds: [ String ] ,
@@ -9,6 +9,10 @@ const post = mongoose.Schema({
     postContent: {type: String, required: true },
     created: { type: Date, default: () => new Date() }
   });
+
+  const test = mongoose.Schema({
+    testVal: {type: String, required: true, unique: true}
+  })
   
   const message = mongoose.Schema({
     messageId: { type: String, required: true ,unique: true },
@@ -28,9 +32,11 @@ const post = mongoose.Schema({
   const postSchema = mongoose.model("post", post);
   const messageSchema = mongoose.model("message", message);
   const postAccessSchema = mongoose.model("postAccess", postAccess);
+  const testSchema = mongoose.model("test", test);
 
 module.exports = { 
   Post: postSchema, 
   Message: messageSchema , 
-  PostAccess: postAccessSchema
+  PostAccess: postAccessSchema,
+  Test: testSchema
 }
