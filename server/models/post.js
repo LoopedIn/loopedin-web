@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const postSchema = mongoose.Schema({
+const post = mongoose.Schema({
     postId: { type: String, required: true ,unique: true },
     senderId: { type: String, required: true},
     receivingUserIds: [ String ] ,
@@ -10,7 +10,7 @@ const postSchema = mongoose.Schema({
     created: { type: Date, default: () => new Date() }
   });
   
-  const messageSchema = mongoose.Schema({
+  const message = mongoose.Schema({
     messageId: { type: String, required: true ,unique: true },
     senderId: { type: String, required: true},
     receivingUserId: {type:  String , required: true},
@@ -20,11 +20,13 @@ const postSchema = mongoose.Schema({
     readAt: {type: Date}
   });
   
-  const postAccessSchema = mongoose.Schema({
+  const postAccess = mongoose.Schema({
     postId: { type: String, required: true },
     userId: { type: String, required: true},
   });
 
-  const Post = (module.exports = mongoose.model("post", postSchema));
-  const Message = (module.exports = mongoose.model("message", messageSchema));
-  const PostAccess = (module.exports = mongoose.model("postAccess", postAccessSchema));
+  const postSchema = mongoose.model("post", post);
+  const messageSchema = mongoose.model("message", message);
+  const postAccessSchema = mongoose.model("postAccess", postAccess);
+
+  module.exports = { Post: postSchema, Message: messageSchema , PostAccess: postAccessSchema}

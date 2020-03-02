@@ -2,11 +2,11 @@ let mongoose = require('mongoose'),
   express = require('express'),
   router = express.Router();
 
-let postSchema = require('../models/post.js');
+let { Post,Message,PostAccess}  = require('../models/post.js');
 
 router.route('/create-post').post((req, res, next) => {
-    console.log(req.body)
-  postSchema.create(req.body, (error, data) => {
+    console.log("request"+ req.body)
+    Post.create(req.body, (error, data) => {
     if (error) {
         console.log(error)
       return next(error)

@@ -36,7 +36,10 @@ function normalizePort(val) {
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
 app.use("/", indexRouter);
+
 /**
  * Create HTTP server.
  */
