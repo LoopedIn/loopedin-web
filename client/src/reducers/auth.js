@@ -6,7 +6,9 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
   VERIFY_REQUEST,
-  VERIFY_SUCCESS
+  VERIFY_SUCCESS,
+  REGISTER_FAILURE,
+  REGISTER_SUCCESS
 } from "../actions/";
 
 export default (
@@ -17,7 +19,10 @@ export default (
     loginError: false,
     logoutError: false,
     isAuthenticated: false,
-    user: {}
+    registerError: false,
+    registerSuccess: false,
+    user: {},
+    registerErrorMsg: ""
   },
   action
 ) => {
@@ -71,6 +76,20 @@ export default (
       return {
         ...state,
         isVerifying: false
+      };
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        registerSuccess: true,
+        registerError: false,
+        user: action.user
+      };
+    case REGISTER_FAILURE:
+      return {
+        ...state,
+        registerSuccess: false,
+        registerError: true,
+        registerErrorMsg: action.error
       };
     default:
       return state;
