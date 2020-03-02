@@ -27,7 +27,7 @@ router.route('/').get((req, res,next) => {
 })
 
 router.route('/update-post/:id').put((req, res, next) => {
-  Post.findByIdAndUpdate(req.params.id, {
+  Post.findOneAndUpdate({"postId": req.params.id}, {
     $set: req.body
   }, (error, data) => {
     if (error) {
@@ -40,7 +40,7 @@ router.route('/update-post/:id').put((req, res, next) => {
 })
 
 router.route('/delete-post/:id').delete((req, res, next) => {
-  Post.findByIdAndRemove(req.params.id, (error, data) => {
+  Post.findOneAndDelete({'postId': req.params.id} , (error, data) => {
     if (error) {
       return next(error);
     } else {

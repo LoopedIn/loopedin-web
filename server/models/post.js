@@ -6,7 +6,7 @@ const post = mongoose.Schema({
     receivingUserIds: [ String ] ,
     receivingLoopIds: [ String ],
     postType: {type: String, required: true, enum: ['text', 'image', 'video']},
-    postContent: {type: String, reuired: true },
+    postContent: {type: String, required: true },
     created: { type: Date, default: () => new Date() }
   });
   
@@ -15,7 +15,7 @@ const post = mongoose.Schema({
     senderId: { type: String, required: true},
     receivingUserId: {type:  String , required: true},
     messageType: {type: String, required: true, enum: ['text', 'yo', 'reply']},
-    messageContent: {type: String, reuired: true },
+    messageContent: {type: String, required: true },
     created: { type: Date, default: () => new Date() },
     readAt: {type: Date}
   });
