@@ -98,4 +98,5 @@ mongoose.connect('mongodb://localhost/InLooped', { useNewUrlParser: true,useUnif
   .then(() =>  console.log('connection succesful'))
   .catch((err) => console.error(err));
 
-module.exports = server;
+
+module.exports = {server,mongoose};

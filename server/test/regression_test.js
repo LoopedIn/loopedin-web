@@ -5,7 +5,7 @@ const tough = require('tough-cookie');
 
 
 axiosCookieJarSupport(axios);
-const server = require('../lib/server');
+const {server,mongoose} = require('../lib/server');
 const PORT = 3000;
 
 describe('application', async () => {
@@ -23,6 +23,7 @@ before(async () => {
   server2 = server.listen(PORT);
 });
 after(async () => {
+  mongoose.connection.close();
   await server2.close();
 });
   describe('sanity', async () => {
@@ -52,7 +53,7 @@ after(async () => {
 
     describe('Post sharing', async () => {
       it('Create a post and share with a list of loops', async () => {
-        const result = await client.post("/create-post", { postId: "testpost",
+        const result = await client.post("/create-post", { postId: "testpost2",
         senderId: "sender",
         receivingUserIds: "receiver" ,
         receivingLoopIds: "loop",
