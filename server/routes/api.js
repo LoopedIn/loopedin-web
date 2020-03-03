@@ -19,6 +19,10 @@ let router = express.Router();
 // eslint-disable-next-line no-unused-vars
 let { Post, Message, PostAccess, Test}  = require('../models/post.js');
 
+let { User}  = require('../models/user.js');
+
+let {Loop, userConnection} = require('../models/loop.js');
+
 // router.route('/login/sessionLogin').post((req, res) => {
 //   // Get the ID token passed and the CSRF token.
 //   const idToken = req.body.idToken.toString();
@@ -82,7 +86,7 @@ router.route('/').get((req, res,next) => {
       res.json(data)
     }
   })
-})
+});
 
 router.route('/update-post/:id').put((req, res, next) => {
   Post.findOneAndUpdate({"postId": req.params.id}, {
@@ -95,7 +99,7 @@ router.route('/update-post/:id').put((req, res, next) => {
       console.log('Post updated successfully !')
     }
   })
-})
+});
 
 router.route('/delete-post/:id').delete((req, res, next) => {
   Post.findOneAndDelete({'postId': req.params.id} , (error, data) => {
@@ -107,23 +111,44 @@ router.route('/delete-post/:id').delete((req, res, next) => {
       })
     }
   })
-})
+});
 
-router.route('/posts/create/');
-router.route('/posts/:id/');
-router.route('/posts/:id/update');
-router.route('/posts/:id/delete');
+router.route('/users/create/').post((req, res, next) => {
+  User.create(req.body, (error, data) => {
+    if (error) {
+        console.log(error)
+      return next(error)
+    } else {
+      console.log(data)
+      res.json(data)
+    }
+  });
+});
 
-router.route('/loops/create/');
-router.route('/loops/:id/');
-router.route('/loops/:id/update');
-router.route('/loops/:id/remove_user');
-router.route('/loops/:id/delete');
+router.route('/users/:id/');
 
-router.route('/messages/send/');
-router.route('/messages/:id/');
-router.route('/messages/');
+router.route('/users/:id/update').post((req, res, next) => {
+  Post.findOneAndUpdate({"userId": req.params.id}, {
+    $set: req.body
+  }, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.json(data);
+      console.log('User updated successfully !');
+    }
+  })
+});
 
-
+// /users/create
+// /users/:user_id/add_friend
+// /users/:user_id/create_loop
+// /loops/:loop_id/update
+// /users/:user_id/send_message
+// /users/:user_id/show_messages
+// /users/:user_id/create_post
+// /users/:user_id/user_posts
+// /posts/:post_id/delete
+// /users/:user_id/posts
 
 module.exports = router;
