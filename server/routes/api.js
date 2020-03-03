@@ -140,23 +140,15 @@ router.route('/users/:id/update').post((req, res, next) => {
   })
 });
 
-router.route('/users/:id/delete');
-
-router.route('/posts/create/');
-router.route('/posts/:id/');
-router.route('/posts/:id/update');
-router.route('/posts/:id/delete');
-
-router.route('/loops/create/');
-router.route('/loops/:id/');
-router.route('/loops/:id/update');
-router.route('/loops/:id/remove_user');
-router.route('/loops/:id/delete');
-
-router.route('/messages/send/');
-router.route('/messages/:id/');
-router.route('/messages/');
-
-
+// /users/create
+// /users/:user_id/add_friend
+// /users/:user_id/create_loop
+// /loops/:loop_id/update
+// /users/:user_id/send_message
+// /users/:user_id/show_messages
+// /users/:user_id/create_post
+// /users/:user_id/user_posts
+// /posts/:post_id/delete
+// /users/:user_id/posts
 
 module.exports = router;
