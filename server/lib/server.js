@@ -99,3 +99,5 @@ server.on('listening', onListening);
 mongoose.connect('mongodb://localhost/InLooped', { useNewUrlParser: true,useUnifiedTopology: true  })
   .then(() =>  console.log('connection succesful'))
   .catch((err) => console.error(err));
+
+module.exports = server;

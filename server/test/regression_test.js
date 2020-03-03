@@ -36,11 +36,6 @@ describe('application', async () => {
       const output = await client.post('/test', input);
       assert(output.data.testVal === val);
     });
-    it('can successfully send an index', async () => {});
-
-    it("doesn't send files that don't exist", async () => {});
-
-    it('sends the raw index.html', async () => {});
   });
 
 
