@@ -49,6 +49,10 @@ let { Loop, UserConnection } = require('../models/loop.js');
 router.route('/create-post').post((req, res, next) => {
     Post.create(req.body, (error, data) => {
     if (error) {
+      if (error.name == "ValidationError") {
+        res.status(400)
+        res.send("ValidationError")
+      }
         console.log(error)
       return next(error)
     } else {
@@ -61,6 +65,10 @@ router.route('/create-post').post((req, res, next) => {
 router.route('/test').post((req, res, next) =>{
   Test.create(req.body, (error, data) =>{
     if (error) {
+      if (error.name == "ValidationError") {
+        res.status(400)
+        res.send("ValidationError")
+      }
       console.log(error)
     return next(error)
   } else {
@@ -85,6 +93,10 @@ router.route('/update-post/:id').post((req, res, next) => {
     $set: req.body
   }, (error, data) => {
     if (error) {
+      if (error.name == "ValidationError") {
+        res.status(400)
+        res.send("ValidationError")
+      }
       return next(error);
     } else {
       res.json(data)
@@ -108,7 +120,10 @@ router.route('/delete-post/:id').delete((req, res, next) => {
 router.route('/users/create/').post((req, res, next) => {
   User.create(req.body, (error, data) => {
     if (error) {
-        console.log(error)
+      if (error.name == "ValidationError") {
+        res.status(400)
+        res.send("ValidationError")
+      }
       return next(error)
     } else {
       console.log(data)
@@ -148,6 +163,10 @@ router.route('/users/create').post((req, res, next) => {
 router.route('/users/:user_id/add_friend').post((req, res, next) => {
   UserConnection.create(req.body, (error, data) => {
   if (error) {
+    if (error.name == "ValidationError") {
+      res.status(400)
+      res.send("ValidationError")
+    }
       console.log(error)
     return next(error)
   } else {
@@ -160,6 +179,10 @@ router.route('/users/:user_id/add_friend').post((req, res, next) => {
 router.route('/users/:user_id/create_loop').post((req, res, next) => {
   Loop.create(req.body, (error, data) => {
   if (error) {
+    if (error.name == "ValidationError") {
+      res.status(400)
+      res.send("ValidationError")
+    }
       console.log(error)
     return next(error)
   } else {
@@ -174,6 +197,10 @@ router.route('/loops/:loop_id/update').post((req, res, next) => {
     $set: req.body
   }, (error, data) => {
     if (error) {
+      if (error.name == "ValidationError") {
+        res.status(400)
+        res.send("ValidationError")
+      }
       return next(error);
     } else {
       res.json(data)
@@ -207,6 +234,10 @@ router.route('/users/:user_id/show_messages').get((req, res,next) => {
 router.route('/users/:user_id/create_post').post((req, res, next) => {
   Post.create(req.body, (error, data) => {
   if (error) {
+    if (error.name == "ValidationError") {
+      res.status(400)
+      res.send("ValidationError")
+    }
       console.log(error)
     return next(error)
   } else {
