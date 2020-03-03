@@ -98,8 +98,15 @@ By this checkpoint we will add UI functionalities for the API end points we crea
  
 # Installation
 
-We will fill this section in the future.
-
+Checkpoint 2: 
+Registration and Login UI
+```bash
+git clone https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1.git
+cd final-project-cookie-crumbs-1
+cd client
+npm install 
+npm run watch
+```
 
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
