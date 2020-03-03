@@ -1,4 +1,4 @@
-name: Mongodb Service Example
+name: Functional Testing
 
 on:
   push:
