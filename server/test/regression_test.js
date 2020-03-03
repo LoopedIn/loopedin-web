@@ -92,7 +92,7 @@ function randomString(length) {
     return await client.post("/loops/" +  loopId + "/update", updateLoopInput);
   }
 
-  async function removeFriendFromLoop(loopId, friendId){
+  async function removeFriendFromLoop(loopId){
     const updateLoopInput = {
       'friendIds' : [],
       'loop_id': loopId
@@ -160,7 +160,8 @@ function randomString(length) {
         const myUser = resultToUser(await createUser());
         const loop1 = createLoop(myUser.id);
         const loop2 = createLoop(myUser.id);
-        const updateNameReqResponse = await updateLoopName(loop2.id, loop1.name);
+        const updateNameReqResponse = 
+        await updateLoopName(loop2.id, loop1.name);
         assert.strictEqual(updateNameReqResponse.status, 400);
       });
 
@@ -208,7 +209,12 @@ function randomString(length) {
         const allowedLoops = [loop1.id, loop2.id];
         const allowedUsers = [myUsersFriend.id];
         const myUsersPostContent = "Hello all";
-        const result = await sendPostFromUser(myUser.id, allowedLoops, allowedUsers, myUsersPostContent);
+        const result = await 
+        sendPostFromUser(
+          myUser.id, 
+          allowedLoops, 
+          allowedUsers, 
+          myUsersPostContent);
         assert.strictEqual(result.status, 200);
       });
 
@@ -220,7 +226,12 @@ function randomString(length) {
         const allowedLoops = [loop1.id, '123'];
         const allowedUsers = [myUsersFriend.id];
         const myUsersPostContent = "Hello all";
-        const result = await sendPostFromUser(myUser.id, allowedLoops, allowedUsers, myUsersPostContent);
+        const result = await 
+        sendPostFromUser(
+          myUser.id, 
+          allowedLoops, 
+          allowedUsers, 
+          myUsersPostContent);
         assert.strictEqual(result.status, 400);
       });
 
