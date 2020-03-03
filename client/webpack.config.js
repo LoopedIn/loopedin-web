@@ -1,30 +1,39 @@
-'use strict'
+"use strict";
 
-const ExtractPlugin = require('extract-text-webpack-plugin')
-const HTMLPlugin = require('html-webpack-plugin')
+const ExtractPlugin = require("extract-text-webpack-plugin");
+const HTMLPlugin = require("html-webpack-plugin");
 module.exports = {
-  devtool: 'eval',
+  devtool: "eval",
   entry: `${__dirname}/src/main.js`,
   output: {
-    filename: 'bundle-[hash].js',
+    filename: "bundle-[hash].js",
     path: `${__dirname}/build`,
-    publicPath: '/',
+    publicPath: "/"
+  },
+  devServer: {
+    historyApiFallback: true
   },
   plugins: [
-    new HTMLPlugin(),
-    new ExtractPlugin('bundle-[hash].css'),
+    new HTMLPlugin({
+      template: "public/index.html"
+    }),
+    new ExtractPlugin("bundle-[hash].css")
   ],
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: /node_module/,
-        loader: 'babel-loader',
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        loaders: "babel-loader"
       },
       {
         test: /\.scss$/,
-        loader: ExtractPlugin.extract(['css-loader', 'sass-loader']),
+        loader: ExtractPlugin.extract(["css-loader", "sass-loader"])
       },
-    ],
-  },
-}
+      {
+        test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
+        loader: "url-loader?limit=100000"
+      }
+    ]
+  }
+};

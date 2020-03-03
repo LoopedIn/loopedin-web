@@ -1,14 +1,14 @@
 'use strict';
 
-const cors = require('cors');
 const express = require('express');
-const mongoose = require('mongoose');
+const cors = require('cors');
 const bodyParser = require('body-parser');
-const debug = require('debug')('homework1-server');
 const http = require('http');
-
+const mongoose = require('mongoose')
 const app = express();
-const router = express.Router();
+app.use(cors());
+const indexRouter = require('../routes/api');
+const loginTestsRouter = require('../routes/login_test');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -36,6 +36,10 @@ function normalizePort(val) {
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
+app.use('/login/', loginTestsRouter);
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
+app.use("/", indexRouter);
 
 /**
  * Create HTTP server.
@@ -69,20 +73,22 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
-}
 
 /**
  * Listen on provided port, on all network interfaces.
  */
+// server.listen(port);
 
-server.listen(port);
 server.on('error', onError);
-server.on('listening', onListening);
+// /*
+// * Creating Mongodb connection
+// */
+const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST:"localhost"
+const portnumber = process.env.MONGODB_PORT ? process.env.MONGODB_PORT:""
+
+mongoose.connect('mongodb://'+ hostname + ":" + portnumber + '/InLooped', { useNewUrlParser: true,useUnifiedTopology: true  })
+  .then(() =>  console.log('connection succesful'))
+  .catch((err) => console.error(err));
+
+
+module.exports = {server,mongoose};

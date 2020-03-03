@@ -1,17 +1,47 @@
-import React from 'react';
+import React from "react";
+import Register from "../register/register";
+import LoginSide from "../login/login";
+import ProtectedRoute from "../protected-route/protectedRoute";
+import Home from "../home/home";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation
+} from "react-router-dom";
+import { connect } from "react-redux";
 
-class App extends React.Component {
-  constructor(props){
-    super(props);
-  }
+const App = props => {
+  const { isAuthenticated, isVerifying } = props;
+  return (
+    <Switch>
+      {/* <Route exact path="/">
+            <LoginSide />
+          </Route> */}
+      <Route path="/login">
+        <LoginSide />
+      </Route>
+      <Route path="/register">
+        <Register />
+      </Route>
+      <ProtectedRoute
+        exact
+        path="/"
+        component={Home}
+        isAuthenticated={isAuthenticated}
+        isVerifying={isVerifying}
+      />
+    </Switch>
+  );
+};
 
- render() {
-   return (
-     <div>
-        <h1>Test React App</h1>
-     </div>
-   );
- }
+function mapStateToProps(state) {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    isVerifying: state.auth.isVerifying
+  };
 }
-
-export default App;
+export default connect(mapStateToProps)(App);

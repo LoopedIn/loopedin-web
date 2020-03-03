@@ -7,7 +7,7 @@
     "lint": "eslint ./",
     "test": "cross-env NODE_ENV=test mocha",
     "regression": "cross-env NODE_ENV=test mocha test/regression_test.js",
-    "start": "cross-env DEBUG=homework1* node lib/server.js",
+    "start": "cross-env node lib/server.js",
     "dboff": "killall mongod",
     "watch": "nodemon index.js",
     "db-init": "mkdir \\db",
@@ -25,6 +25,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "firebase-admin": "^8.9.2",
     "http-errors": "^1.7.3",
     "mongoose": "^5.9.2",
     "superagent": "^5.2.2"
@@ -41,7 +42,7 @@
     "glob": "^7.1.6",
     "mocha": "^7.0.1",
     "nyc": "^15.0.0",
-    "prettier": "1.19.1",
+    "prettier": "^1.19.1",
     "tough-cookie": "^3.0.1"
   },
   "nyc": {
