@@ -94,7 +94,10 @@ server.on('listening', onListening);
 // /*
 // * Creating Mongodb connection
 // */
-mongoose.connect('mongodb://localhost/InLooped', { useNewUrlParser: true,useUnifiedTopology: true  })
+const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST:"localhost"
+const portnumber = process.env.MONGODB_PORT ? process.env.MONGODB_PORT:""
+
+mongoose.connect('mongodb://'+ hostname + ":" + portnumber + '/InLooped', { useNewUrlParser: true,useUnifiedTopology: true  })
   .then(() =>  console.log('connection succesful'))
   .catch((err) => console.error(err));
 
