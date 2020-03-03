@@ -2,14 +2,6 @@ let express = require('express');
 let router = express.Router();
 // const admin = require('firebase-admin');
 
-// admin.initializeApp({
-//   databaseURL: 'https://<DATABASE_NAME>.firebaseio.com',
-//   credential: admin.credential.cert({
-//       projectId: '<PROJECT_ID>',
-//       clientEmail: 'foo@<PROJECT_ID>.iam.gserviceaccount.com',
-//       privateKey: '-----BEGIN PRIVATE KEY-----\n<KEY>\n-----END PRIVATE KEY-----\n'
-//   })
-// });
 
 // let auth = require('../auth_modules/server_auth');
 
