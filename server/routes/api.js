@@ -80,7 +80,7 @@ router.route('/').get((req, res,next) => {
   })
 });
 
-router.route('/update-post/:id').put((req, res, next) => {
+router.route('/update-post/:id').post((req, res, next) => {
   Post.findOneAndUpdate({"postId": req.params.id}, {
     $set: req.body
   }, (error, data) => {
@@ -169,7 +169,7 @@ router.route('/users/:user_id/create_loop').post((req, res, next) => {
 })
 });
 // /loops/:loop_id/update
-router.route('/loops/:loop_id/update').put((req, res, next) => {
+router.route('/loops/:loop_id/update').post((req, res, next) => {
   Loop.findOneAndUpdate({"loop_id": req.params.loop_id}, {
     $set: req.body
   }, (error, data) => {
