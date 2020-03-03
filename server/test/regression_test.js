@@ -132,7 +132,7 @@ function randomString(length) {
 
       it('Create a loop ', async () => {
         const myUser = resultToUser(await createUser());
-        assert.strictEqual(createLoop(myUser.id),200);
+        assert.strictEqual((await createLoop(myUser.id)).status,200);
       });
 
       it('Create a loop with a duplicate name', async () => {
@@ -143,10 +143,10 @@ function randomString(length) {
       });
       
       it("Update a loop's name to a duplicate name (not allowed)", async () => {
-        const myUser = resultToUser(createUser());
+        const myUser = resultToUser(await createUser());
         const loop1 = createLoop(myUser.id);
         const loop2 = createLoop(myUser.id);
-        const updateNameReqResponse = updateLoopName(loop2.id, loop1.name);
+        const updateNameReqResponse = await updateLoopName(loop2.id, loop1.name);
         assert.strictEqual(updateNameReqResponse.status, 400);
       });
 
