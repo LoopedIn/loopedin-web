@@ -53,10 +53,10 @@ router.route('/create-post').post((req, res, next) => {
         res.status(400)
         res.send("ValidationError")
       }
-        console.log(error)
+        // console.log(error)
       return next(error)
     } else {
-      console.log(data)
+      // console.log(data)
       res.json(data)
     }
   })
@@ -69,10 +69,10 @@ router.route('/test').post((req, res, next) =>{
         res.status(400)
         res.send("ValidationError")
       }
-      console.log(error)
+      // console.log(error)
     return next(error)
   } else {
-    console.log(data)
+    // console.log(data)
     res.json(data)
   }
   })
@@ -100,7 +100,7 @@ router.route('/update-post/:id').post((req, res, next) => {
       return next(error);
     } else {
       res.json(data)
-      console.log('Post updated successfully !')
+      // console.log('Post updated successfully !')
     }
   })
 });
@@ -126,7 +126,7 @@ router.route('/users/create/').post((req, res, next) => {
       }
       return next(error)
     } else {
-      console.log(data)
+      // console.log(data)
       res.json(data)
     }
   });
@@ -142,7 +142,7 @@ router.route('/users/:id/update').post((req, res, next) => {
       return next(error);
     } else {
       res.json(data);
-      console.log('User updated successfully !');
+      // console.log('User updated successfully !');
     }
   })
 });
@@ -151,10 +151,10 @@ router.route('/users/:id/update').post((req, res, next) => {
 router.route('/users/create').post((req, res, next) => {
   User.create(req.body, (error, data) => {
   if (error) {
-      console.log(error)
+      // console.log(error)
     return next(error)
   } else {
-    console.log(data)
+    // console.log(data)
     res.json(data)
   }
 })
@@ -167,10 +167,10 @@ router.route('/users/:user_id/add_friend').post((req, res, next) => {
       res.status(400)
       res.send("ValidationError")
     }
-      console.log(error)
+      // console.log(error)
     return next(error)
   } else {
-    console.log(data)
+    // console.log(data)
     res.json(data)
   }
 })
@@ -183,10 +183,10 @@ router.route('/users/:user_id/create_loop').post((req, res, next) => {
       res.status(400)
       res.send("ValidationError")
     }
-      console.log(error)
+      // console.log(error)
     return next(error)
   } else {
-    console.log(data)
+    // console.log(data)
     res.json(data)
   }
 })
@@ -204,7 +204,7 @@ router.route('/loops/:loop_id/update').post((req, res, next) => {
       return next(error);
     } else {
       res.json(data)
-      console.log('Loop updated successfully !')
+      // console.log('Loop updated successfully !')
     }
   })
 });
@@ -212,10 +212,10 @@ router.route('/loops/:loop_id/update').post((req, res, next) => {
 router.route('/users/:user_id/send_message').post((req, res, next) => {
   Message.create(req.body, (error, data) => {
   if (error) {
-      console.log(error)
+      // console.log(error)
     return next(error)
   } else {
-    console.log(data)
+    // console.log(data)
     res.json(data)
   }
 })
@@ -238,10 +238,10 @@ router.route('/users/:user_id/create_post').post((req, res, next) => {
       res.status(400)
       res.send("ValidationError")
     }
-      console.log(error)
+      // console.log(error)
     return next(error)
   } else {
-    console.log(data)
+    // console.log(data)
     res.json(data)
   }
 })
@@ -258,7 +258,7 @@ router.route('/users/:user_id/user_posts').get((req, res, next) => {
 });
 // /posts/:post_id/delete
 router.route('/posts/:post_id/delete').delete((req, res, next) => {
-  Post.findOneAndDelete({'postId': req.params.post_id} , (error, data) => {
+  Post.findOneAndDelete({'_id': req.params.post_id} , (error, data) => {
     if (error) {
       return next(error);
     } else {

@@ -126,6 +126,10 @@ function randomString(length) {
     return await client.post("/users/" + senderId + "/create_post", createPostInput);
   }
 
+  async function showPostsSharedToUser(userId){
+  return await client.get("/users/" + userId + "/posts",);
+}
+
   function resultToLoop(result){
     return {id: result.data.loopId};
   }
@@ -236,13 +240,43 @@ function randomString(length) {
       });
 
       // it('User views their own posts ', async () => {}); //TBD
-      // it('User deletes their post', async () => {}); //TBD
+      it('User deletes their post', async () => {
+        const myUser = resultToUser(await createUser());
+        const myUsersFriend = resultToUser(await createUser());
+        await addAsFriend(myUser.id, myUsersFriend.id);
+        const allowedLoops = [];
+        const allowedUsers = [myUsersFriend.id];
+        const myUsersPostContent = "Hello all";
+        const result = await sendPostFromUser(
+          myUser.id, 
+          allowedLoops, 
+          allowedUsers, 
+          myUsersPostContent);
+        const postId = result.data._id;
+        console.log(postId);
+        const deleteReq = await client.delete("/posts/" + postId + "/delete");
+        assert.strictEqual(deleteReq.status, 200);
+      });
     });
 
 
     describe('Feed', async () => {
-      // it('User reads all posts shared to them', async () => {}); //TBD
-      // it('User replies to a post shared to them', async () => {}); //TBD
+      it('User reads all posts shared to user', async () => {
+        const myUser = resultToUser(await createUser());
+        const myUsersFriend = resultToUser(await createUser());
+        await addAsFriend(myUser.id, myUsersFriend.id);
+        const allowedLoops = [];
+        const allowedUsers = [myUsersFriend.id];
+        const myUsersPostContent = "Hello all";
+        await sendPostFromUser(
+          myUser.id, 
+          allowedLoops, 
+          allowedUsers, 
+          myUsersPostContent);
+        const result = await showPostsSharedToUser(myUser.id);
+        assert.strictEqual(result.status, 200);
+      }); 
+      it('User replies to a post shared to them', async () => {}); //TBD
     });
   });
 
