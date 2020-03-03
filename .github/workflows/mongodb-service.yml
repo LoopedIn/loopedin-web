@@ -26,6 +26,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1     
     - run: npm ci
+    - run: npm install
+      working-directory: ./server
     - run: npm run regression
       working-directory: ./server
       env:
