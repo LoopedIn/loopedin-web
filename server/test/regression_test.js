@@ -176,10 +176,20 @@ after(async () => {
       it('User views their own posts ', async () => {}); //TBD
       it('User deletes their post', async () => {}); //TBD
     });
+  //   describe('Post sharing', async () => {
+  //     // it(' Create a post and share with a list of loops', async () => {
+  //     //   return client.post("/create-post", { postId: "testpost",
+  //     //   senderId: "sender",
+  //     //   receivingUserIds: "receiver" ,
+  //     //   receivingLoopIds: "loop",
+  //     //   postType: "image",
+  //     //   postContent:"helloworld"});
+
 
     describe('Feed', async () => {
       it('User reads all posts shared to them', async () => {}); //TBD
       it('User replies to a post shared to them', async () => {}); //TBD
     });
   });
+
 });

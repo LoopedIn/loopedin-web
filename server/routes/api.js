@@ -21,7 +21,7 @@ let { Post, Message, PostAccess, Test}  = require('../models/post.js');
 
 let { User}  = require('../models/user.js');
 
-let {Loop, userConnection} = require('../models/loop.js');
+let { Loop, UserConnection } = require('../models/loop.js');
 
 // router.route('/login/sessionLogin').post((req, res) => {
 //   // Get the ID token passed and the CSRF token.
@@ -141,14 +141,118 @@ router.route('/users/:id/update').post((req, res, next) => {
 });
 
 // /users/create
-// /users/:user_id/add_friend
+router.route('/users/create').post((req, res, next) => {
+  User.create(req.body, (error, data) => {
+  if (error) {
+      console.log(error)
+    return next(error)
+  } else {
+    console.log(data)
+    res.json(data)
+  }
+})
+});
+// /users/:user_id/add_friend //TODO
+router.route('/users/:user_id/add_friend').post((req, res, next) => {
+  UserConnection.create(req.body, (error, data) => {
+  if (error) {
+      console.log(error)
+    return next(error)
+  } else {
+    console.log(data)
+    res.json(data)
+  }
+})
+});
 // /users/:user_id/create_loop
+router.route('/users/:user_id/create_loop').post((req, res, next) => {
+  Loop.create(req.body, (error, data) => {
+  if (error) {
+      console.log(error)
+    return next(error)
+  } else {
+    console.log(data)
+    res.json(data)
+  }
+})
+});
 // /loops/:loop_id/update
+router.route('/loops/:loop_id/update').put((req, res, next) => {
+  Loop.findOneAndUpdate({"loop_id": req.params.loop_id}, {
+    $set: req.body
+  }, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.json(data)
+      console.log('Loop updated successfully !')
+    }
+  })
+});
 // /users/:user_id/send_message
+router.route('/users/:user_id/send_message').post((req, res, next) => {
+  Message.create(req.body, (error, data) => {
+  if (error) {
+      console.log(error)
+    return next(error)
+  } else {
+    console.log(data)
+    res.json(data)
+  }
+})
+});
 // /users/:user_id/show_messages
+router.route('/users/:user_id/show_messages').get((req, res,next) => {
+  Message.find({"senderId": req.params.user_id, "receivingUserId": req.body.receivingUserId },(error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+});
 // /users/:user_id/create_post
+router.route('/users/:user_id/create_post').post((req, res, next) => {
+  Post.create(req.body, (error, data) => {
+  if (error) {
+      console.log(error)
+    return next(error)
+  } else {
+    console.log(data)
+    res.json(data)
+  }
+})
+});
 // /users/:user_id/user_posts
+router.route('/users/:user_id/user_posts').get((req, res, next) => {
+  Post.find({"senderId": req.params.user_id}, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.json(data)
+    }
+  })
+});
 // /posts/:post_id/delete
+router.route('/posts/:post_id/delete').delete((req, res, next) => {
+  Post.findOneAndDelete({'postId': req.params.post_id} , (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.status(200).json({
+        msg: data
+      })
+    }
+  })
+});
 // /users/:user_id/posts
-
+router.route('/users/:user_id/posts').get((req, res, next) => {
+  PostAccess.find({"user_id": req.params.user_id}, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.json(data)
+    }
+  })
+});
 module.exports = router;
