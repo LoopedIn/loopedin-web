@@ -50,17 +50,16 @@ To keep our target app realistic, the features we will provide our:-
 The deliverables for checkpoint 2 will support a few functionalities via API and a few basic functionalities via UI.
 
 **Functionalities supported via API only:-**
-1.  Register user
-2.  Login user
-3.  Create/Read and Update a loop
-4.  Send a message from one user to another
-5.  Create a post
-6.  Read posts shared to user
-7.  Delete a post shared by the user.  
+
+- [x]  Create/Read and Update a loop
+- [x]  Send a message from one user to another
+- [x]  Create a post
+- [x]  Read posts shared to user
+- [x]  Delete a post shared by the user.  
       
 **Functionalities  supported via UI:-**
-1.  Register user
-2.  Login user
+- [x]  Register user
+- [x]  Login user
 
 ## Deliverables for checkpoint 4
 
@@ -100,3 +99,9 @@ By this checkpoint we will add UI functionalities for the API end points we crea
 # Installation
 
 We will fill this section in the future.
+
+
+# References
+- https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
+- https://itnext.io/firebase-login-functionality-from-scratch-with-react-redux-2bf316e5820f
+
