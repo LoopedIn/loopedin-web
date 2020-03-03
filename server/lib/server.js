@@ -3,7 +3,6 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const debug = require('debug')('homework1-server');
 const http = require('http');
 const mongoose = require('mongoose')
 const app = express();
@@ -74,23 +73,13 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
-}
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
+// server.listen(port);
 
 server.on('error', onError);
-server.on('listening', onListening);
 // /*
 // * Creating Mongodb connection
 // */

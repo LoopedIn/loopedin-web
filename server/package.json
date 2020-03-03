@@ -7,7 +7,7 @@
     "lint": "eslint ./",
     "test": "cross-env NODE_ENV=test mocha",
     "regression": "cross-env NODE_ENV=test mocha test/regression_test.js",
-    "start": "cross-env DEBUG=homework1* node lib/server.js",
+    "start": "cross-env node lib/server.js",
     "dboff": "killall mongod",
     "watch": "nodemon index.js",
     "db-init": "mkdir \\db",

@@ -28,10 +28,24 @@ after(async () => {
   await server2.close();
 });
 
+function randomString(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 
   function getRandomCreateUserInput(){
+    const random = randomString(5);
     return {
-     
+      userId: random,
+      email: random + '@email.com',
+      firstName: random + '_fn',
+      lastName: random + '_ln',
     };
   }
 
@@ -52,8 +66,10 @@ after(async () => {
 
   async function addAsFriend(user1Id, user2Id){
       const addFriendInput = {
-      'userId': user2Id.id
+      'userId': user2Id,
+      'friendIds' : [user2Id],
     };
+    console.log(addFriendInput);
     return await client.post("/users/" + user1Id + "/add_friend", addFriendInput);
   }
 
@@ -66,7 +82,7 @@ after(async () => {
   }
 
   function resultToUser(result){
-    return {};
+    return {id: result.data._id};
   }
 
   async function sendMessage(userId, friendId, messageContent){
@@ -83,98 +99,100 @@ after(async () => {
 
   describe('authenticated state', async () => {
     describe('Managing friends and loops', async () => {
-      it('Create a user', async () => {
-        assert.strictEqual(createUser().status,200);
-      });
+      // it('Create a user', async () => {
+      //   const resp = await createUser();
+      //   assert.strictEqual(resp.status,200);
+      // });
 
-      it('Add a user as a friend ', async () => {
-        const myUser = resultToUser(createUser());
-        const myUsersFriend = resultToUser(createUser());
-        assert.strictEqual(addAsFriend(myUser.id, myUsersFriend.id),200);
-      });
+      // it('Add a user as a friend ', async () => {
+      //   const myUser = resultToUser(await createUser());
+      //   const myUsersFriend = resultToUser(await createUser());
+      //   const resp = await addAsFriend(myUser.id, myUsersFriend.id);
+      //   assert.strictEqual(resp.status, 200);
+      // });
 
       it('Create a loop ', async () => {
-        const myUser = resultToUser(createUser());
+        const myUser = resultToUser(await createUser());
         assert.strictEqual(createLoop(myUser.id),200);
       });
 
-      it('Create a loop with a duplicate name (not allowed)', async () => {
-        const myUser = resultToUser(createUser());
-        const loop = createLoop(myUser.id);
-        const duplicateLoopReqResponse = createLoop(myUser.id, loop.name);
-        assert.strictEqual(duplicateLoopReqResponse.status, 400);
-      });
+      // it('Create a loop with a duplicate name (not allowed)', async () => {
+      //   const myUser = resultToUser(createUser());
+      //   const loop = createLoop(myUser.id);
+      //   const duplicateLoopReqResponse = createLoop(myUser.id, loop.name);
+      //   assert.strictEqual(duplicateLoopReqResponse.status, 400);
+      // });
       
-      it("Update a loop's name to a duplicate name (not allowed)", async () => {
-        const myUser = resultToUser(createUser());
-        const loop1 = createLoop(myUser.id);
-        const loop2 = createLoop(myUser.id);
-        const updateNameReqResponse = updateLoopName(loop2.id, loop1.name);
-        assert.strictEqual(updateNameReqResponse.status, 400);
-      });
+      // it("Update a loop's name to a duplicate name (not allowed)", async () => {
+      //   const myUser = resultToUser(createUser());
+      //   const loop1 = createLoop(myUser.id);
+      //   const loop2 = createLoop(myUser.id);
+      //   const updateNameReqResponse = updateLoopName(loop2.id, loop1.name);
+      //   assert.strictEqual(updateNameReqResponse.status, 400);
+      // });
 
-      it('Add a friend to a loop ', async () => {
-        const myUser = resultToUser(createUser());
-        const myUsersFriend = resultToUser(createUser());
-        addAsFriend(myUser.id, myUsersFriend.id);
-        const loop = createLoop(myUser.id);
-        const addFriendToLoopReqResponse 
-          = addFriendToLoop(loop.id,  myUsersFriend.id);
-        assert.strictEqual(addFriendToLoopReqResponse.status, 200);
-      });
+      // it('Add a friend to a loop ', async () => {
+      //   const myUser = resultToUser(createUser());
+      //   const myUsersFriend = resultToUser(createUser());
+      //   addAsFriend(myUser.id, myUsersFriend.id);
+      //   const loop = createLoop(myUser.id);
+      //   const addFriendToLoopReqResponse 
+      //     = addFriendToLoop(loop.id,  myUsersFriend.id);
+      //   assert.strictEqual(addFriendToLoopReqResponse.status, 200);
+      // });
 
-      it('Remove a friend from a loop ', async () => {
-        const myUser = resultToUser(createUser());
-        const myUsersFriend = resultToUser(createUser());
-        addAsFriend(myUser.id, myUsersFriend.id);
-        const loop = createLoop(myUser.id);
-        addFriendToLoop(loop,  myUsersFriend.id);
-        const result = removeFriendFromLoop(loop.id, myUsersFriend.id);
-        assert.strictEqual(result.status, 200);
-      });
+      // it('Remove a friend from a loop ', async () => {
+      //   const myUser = resultToUser(createUser());
+      //   const myUsersFriend = resultToUser(createUser());
+      //   addAsFriend(myUser.id, myUsersFriend.id);
+      //   const loop = createLoop(myUser.id);
+      //   addFriendToLoop(loop,  myUsersFriend.id);
+      //   const result = removeFriendFromLoop(loop.id, myUsersFriend.id);
+      //   assert.strictEqual(result.status, 200);
+      // });
     });
 
     describe('Private messages', async () => {
-      it('Send a message to a user ', async () => {
-        const myUser = resultToUser(createUser());
-        const myUsersFriend = resultToUser(createUser());
-        addAsFriend(myUser.id, myUsersFriend.id);
-        const message = "Hello";
-        const result = sendMessage(myUser.id, myUsersFriend.id, message);
-        assert.strictEqual(result.status, 200);
-      });
-      it('Recieve messages from other users ', async () => {}); //TBD
-      it('Read chat history with a user ', async () => {}); //TBD
+      // it('Send a message to a user ', async () => {
+      //   const myUser = resultToUser(createUser());
+      //   const myUsersFriend = resultToUser(createUser());
+      //   addAsFriend(myUser.id, myUsersFriend.id);
+      //   const message = "Hello";
+      //   const result = sendMessage(myUser.id, myUsersFriend.id, message);
+      //   assert.strictEqual(result.status, 200);
+      // });
+      // it('Recieve messages from other users ', async () => {}); //TBD
+      // it('Read chat history with a user ', async () => {}); //TBD
     });
 
     describe('Post sharing', async () => {
-      it('Create a post and share with a list of loops', async () => {
-        const myUser = resultToUser(createUser());
-        const myUsersFriend = resultToUser(createUser());
-        addAsFriend(myUser.id, myUsersFriend.id);
-        const loop1 = createLoop(myUser.id);
-        const loop2 = createLoop(myUser.id);
-        const allowedLoops = [loop1.id, loop2.id];
-        const allowedUsers = [myUsersFriend.id];
-        const myUsersPostContent = "Hello all";
-        const result = sendPostFromUser(myUser.Id, allowedLoops, allowedUsers, myUsersPostContent);
-        assert.strictEqual(result.status, 200);
-      });
+      // it('Create a post and share with a list of loops', async () => {
+      //   const myUser = resultToUser(createUser());
+      //   const myUsersFriend = resultToUser(createUser());
+      //   addAsFriend(myUser.id, myUsersFriend.id);
+      //   const loop1 = createLoop(myUser.id);
+      //   const loop2 = createLoop(myUser.id);
+      //   const allowedLoops = [loop1.id, loop2.id];
+      //   const allowedUsers = [myUsersFriend.id];
+      //   const myUsersPostContent = "Hello all";
+      //   const result = sendPostFromUser(myUser.Id, allowedLoops, allowedUsers, myUsersPostContent);
+      //   assert.strictEqual(result.status, 200);
+      // });
 
-      it('Incorrect loop names in above request (not allowed)', async () => {
-        const myUser = resultToUser(createUser());
-        const myUsersFriend = resultToUser(createUser());
-        addAsFriend(myUser.id, myUsersFriend.id);
-        const loop1 = createLoop(myUser.id);
-        const allowedLoops = [loop1.id, '123'];
-        const allowedUsers = [myUsersFriend.id];
-        const myUsersPostContent = "Hello all";
-        const result = sendPostFromUser(myUser.Id, allowedLoops, allowedUsers, myUsersPostContent);
-        assert.strictEqual(result.status, 200);
-      });
+      // it('Incorrect loop names in above request (not allowed)', async () => {
+      //   const myUser = resultToUser(createUser());
+      //   const myUsersFriend = resultToUser(createUser());
+      //   addAsFriend(myUser.id, myUsersFriend.id);
+      //   const loop1 = createLoop(myUser.id);
+      //   const allowedLoops = [loop1.id, '123'];
+      //   const allowedUsers = [myUsersFriend.id];
+      //   const myUsersPostContent = "Hello all";
+      //   const result = sendPostFromUser(myUser.Id, allowedLoops, allowedUsers, myUsersPostContent);
+      //   assert.strictEqual(result.status, 200);
+      // });
 
-      it('User views their own posts ', async () => {}); //TBD
-      it('User deletes their post', async () => {}); //TBD
+      // it('User views their own posts ', async () => {}); //TBD
+      // it('User deletes their post', async () => {}); //TBD
     });
   //   describe('Post sharing', async () => {
   //     // it(' Create a post and share with a list of loops', async () => {
@@ -187,8 +205,8 @@ after(async () => {
 
 
     describe('Feed', async () => {
-      it('User reads all posts shared to them', async () => {}); //TBD
-      it('User replies to a post shared to them', async () => {}); //TBD
+      // it('User reads all posts shared to them', async () => {}); //TBD
+      // it('User replies to a post shared to them', async () => {}); //TBD
     });
   });
 

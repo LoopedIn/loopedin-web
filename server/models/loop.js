@@ -15,4 +15,4 @@ const loop = mongoose.Schema({
 
 const userConnectionSchema = mongoose.model("userConnection", userConnection);
 const loopSchema = mongoose.model("loop", loop);
-module.exports = { Loop: loopSchema, userConnection: userConnectionSchema}
+module.exports = { Loop: loopSchema, UserConnection: userConnectionSchema}
