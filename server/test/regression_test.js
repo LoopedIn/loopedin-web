@@ -1,15 +1,30 @@
+const assert = require('assert');
 var axios = require("axios");
+const axiosCookieJarSupport = require('axios-cookiejar-support').default;
+const tough = require('tough-cookie');
 
+
+axiosCookieJarSupport(axios);
+const server = require('../lib/server');
 const PORT = 3000;
-const client = axios.create({
-  withCredentials: true,
-  baseURL: `http://localhost:${PORT}/`,
-  validateStatus: function(status) {
-    /* always resolve on any HTTP status */
-    return true;
-  }
-});
+
 describe('application', async () => {
+
+let client = {};
+let server2 = {};
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = `http://localhost:${PORT}/`;
+axios.defaults.validateStatus = () => true;
+
+before(async () => {
+  client = axios.create();
+  // make a new cookie jar every time you create a new client
+  client.defaults.jar = new tough.CookieJar();
+  server2 = server.listen(PORT);
+});
+after(async () => {
+  await server2.close();
+});
   describe('sanity', async () => {
     it('can successfully send an index', async () => {});
 
@@ -36,14 +51,14 @@ describe('application', async () => {
     });
 
     describe('Post sharing', async () => {
-      it(' Create a post and share with a list of loops', async () => {
-        return client.post("/create-post", { postId: "testpost",
+      it('Create a post and share with a list of loops', async () => {
+        const result = await client.post("/create-post", { postId: "testpost",
         senderId: "sender",
         receivingUserIds: "receiver" ,
         receivingLoopIds: "loop",
         postType: "image",
         postContent:"helloworld"});
-
+        assert.strictEqual(result.status,200)
       });
       it('Incorrect loop names in above request (not allowed)', async () => {});
       it('User views their own posts ', async () => {});
