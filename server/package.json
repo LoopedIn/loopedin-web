@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint ./",
     "test": "cross-env NODE_ENV=test mocha",
-    "regression": "cross-env NODE_ENV=test mocha test/regression_test.js",
+    "unit-tests": "cross-env NODE_ENV=test mocha test/unit_tests.js",
     "start": "cross-env node lib/server.js",
     "dboff": "killall mongod",
     "watch": "nodemon index.js",

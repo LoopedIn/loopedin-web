@@ -5,13 +5,13 @@ const tough = require('tough-cookie');
 
 
 axiosCookieJarSupport(axios);
-const {server,mongoose} = require('../lib/server');
+
+const {mongoose,serverListener} = require('../lib/server');
 const PORT = 3000;
 
 describe('application', async () => {
 
 let client = {};
-let server2 = {};
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = `http://localhost:${PORT}/`;
 axios.defaults.validateStatus = () => true;
@@ -20,12 +20,11 @@ before(async () => {
   client = axios.create();
   // make a new cookie jar every time you create a new client
   client.defaults.jar = new tough.CookieJar();
-  server2 = server.listen(PORT);
 });
 
 after(async () => {
   mongoose.connection.close();
-  await server2.close();
+  await serverListener.close();
 });
 
 function randomString(length) {

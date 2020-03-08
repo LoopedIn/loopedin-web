@@ -28,7 +28,7 @@ jobs:
     - run: npm ci
     - run: npm install
       working-directory: ./server
-    - run: npm run regression
+    - run: npm run unit-tests
       working-directory: ./server
       env:
         # use mongodb for the host here because we have specified a container for the job.
