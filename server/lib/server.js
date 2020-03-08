@@ -83,8 +83,8 @@ server.on('error', onError);
 // /*
 // * Creating Mongodb connection
 // */
-const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST:"localhost"
-const portnumber = process.env.MONGODB_PORT ? process.env.MONGODB_PORT:""
+const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST:"mongo"
+const portnumber = process.env.MONGODB_PORT ? process.env.MONGODB_PORT:"27017"
 
 mongoose.connect('mongodb://'+ hostname + ":" + portnumber + '/InLooped', { useNewUrlParser: true,useUnifiedTopology: true  })
   .then(() =>  console.log('connection succesful'))
