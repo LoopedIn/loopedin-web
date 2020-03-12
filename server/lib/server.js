@@ -77,18 +77,18 @@ function onError(error) {
 /**
  * Listen on provided port, on all network interfaces.
  */
-// server.listen(port);
+const serverListener = server.listen(port);
 
 server.on('error', onError);
 // /*
 // * Creating Mongodb connection
 // */
-const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST:"localhost"
-const portnumber = process.env.MONGODB_PORT ? process.env.MONGODB_PORT:""
+const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST:"mongo"
+const portnumber = process.env.MONGODB_PORT ? process.env.MONGODB_PORT:"27017"
 
 mongoose.connect('mongodb://'+ hostname + ":" + portnumber + '/InLooped', { useNewUrlParser: true,useUnifiedTopology: true  })
   .then(() =>  console.log('connection succesful'))
   .catch((err) => console.error(err));
 
 
-module.exports = {server,mongoose};
+module.exports = {mongoose,serverListener};

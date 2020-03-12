@@ -107,7 +107,11 @@ cd client
 npm install 
 npm run watch
 ```
+Running the server code and mongodb:
 
+```bash
+docker compose up
+```
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
 - https://itnext.io/firebase-login-functionality-from-scratch-with-react-redux-2bf316e5820f
