@@ -81,7 +81,7 @@ const CustomSignInSVG = withStyles({
   }
 })(LockOutlinedIcon);
 
-const loginSide = props => {
+export const loginSide = props => {
   const classes = useStyles();
 
   const [email, setEmail] = useState("");
