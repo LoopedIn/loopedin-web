@@ -83,7 +83,7 @@ server.on('error', onError);
 // */
 const hostname = process.env.MONGODB_HOST
   ? process.env.MONGODB_HOST
-  : 'localhost';
+  : 'mongo';
 const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';
