@@ -7,8 +7,29 @@ services:
       - '80:3000'
     links:
       - mongo
+
   mongo:
     container_name: mongo
     image: mongo
     ports:
       - '27017:27017'
+
+  client:
+    build: client/
+    environment:
+        - NODE_ENV=development
+        - CHOKIDAR_USEPOLLING=true
+        - REACT_APP_API_URL=${REACT_APP_API_URL}
+    depends_on:
+        - node
+    
+  nginx:
+    build:
+        context: ./services/nginx
+        dockerfile: Dockerfile-dev
+    restart: always
+    ports:
+        - 80:80
+    depends_on:
+        - node
+        - client
