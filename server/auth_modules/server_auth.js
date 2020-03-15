@@ -6,11 +6,16 @@ admin.initializeApp({
   databaseURL: "https://loopedin-269607.firebaseio.com"
 });
 
-const auth = (req, res, next) => {
-  if (req.headers.authtoken) {
-    admin.auth().verifyIdToken(req.headers.authtoken)
-      .then(() => {
-        next();
+const tokenIdToDbUserIdConverter = (tokenUid) =>{
+  return tokenUid;
+}
+
+const firebaseTokenAuthenticator = (req, res, next) => {
+  next();
+  if (req.body.idToken) {
+    admin.auth().verifyIdToken(req.body.idToken)
+      .then((decodedToken) => {
+        next(tokenIdToDbUserIdConverter(decodedToken.uid));
       }).catch(() => {
         res.status(403).send('Unauthorized');
       });
@@ -19,4 +24,4 @@ const auth = (req, res, next) => {
   }
 }
 
-module.exports = {auth};
+module.exports = {firebaseTokenAuthenticator};

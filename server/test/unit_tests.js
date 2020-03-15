@@ -73,7 +73,7 @@ function randomString(length) {
   async function createUser(){
     const userInput = getRandomCreateUserInput();
     const result = await client.post("/users/create", userInput);
-    return result;
+    return {userInput, result};
   }
 
   async function addAsFriend(user1Id, user2Id){
@@ -136,7 +136,8 @@ function randomString(length) {
   describe('authenticated state', async () => {
     describe('Managing friends and loops', async () => {
       it('Create a user', async () => {
-        const resp = await createUser();
+        const {userName, resp} = await createUser();
+        //TODO: fetch user and assert user has been created
         assert.strictEqual(resp.status,200);
       });
 
@@ -144,11 +145,13 @@ function randomString(length) {
         const myUser = resultToUser(await createUser());
         const myUsersFriend = resultToUser(await createUser());
         const resp = await addAsFriend(myUser.id, myUsersFriend.id);
+      //TODO: fetch users friends and assert users friend is present in the list
         assert.strictEqual(resp.status, 200);
       });
 
       it('Create a loop ', async () => {
         const myUser = resultToUser(await createUser());
+      //TODO: fetch loop and test if it exists
         assert.strictEqual((await createLoop(myUser.id)).status,200);
       });
 
@@ -156,7 +159,7 @@ function randomString(length) {
         const myUser = resultToUser(await createUser());
         const loop = resultToLoop(await createLoop(myUser.id));
         const duplicateLoopReqResponse = await createLoop(myUser.id, loop.name);
-        assert.strictEqual(duplicateLoopReqResponse.status, 200); 
+        assert.strictEqual(duplicateLoopReqResponse.status, 400); 
       });
       
       it("Update a loop's name to a duplicate name (not allowed)", async () => {
@@ -164,7 +167,7 @@ function randomString(length) {
         const loop1 = createLoop(myUser.id);
         const loop2 = createLoop(myUser.id);
         const updateNameReqResponse = 
-        await updateLoopName(loop2.id, loop1.name);
+          await updateLoopName(loop2.id, loop1.name);
         assert.strictEqual(updateNameReqResponse.status, 400);
       });
 
@@ -175,6 +178,7 @@ function randomString(length) {
         const loop = resultToLoop(await createLoop(myUser.id));
         const addFriendToLoopReqResponse 
           = await addFriendToLoop(loop.id,  myUsersFriend.id);
+        //TODO: fetch loop and test if friend is present in loop
         assert.strictEqual(addFriendToLoopReqResponse.status, 200);
       });
 
@@ -184,7 +188,9 @@ function randomString(length) {
         await addAsFriend(myUser.id, myUsersFriend.id);
         const loop = resultToLoop(await createLoop(myUser.id));
         await addFriendToLoop(loop,  myUsersFriend.id);
+      //TODO: fetch loop and test if friend is present in loop
         const result = await removeFriendFromLoop(loop.id, myUsersFriend.id);
+       //TODO: fetch loop and test if friend is removed from loop
         assert.strictEqual(result.status, 200);
       });
     });
@@ -196,10 +202,11 @@ function randomString(length) {
         await addAsFriend(myUser.id, myUsersFriend.id);
         const message = "Hello";
         const result = await sendMessage(myUser.id, myUsersFriend.id, message);
+      //TODO: fetch users messages and test message is present
         assert.strictEqual(result.status, 200);
       });
-      // it('Recieve messages from other users ', async () => {}); //TBD
-      // it('Read chat history with a user ', async () => {}); //TBD
+      it('Recieve messages from other users ', async () => {}); //TBD
+      it('Read chat history with a user ', async () => {}); //TBD
     });
 
     describe('Post sharing', async () => {

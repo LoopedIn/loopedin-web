@@ -14,7 +14,37 @@ const { Loop, UserConnection } = require('../models/loop.js');
 
 router.use(cors());
 router.use(cookieParser());
-router.use(serverAuth.auth);
+
+//Declaring here as unauthenticated
+router.route('/users/create/').post((req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    res.status(400);
+    const error = 'The data to create user is not present';
+    return next(error);
+  }
+
+  User.create(req.body, (error, data) => {
+    if (error) {
+      if (error.name === 'ValidationError') {
+        res.status(400);
+        res.send('ValidationError');
+      }
+      res.status(400).send(error);
+      return next(error);
+    }
+    // [TODO] : Create a session and send it along with db data
+    console.log(data);
+
+    res.json(data);
+  });
+});
+
+//Registering authenticated middleware
+router.use(serverAuth.firebaseTokenAuthenticator);
+
+router.route('/test_authenticated').post((userId, req, res, next) => {
+    console.log(userId);
+});
 
 router.route('/create-post').post((req, res, next) => {
   // [TODO] Get user id from session
@@ -36,32 +66,6 @@ router.route('/create-post').post((req, res, next) => {
       return next(error);
     }
     // console.log(data)
-    res.json(data);
-  });
-});
-
-router.route('/test').post((req, res, next) => {
-  Test.create(req.body, (error, data) => {
-    if (error) {
-      if (error.name === 'ValidationError') {
-        res.status(400);
-        res.send('ValidationError');
-      }
-      // console.log(error)
-      return next(error);
-    }
-    // console.log(data)
-    res.json(data);
-  });
-});
-
-router.route('/').get((req, res, next) => {
-  // eslint-disable-next-line array-callback-return
-  Post.find((error, data) => {
-    if (error) {
-      res.status(400).send(error);
-      return next(error);
-    }
     res.json(data);
   });
 });
@@ -101,28 +105,7 @@ router.route('/delete-post/:id').delete((req, res, next) => {
   });
 });
 
-router.route('/users/create/').post((req, res, next) => {
-  if (Object.keys(req.body).length === 0) {
-    res.status(400);
-    const error = 'The data to create user is not present';
-    return next(error);
-  }
 
-  User.create(req.body, (error, data) => {
-    if (error) {
-      if (error.name === 'ValidationError') {
-        res.status(400);
-        res.send('ValidationError');
-      }
-      res.status(400).send(error);
-      return next(error);
-    }
-    // [TODO] : Create a session and send it along with db data
-    console.log(data);
-
-    res.json(data);
-  });
-});
 
 router.route('/post/updatepost').post((req, res, next) => {
   // [TODO] Get user id from session for validation
