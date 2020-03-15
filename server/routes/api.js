@@ -42,7 +42,7 @@ router.route('/users/create/').post((req, res, next) => {
 //Registering authenticated middleware
 router.use(serverAuth.firebaseTokenAuthenticator);
 
-router.route('/create-post').post((userId, req, res, next)) => { 
+router.route('/create-post').post((userId, req, res, next) => { 
   // [TODO] Get user id from session
   const userID = '';
   if (Object.keys(req.body).length === 0) {
