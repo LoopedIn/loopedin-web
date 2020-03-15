@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const mongoose = require('mongoose');
+
 const app = express();
 app.use(cors());
 const indexRouter = require('../routes/api');
@@ -39,7 +40,6 @@ app.use('/login/', loginTestsRouter);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/', indexRouter);
-
 
 /**
  * Create HTTP server.
@@ -82,9 +82,7 @@ server.on('error', onError);
 // /*
 // * Creating Mongodb connection
 // */
-const hostname = process.env.MONGODB_HOST
-  ? process.env.MONGODB_HOST
-  : 'mongo';
+const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : 'mongo';
 const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';
@@ -97,4 +95,4 @@ mongoose
   .then(() => console.log('connection succesful'))
   .catch((err) => console.error(err));
 
-
+module.exports = { mongoose, serverListener };
