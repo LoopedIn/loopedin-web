@@ -1,4 +1,6 @@
 import { myFirebase } from "../firebase/firebase";
+import firebase from "firebase/app";
+import axios from 'axios';
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -83,14 +85,31 @@ export const loginUser = (email, password) => dispatch => {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(user => {
-      console.log(user);
-      dispatch(receiveLogin(user));
+      return firebase.auth().currentUser.getIdToken()
+        .then(idToken => {
+          const csrfToken = getCookie('csrfToken');
+          const authInfo = {
+            'idToken' : idToken, 
+            'csrfToken' : csrfToken
+          };
+          return axios.post('http://localhost:3000/login/sessionLogin', authInfo)
+            .then(() => {
+                fetch('http://localhost:3000/login/post_login_req/')
+                  .then(response => console.log(response));
+              });
+      });
     })
     .catch(error => {
       //Do something with the error if you want!
       dispatch(loginError());
     });
 };
+
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
 
 export const logoutUser = () => dispatch => {
   dispatch(requestLogout());

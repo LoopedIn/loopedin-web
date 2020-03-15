@@ -1,11 +1,7 @@
 {
   "name": "final-project-cookie-crumbs-1",
   "version": "1.0.0",
-  "description": "TODO: Fill out this file with the following information",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "Looped in project",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1.git"

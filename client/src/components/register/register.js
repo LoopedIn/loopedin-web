@@ -143,7 +143,6 @@ const register = props => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={handleSubmit}
         >
           Sign Up
         </Button>

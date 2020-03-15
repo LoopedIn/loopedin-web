@@ -1,9 +1,12 @@
-const userSchema = mongoose.Schema({
-  passwordHash: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  username: { type: String, required: true, unique: true },
-  tokenSeed: { type: String, required: true, unique: true },
-  created: { type: Date, default: () => new Date() }
-});
+const mongoose = require('mongoose');
 
-const User = (module.exports = mongoose.model("user", userSchema));
+const user = mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  firstName: { type: String, required: true, unique: false },
+  lastName: { type: String, required: true, unique: false },
+  created: { type: Date, default: () => new Date() },
+});
+const userSchema = mongoose.model('user', user);
+module.exports = {
+  User: userSchema,
+};
