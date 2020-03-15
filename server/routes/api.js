@@ -42,11 +42,7 @@ router.route('/users/create/').post((req, res, next) => {
 //Registering authenticated middleware
 router.use(serverAuth.firebaseTokenAuthenticator);
 
-router.route('/test_authenticated').post((userId, req, res, next) => {
-    console.log(userId);
-});
-
-router.route('/create-post').post((req, res, next) => {
+router.route('/create-post').post((userId, req, res, next)) => { 
   // [TODO] Get user id from session
   const userID = '';
   if (Object.keys(req.body).length === 0) {
@@ -70,7 +66,7 @@ router.route('/create-post').post((req, res, next) => {
   });
 });
 
-router.route('/update-post/:id').post((req, res, next) => {
+router.route('/update-post/:id').post((userId, req, res, next) => {
   // [TODO] Get user id from session
   const userID = '';
   Post.findOneAndUpdate(
@@ -92,7 +88,7 @@ router.route('/update-post/:id').post((req, res, next) => {
   );
 });
 
-router.route('/delete-post/:id').delete((req, res, next) => {
+router.route('/delete-post/:id').delete((userId, req,res, next) => {
   // [TODO] Get user id from session
   const userID = '';
   Post.findOneAndDelete({ postId: req.params.id }, (error, data) => {
@@ -107,7 +103,7 @@ router.route('/delete-post/:id').delete((req, res, next) => {
 
 
 
-router.route('/post/updatepost').post((req, res, next) => {
+router.route('/post/updatepost').post((userId, req,res, next) => {
   // [TODO] Get user id from session for validation
 
   // senderId is the _id object of user
@@ -129,7 +125,7 @@ router.route('/post/updatepost').post((req, res, next) => {
 });
 
 // Create a loop for a user
-router.route('/users/create_loop').post((req, res, next) => {
+router.route('/users/create_loop').post((userId, req,res, next) => {
   const { body } = req;
   // [TODO] : get user id from session for validation
 
@@ -156,7 +152,7 @@ router.route('/users/create_loop').post((req, res, next) => {
 });
 
 // Get the loops the user has created
-router.route('/loops').post((req, res, next) => {
+router.route('/loops').post((userId, req,res, next) => {
   // [TODO] get user id from session for validation
   // userID is the _id object of the user
   let { userID } = req.body;
@@ -173,7 +169,7 @@ router.route('/loops').post((req, res, next) => {
 });
 
 // update loop of a user
-router.route('/loops/:loop_id/update_loop').post((req, res, next) => {
+router.route('/loops/:loop_id/update_loop').post((userId, req,res, next) => {
   // [TODO] Get user id from session
   // const userID = '';
   const { body } = req;
@@ -205,7 +201,7 @@ router.route('/loops/:loop_id/update_loop').post((req, res, next) => {
 });
 
 // Return the members of a loop for a user
-router.route('/loops/:loop_id/get_contacts').post((req, res, next) => {
+router.route('/loops/:loop_id/get_contacts').post((userId, req,res, next) => {
   let { loop_id } = req.params;
   // [TODO] Get user id from session for validation
   // const userID = '';
@@ -221,7 +217,7 @@ router.route('/loops/:loop_id/get_contacts').post((req, res, next) => {
 });
 
 // Stores a message send from one user to another
-router.route('/users/send_message').post((req, res, next) => {
+router.route('/users/send_message').post((userId, req,res, next) => {
   // [TODO] Get user id from session
   // const userID = '';
   const { MessageObject } = req.body;
@@ -238,7 +234,7 @@ router.route('/users/send_message').post((req, res, next) => {
 });
 
 // Get list of messages between two persons
-router.route('/users/show_messages_persons').post((req, res, next) => {
+router.route('/users/show_messages_persons').post((userId, req,res, next) => {
   // [TODO] Get user id from session for validation
   // const userID = '';
   if (Object.keys(req.body).length === 0) {
@@ -266,7 +262,7 @@ router.route('/users/show_messages_persons').post((req, res, next) => {
   );
 });
 
-router.route('/users/show_messages').post((req, res, next) => {
+router.route('/users/show_messages').post((userId, req,res, next) => {
   // [TODO] Get user id from session for validation
   // const userID = '123';
   if (Object.keys(req.body).length === 0) {
@@ -295,7 +291,7 @@ router.route('/users/show_messages').post((req, res, next) => {
 });
 
 // Creates a post for the user
-router.route('/users/create_post').post((req, res, next) => {
+router.route('/users/create_post').post((userId, req,res, next) => {
   // [TODO] Get user id from session for validation
   // const userID = '';
 
@@ -320,7 +316,7 @@ router.route('/users/create_post').post((req, res, next) => {
 });
 
 // /users/user_posts
-router.route('/users/user_posts').post((req, res, next) => {
+router.route('/users/user_posts').post((userId, req,res, next) => {
   // [TODO] Get user id from session for validation
   // const userID = '123';
 
@@ -350,7 +346,7 @@ router.route('/users/user_posts').post((req, res, next) => {
 });
 
 // /posts/:post_id/delete
-router.route('/posts/:post_id/delete').delete((req, res, next) => {
+router.route('/posts/:post_id/delete').delete((userId, req,res, next) => {
   Post.findOneAndDelete({ _id: req.params.post_id }, (error, data) => {
     if (error) {
       return next(error);
@@ -362,7 +358,7 @@ router.route('/posts/:post_id/delete').delete((req, res, next) => {
 });
 
 // Return the list of friends of a user
-router.route('/users/add_friend').post((req, res, next) => {
+router.route('/users/add_friend').post((userId, req,res, next) => {
   // [TODO] : get session and validate
   // const userID = '123';
   if (Object.keys(req.body).length === 0) {
