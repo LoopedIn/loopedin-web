@@ -13,7 +13,6 @@ export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
 export const VERIFY_REQUEST = "VERIFY_REQUEST";
 export const VERIFY_SUCCESS = "VERIFY_SUCCESS";
 
-export const REGISTER_REQUEST = "REGISTER_REQUEST";
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAILURE = "REGISTER_FAILURE";
 
@@ -66,21 +65,17 @@ const verifySuccess = () => {
   };
 };
 
-const registerRequest = () => {
+const registerSuccess = user => {
   return {
-    type: REGISTER_REQUEST
+    type: REGISTER_SUCCESS,
+    user
   };
 };
 
-const registerSuccess = () => {
+const registerFailure = error => {
   return {
-    type: REGISTER_SUCCESS
-  };
-};
-
-const registerFailure = () => {
-  return {
-    type: REGISTER_FAILURE
+    type: REGISTER_FAILURE,
+    error
   };
 };
 
@@ -140,15 +135,15 @@ export const verifyAuth = () => dispatch => {
   });
 };
 
-export const registerUser = (email, password) => {
-  dispatch(registerRequest());
+export const registerUser = (email, password) => dispatch => {
   myFirebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(user => {
-      dispatch(registerSuccess());
+      console.log(user);
+      dispatch(registerSuccess(user));
     })
     .catch(error => {
-      dispatch(registerFailure());
+      dispatch(registerFailure(error));
     });
 };

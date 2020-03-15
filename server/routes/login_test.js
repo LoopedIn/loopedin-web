@@ -4,7 +4,7 @@ const admin = require('firebase-admin');
 
 let router = express.Router();
 
-router.route('/login/sessionLogin').post((req, res) => {
+router.route('/login/sessionLogin').get((req, res) => {
   console.log('login session called');
   // Get the ID token passed and the CSRF token.
   const idToken = req.body.idToken.toString();
