@@ -3,11 +3,24 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "Launch both server and client",
+            "configurations": ["Launch Server","Launch React"]
+        }
+    ],
     "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch React",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}/client/src"
+        },
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch Server",
             "skipFiles": [
                 "<node_internals>/**"
             ],
