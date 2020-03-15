@@ -1,5 +1,6 @@
 import { myFirebase } from "../firebase/firebase";
 import { sendAuthenticatedRequest, sendUnAuthenticatedRequest } from  "../utils/requestUtils";
+import { createUserApi } from "../api/apiRequests";
 import { routes } from "../utils/serverRoutes";
 import firebase from "firebase/app";
 import axios from 'axios';
@@ -83,19 +84,10 @@ const registerFailure = error => {
 
 export const loginUser = (email, password) => dispatch => {
   dispatch(requestLogin());
-
-  sendUnAuthenticatedRequest(routes.testUnauthenticated, {})
-    .then(resp => console.log("Unauthenticated response " + resp.body));
-
-
   myFirebase
     .auth()
     .signInWithEmailAndPassword(email, password)
     .catch(error => {
-
-      sendAuthenticatedRequest(routes.testAuthenticated, {})
-      .then(resp => console.log("Authenticated response " + resp.body));
-
       dispatch(loginError());
     });
 };
@@ -109,7 +101,6 @@ export const logoutUser = () => dispatch => {
       dispatch(receiveLogout());
     })
     .catch(error => {
-      //Do something with the error if you want!
       dispatch(logoutError());
     });
 };
@@ -124,13 +115,13 @@ export const verifyAuth = () => dispatch => {
   });
 };
 
-export const registerUser = (email, password) => dispatch => {
+export const registerUser = (firstName, lastName, email, password) => dispatch => {
   myFirebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(user => {
-      console.log(user);
-      dispatch(registerSuccess(user));
+    .then(response =>  createUserApi(response.user.uid, firstName, lastName, email))
+    .then(response => {
+      dispatch(registerSuccess(response));
     })
     .catch(error => {
       dispatch(registerFailure(error));
