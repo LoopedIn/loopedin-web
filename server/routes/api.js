@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const auth = require('../auth_modules/server_auth');
+const serverAuth = require('../auth_modules/server_auth.js');
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const { Loop, UserConnection } = require('../models/loop.js');
 
 router.use(cors());
 router.use(cookieParser());
-router.use(auth());
+router.use(serverAuth.auth);
 
 router.route('/create-post').post((req, res, next) => {
   // [TODO] Get user id from session

@@ -89,21 +89,21 @@ export const loginUser = (email, password) => dispatch => {
   myFirebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then(user => {
-      return firebase.auth().currentUser.getIdToken()
-        .then(idToken => {
-          const csrfToken = getCookie('csrfToken');
-          const authInfo = {
-            'idToken' : idToken, 
-            'csrfToken' : csrfToken
-          };
-          return axios.post('http://localhost:3000/login/sessionLogin', authInfo)
-            .then(() => {
-                fetch('http://localhost:3000/login/post_login_req/')
-                  .then(response => console.log(response));
-              });
-      });
-    })
+    // .then(user => {
+    //   return firebase.auth().currentUser.getIdToken()
+    //     .then(idToken => {
+    //       const csrfToken = getCookie('csrfToken');
+    //       const authInfo = {
+    //         'idToken' : idToken, 
+    //         'csrfToken' : csrfToken
+    //       };
+    //       return axios.post('http://localhost:3000/login/sessionLogin', authInfo)
+    //         .then(() => {
+    //             fetch('http://localhost:3000/login/post_login_req/')
+    //               .then(response => console.log(response));
+    //           });
+    //   });
+    // })
     .catch(error => {
       //Do something with the error if you want!
       dispatch(loginError());

@@ -1,22 +1,22 @@
 const admin = require('firebase-admin');
-const serviceAccount = require("./config/serviceAccountKey.json");
+const serviceAccount = require("../config/serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://loopedin-269607.firebaseio.com"
 });
 
-function checkAuth(req, res, next) {
+const auth = (req, res, next) => {
   if (req.headers.authtoken) {
     admin.auth().verifyIdToken(req.headers.authtoken)
       .then(() => {
-        next()
+        next();
       }).catch(() => {
-        res.status(403).send('Unauthorized')
+        res.status(403).send('Unauthorized');
       });
   } else {
-    res.status(403).send('Unauthorized')
+    res.status(403).send('Unauthorized');
   }
 }
 
-module.exports = {checkAuth};
+module.exports = {auth};
