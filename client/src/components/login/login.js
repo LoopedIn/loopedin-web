@@ -67,6 +67,11 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
+  },
+  errorText: {
+    color: "#f50057",
+    marginBottom: 5,
+    textAlign: "center"
   }
 }));
 
@@ -76,7 +81,7 @@ const CustomSignInSVG = withStyles({
   }
 })(LockOutlinedIcon);
 
-const loginSide = props => {
+export const loginSide = props => {
   const classes = useStyles();
 
   const [email, setEmail] = useState("");
@@ -152,6 +157,11 @@ const loginSide = props => {
             >
               Sign In
             </Button>
+            {loginError && (
+              <Typography component="p" className={classes.errorText}>
+                Incorrect email or password.
+              </Typography>
+            )}
             <Grid container>
               <Grid item>
                 <Link component={RouterLink} to="/register" variant="body2">
