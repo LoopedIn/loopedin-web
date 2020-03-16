@@ -16,7 +16,7 @@ router.use(cors());
 router.use(cookieParser());
 
 //Registering authenticated middleware
-//router.use(serverAuth.firebaseTokenAuthenticator);
+router.use(serverAuth.firebaseTokenAuthenticator);
 
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
@@ -402,12 +402,20 @@ router.route('/users/create_message').post((req,res, next) => {
       return next(error);
     }
     console.log(data);
-    //res.status(200).json(data);
+    res.status(200).json(data);
   });
 });
-
+function validateBody(req){
+  if (req.body.length === 0) {
+    res.status(400).send('Post data not present');
+    return next('Post data not present');
+  }
+  console.log("Post body present")
+  return ;
+}
 //Get_recent_chats
 router.route('/users/get_recent_chats').post((req,res, next) => {
+  validateBody(req)
   console.log( req.body.userID)
   userID = req.body.userID // TODO: change
   friendID = req.body.friendID
@@ -419,6 +427,7 @@ router.route('/users/get_recent_chats').post((req,res, next) => {
     if (error) {
       console.log(error);
       res.status(400);
+      next(error);
     }
     console.log(data);
     res.status(200).json(data);
@@ -428,6 +437,7 @@ router.route('/users/get_recent_chats').post((req,res, next) => {
 
 //get_chat_history 
 router.route('/users/get_chat_history').post((req,res, next) => {
+  validateBody(req)
   console.log( req.body.userID)
   userID = req.body.userID // TODO: change
   friendID = req.body.friendID

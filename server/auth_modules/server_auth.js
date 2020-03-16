@@ -7,7 +7,11 @@ admin.initializeApp({
 });
 
 const tokenIdToDbUserIdConverter = (tokenUid) =>{
-  return tokenUid;
+  User.find({authToken:tokenUid}, (error,data)=> {
+    
+    console.log(data)
+    return data._id;
+  })
 }
 
 const firebaseTokenAuthenticator = (req, res, next) => {
@@ -15,7 +19,7 @@ const firebaseTokenAuthenticator = (req, res, next) => {
   if (req.body.idToken) {
     admin.auth().verifyIdToken(req.body.idToken)
       .then((decodedToken) => {
-       req.userID = tokenIdToDbUserIdConverter(decodedToken.uid);
+       req.body.userID = tokenIdToDbUserIdConverter(decodedToken.uid);
       }).catch(() => {
         res.status(403).send('Unauthorized');
       });
