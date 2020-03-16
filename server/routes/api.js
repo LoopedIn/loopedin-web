@@ -28,8 +28,9 @@ router.route('/users/create/').post((req, res, next) => {
       if (error.name === 'ValidationError') {
         res.status(400);
         res.send('ValidationError');
+      } else {
+          res.status(400).send(error);
       }
-      res.status(400).send(error);
       return next(error);
     }
     // [TODO] : Create a session and send it along with db data
