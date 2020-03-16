@@ -390,14 +390,13 @@ router.route('/posts/:post_id/delete').delete((req,res, next) => {
 
 
 router.route('/users/create_message').post((req,res, next) => {
-  userID = req.userID
   const { body } = req;
   if (Object.keys(body).length === 0) {
     res.status(400).send('Post data not present');
     return next('Post data not present');
   }
   console.log (req.body)
-  req.body.senderId = mongoose.Types.ObjectId(req.body.senderId);
+  req.body.senderId = mongoose.Types.ObjectId(req.body.userId);
 
   // body.post has senderId field which is the _id of the user object
   Message.create(req.body, (error, data) => {

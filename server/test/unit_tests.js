@@ -64,18 +64,31 @@ describe('application', async () => {
   }
 
   async function createLoop(myUserInput, loopName, receivingUsers){
-    console.log(userId)
+    console.log(myUserInput)
     console.log(receivingUsers)
     const random = randomString(5);
     if(loopName === undefined){
       loopName = random;
     }
     const createLoopInput = {
-      'userId' : userId,
       'loopName': loopName,
       'receivingUsers': [receivingUsers]
     }
     const response = await sendAuthenticatedRequest(myUserInput, "/users/create_loop", createLoopInput);
+    return response
+  }
+
+  async function createMessage(myUserInput,receivingUsers){
+    console.log(myUserInput)
+    console.log(receivingUsers)
+    const random = randomString(5);
+
+    const createMessageInput = {
+      'receivingUserId': receivingUsers,
+      'messageType': "text",
+      'messageContent' : randomString(10)
+    }
+    const response = await sendAuthenticatedRequest(myUserInput, "/users/create_message", createMessageInput );
     return response
   }
 
@@ -201,19 +214,29 @@ describe('application', async () => {
         const resp = await addAsFriend(myUserInput, myUsersFriend.id);
       //TODO: fetch users friends and assert users friend is present in the list
         assert.strictEqual(resp.status, 200);
-      });
+      }).timeout(10000);
 
-      it('Create a loop ', async () => {
+      // it('Create a loop ', async () => {
+      //   const myUserInput = getRandomCreateUserInput();
+      //   resultToUser(await registerAndCreateUser(myUserInput));
+      //   const myUsersFriendInput = getRandomCreateUserInput();
+      //   const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
+      //   const resp = await addAsFriend(myUserInput, myUsersFriend.id);
+      //   const loop = await createLoop(myUserInput,undefined,myUsersFriend.id)
+      // //TODO: fetch users friends and assert users friend is present in the list
+      //   assert.strictEqual(resp.status, 200);
+      // });
+
+      it('Create a message ', async () => {
         const myUserInput = getRandomCreateUserInput();
         resultToUser(await registerAndCreateUser(myUserInput));
         const myUsersFriendInput = getRandomCreateUserInput();
         const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
         const resp = await addAsFriend(myUserInput, myUsersFriend.id);
-        const loop = await createLoop(myUserInput,undefined,myUsersFriend.id)
-        const message = await createPost()
+        const message = await createMessage(myUserInput,myUsersFriend.id);
       //TODO: fetch users friends and assert users friend is present in the list
         assert.strictEqual(resp.status, 200);
-      });
+      }).timeout(10000);
 
     //   it('Create a loop ', async () => {
     //     const myUser = resultToUser(await createUser());
