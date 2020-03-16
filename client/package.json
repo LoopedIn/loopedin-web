@@ -8,6 +8,7 @@
     "build": "webpack",
     "watch": "webpack-dev-server --inline --hot",
     "test": "jest",
+    "start": "webpack-dev-server --mode development --open --hot --host 0.0.0.0",
     "test:watch": "jest --watch"
   },
   "keywords": [],

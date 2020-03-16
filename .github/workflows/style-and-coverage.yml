@@ -34,3 +34,4 @@ jobs:
           npm run coverage --silent
       env:
         CI: true
+        FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBAS_AUTH_SECRET }}
