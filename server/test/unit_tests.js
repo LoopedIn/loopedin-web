@@ -184,23 +184,23 @@ describe('application', async () => {
   describe('authenticated state', async () => {
     describe('Managing friends and loops', async () => {
 
-      // it('Create a user', async () => {
-      //   const userInput = getRandomCreateUserInput();
-      //   const resp = await registerAndCreateUser(userInput);
-      //   assert.strictEqual(resp['firstName'],userInput['firstName']);
-      //   assert.strictEqual(resp['lastName'],userInput['lastName']);
-      //   assert.strictEqual(resp['email'],userInput['email']);
-      // });
-
-      it('Add a user as a friend ', async () => {
-        const myUserInput = getRandomCreateUserInput();
-        resultToUser(await registerAndCreateUser(myUserInput));
-        const myUsersFriendInput = getRandomCreateUserInput();
-        const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
-        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
-      //TODO: fetch users friends and assert users friend is present in the list
-        assert.strictEqual(resp.status, 200);
+      it('Create a user', async () => {
+        const userInput = getRandomCreateUserInput();
+        const resp = await registerAndCreateUser(userInput);
+        assert.strictEqual(resp['firstName'],userInput['firstName']);
+        assert.strictEqual(resp['lastName'],userInput['lastName']);
+        assert.strictEqual(resp['email'],userInput['email']);
       });
+
+      // it('Add a user as a friend ', async () => {
+      //   const myUserInput = getRandomCreateUserInput();
+      //   resultToUser(await registerAndCreateUser(myUserInput));
+      //   const myUsersFriendInput = getRandomCreateUserInput();
+      //   const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
+      //   const resp = await addAsFriend(myUserInput, myUsersFriend.id);
+      // //TODO: fetch users friends and assert users friend is present in the list
+      //   assert.strictEqual(resp.status, 200);
+      // });
 
     //   it('Create a loop ', async () => {
     //     const myUser = resultToUser(await createUser());
