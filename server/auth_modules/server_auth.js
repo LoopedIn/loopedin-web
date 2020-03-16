@@ -13,11 +13,11 @@ const tokenIdToDbUserIdConverter = (tokenUid) =>{
 }
 
 const firebaseTokenAuthenticator = (req, res, next) => {
+  next();// TODO : remove
   if (req.body.idToken) {
     admin.auth().verifyIdToken(req.body.idToken)
       .then((decodedToken) => {
-        console.log(decodedToken);
-        next();
+       req.userID = tokenIdToDbUserIdConverter(decodedToken.uid);
       }).catch(() => {
         res.status(403).send('Unauthorized');
       });

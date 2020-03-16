@@ -79,7 +79,7 @@ server.on('error', onError);
 // /*
 // * Creating Mongodb connection
 // */
-const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : '127.0.0.1';
+const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : 'localhost';
 const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';

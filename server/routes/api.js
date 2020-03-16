@@ -15,6 +15,9 @@ const { Loop, UserConnection } = require('../models/loop.js');
 router.use(cors());
 router.use(cookieParser());
 
+//Registering authenticated middleware
+router.use(serverAuth.firebaseTokenAuthenticator);
+
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
   if (Object.keys(req.body).length === 0) {
@@ -40,33 +43,9 @@ router.route('/users/create/').post((req, res, next) => {
   });
 });
 
-//Registering authenticated middleware
-router.use(serverAuth.firebaseTokenAuthenticator);
-
-// Return the list of friends of a user
-router.route('/users/addFriend').post((req,res, next) => {
-    if (Object.keys(req.body).length === 0) {
-      res.status(400).send('Post data not present');
-      return next('Post data not present');
-    }
-  
-    UserConnection.update(
-      { userId: _userId },
-      { $set: data },
-      { upsert: true },
-      (error, response) => {
-        if (error) {
-          console.log(`Error ${error}`);
-          return next(error);
-        }
-        res.status(200).json(response);
-      }
-    );
-});
-
-router.route('/create-post').post((userId, req, res, next) => { 
+router.route('/create-post').post(( req, res, next) => { 
   // [TODO] Get user id from session
-  const userID = '';
+  const userID = req.userID;
   if (Object.keys(req.body).length === 0) {
     const error = 'Data not present in POST request body';
     return next(error);
@@ -88,9 +67,9 @@ router.route('/create-post').post((userId, req, res, next) => {
   });
 });
 
-router.route('/update-post/:id').post((userId, req, res, next) => {
+router.route('/update-post/:id').post(( req, res, next) => {
   // [TODO] Get user id from session
-  const userID = '';
+  const userID = req.userID;
   Post.findOneAndUpdate(
     { postId: req.params.id },
     {
@@ -110,9 +89,9 @@ router.route('/update-post/:id').post((userId, req, res, next) => {
   );
 });
 
-router.route('/delete-post/:id').delete((userId, req,res, next) => {
+router.route('/delete-post/:id').delete((req,res, next) => {
   // [TODO] Get user id from session
-  const userID = '';
+  const userID = req.userID;
   Post.findOneAndDelete({ postId: req.params.id }, (error, data) => {
     if (error) {
       return next(error);
@@ -123,7 +102,7 @@ router.route('/delete-post/:id').delete((userId, req,res, next) => {
   });
 });
 
-router.route('/post/updatepost').post((userId, req,res, next) => {
+router.route('/post/updatepost').post((req,res, next) => {
   // [TODO] Get user id from session for validation
 
   // senderId is the _id object of user
@@ -145,7 +124,7 @@ router.route('/post/updatepost').post((userId, req,res, next) => {
 });
 
 // Create a loop for a user
-router.route('/users/create_loop').post((userId, req,res, next) => {
+router.route('/users/create_loop').post((req,res, next) => {
   const { body } = req;
   // [TODO] : get user id from session for validation
 
@@ -172,7 +151,7 @@ router.route('/users/create_loop').post((userId, req,res, next) => {
 });
 
 // Get the loops the user has created
-router.route('/loops').post((userId, req,res, next) => {
+router.route('/loops').post((req,res, next) => {
   // [TODO] get user id from session for validation
   // userID is the _id object of the user
   let { userID } = req.body;
@@ -189,7 +168,7 @@ router.route('/loops').post((userId, req,res, next) => {
 });
 
 // update loop of a user
-router.route('/loops/:loop_id/update_loop').post((userId, req,res, next) => {
+router.route('/loops/:loop_id/update_loop').post((req,res, next) => {
   // [TODO] Get user id from session
   // const userID = '';
   const { body } = req;
@@ -221,7 +200,7 @@ router.route('/loops/:loop_id/update_loop').post((userId, req,res, next) => {
 });
 
 // Return the members of a loop for a user
-router.route('/loops/:loop_id/get_contacts').post((userId, req,res, next) => {
+router.route('/loops/:loop_id/get_contacts').post((req,res, next) => {
   let { loop_id } = req.params;
   // [TODO] Get user id from session for validation
   // const userID = '';
@@ -237,7 +216,7 @@ router.route('/loops/:loop_id/get_contacts').post((userId, req,res, next) => {
 });
 
 // Stores a message send from one user to another
-router.route('/users/send_message').post((userId, req,res, next) => {
+router.route('/users/send_message').post((req,res, next) => {
   // [TODO] Get user id from session
   // const userID = '';
   const { MessageObject } = req.body;
@@ -254,7 +233,7 @@ router.route('/users/send_message').post((userId, req,res, next) => {
 });
 
 // Get list of messages between two persons
-router.route('/users/show_messages_persons').post((userId, req,res, next) => {
+router.route('/users/show_messages_persons').post((req,res, next) => {
   // [TODO] Get user id from session for validation
   // const userID = '';
   if (Object.keys(req.body).length === 0) {
@@ -282,7 +261,7 @@ router.route('/users/show_messages_persons').post((userId, req,res, next) => {
   );
 });
 
-router.route('/users/show_messages').post((userId, req,res, next) => {
+router.route('/users/show_messages').post((req,res, next) => {
   // [TODO] Get user id from session for validation
   // const userID = '123';
   if (Object.keys(req.body).length === 0) {
@@ -311,7 +290,7 @@ router.route('/users/show_messages').post((userId, req,res, next) => {
 });
 
 // Creates a post for the user
-router.route('/users/create_post').post((userId, req,res, next) => {
+router.route('/users/create_post').post((req,res, next) => {
   // [TODO] Get user id from session for validation
   // const userID = '';
 
@@ -336,7 +315,7 @@ router.route('/users/create_post').post((userId, req,res, next) => {
 });
 
 // /users/user_posts
-router.route('/users/user_posts').post((userId, req,res, next) => {
+router.route('/users/user_posts').post((req,res, next) => {
   // [TODO] Get user id from session for validation
   // const userID = '123';
 
@@ -366,7 +345,7 @@ router.route('/users/user_posts').post((userId, req,res, next) => {
 });
 
 // /posts/:post_id/delete
-router.route('/posts/:post_id/delete').delete((userId, req,res, next) => {
+router.route('/posts/:post_id/delete').delete((req,res, next) => {
   Post.findOneAndDelete({ _id: req.params.post_id }, (error, data) => {
     if (error) {
       return next(error);
@@ -374,6 +353,90 @@ router.route('/posts/:post_id/delete').delete((userId, req,res, next) => {
     res.status(200).json({
       msg: data,
     });
+  });
+});
+
+// Return the list of friends of a user
+router.route('/users/add_friend').post((req,res, next) => {
+  // [TODO] : get session and validate
+  // const userID = '123';
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).send('Post data not present');
+    return next('Post data not present');
+  }
+
+  const { data, userID } = req.body;
+  // Get userID from the _id field of the request.
+
+  UserConnection.update(
+    { userId: userID },
+    {
+      $set: data,
+    },
+    { upsert: true },
+    // eslint-disable-next-line consistent-return
+    (error, response) => {
+      if (error) {
+        console.log(`Error ${error}`);
+        return next(error);
+      }
+      res.status(200).json(response);
+    },
+  );
+});
+
+router.route('/users/create_message').post((req,res, next) => {
+  userID = req.userID
+  const { body } = req;
+  if (Object.keys(body).length === 0) {
+    res.status(400).send('Post data not present');
+    return next('Post data not present');
+  }
+  console.log (req.body)
+  req.body.senderId = mongoose.Types.ObjectId(req.body.senderId);
+
+  // body.post has senderId field which is the _id of the user object
+  Message.create(req.body, (error, data) => {
+    if (error) {
+      //res.status(400).send('ValidationError');
+      console.log(error);
+      return next(error);
+    }
+    console.log(data);
+    //res.status(200).json(data);
+  });
+});
+
+//Get_recent_chats
+router.route('/users/get_recent_chats').post((req,res, next) => {
+  console.log( req.body.userID)
+  userID = req.body.userID // TODO: change
+  friendID = req.body.friendID
+  Message.find({$or:[{receivingUserId: userID },{senderId: userID }]})
+  .sort({created:-1}).exec((error, data) => {
+    if (error) {
+      //res.status(400);
+      console.log(error);
+    }
+    console.log(data);
+    //res.json(data);
+  });
+});
+
+//get_chat_history 
+router.route('/users/get_chat_history ').post((req,res, next) => {
+  console.log( req.body.userID)
+  userID = req.body.userID // TODO: change
+  friendID = req.body.friendID
+  Message.find({$or:[{ $and:[{ receivingUserId: userID }, { senderId: friendID }],
+    $and:[{ receivingUserId: friendID }, { senderId: userID }]}]})
+  .sort({created:-1}).exec((error, data) => {
+    if (error) {
+      //res.status(400);
+      console.log(error);
+    }
+    console.log(data);
+    //res.json(data);
   });
 });
 
