@@ -67,7 +67,7 @@ const register = props => {
   const handleSubmit = () => {
     const { dispatch } = props;
 
-    dispatch(registerUser(email, password));
+    dispatch(registerUser(firstName, lastName, email, password));
   };
 
   const { registerSuccess, registerError, registerErrorMsg } = props;
