@@ -79,13 +79,14 @@ server.on('error', onError);
 // /*
 // * Creating Mongodb connection
 // */
-const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : 'mongo';
+const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : '127.0.0.1';
 const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';
 console.log(`${hostname}   ${portnumber}`);
+
 mongoose
-  .connect(`mongodb://127.0.0.1:27017/InLooped`, {
+  .connect(`mongodb://${hostname}:${portnumber}/InLooped`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
