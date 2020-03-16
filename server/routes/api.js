@@ -33,9 +33,6 @@ router.route('/users/create/').post((req, res, next) => {
       }
       return next(error);
     }
-    // [TODO] : Create a session and send it along with db data
-    console.log(data);
-
     res.json(data);
   });
 });
@@ -51,19 +48,16 @@ router.route('/users/add_friend').post((req,res, next) => {
   }
 
   const data = req.body;
-  console.log(req.body);
-  console.log(req.body.userID);
-
   const userId = req.body.userID;
+  data.userId = userId;
   // Get userID from the _id field of the request.
 
-  UserConnection.update(
+  UserConnection.updateOne(
     { userId: userId },
     {
       $set: data,
     },
     { upsert: true },
-    // eslint-disable-next-line consistent-return
     (error, response) => {
       if (error) {
         console.log(`Error ${error}`);
