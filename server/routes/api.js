@@ -40,7 +40,7 @@ router.route('/users/create/').post((req, res, next) => {
   });
 });
 //Registering authenticated middleware
-router.use(serverAuth.firebaseTokenAuthenticator);
+//router.use(serverAuth.firebaseTokenAuthenticator);
 
 router.route('/create-post').post(( req, res, next) => { 
   // [TODO] Get user id from session
@@ -51,7 +51,7 @@ router.route('/create-post').post(( req, res, next) => {
   }
 
   const postObject = req.body;
-  postObject.senderId = userID;
+  //postObject.senderId = userID;
   Post.create(postObject, (error, data) => {
     if (error) {
       if (error.name === 'ValidationError') {
@@ -457,5 +457,32 @@ router.route('/users/get_chat_history').post((req,res, next) => {
     return next();
   });
 });
-
+//get_recent_posts
+async function  getLoopsContainingUser (userID) {
+  return await Loop.find({receivingUsers : userID}, '_id', (error,data)=> {
+    console.log("Loops: " + data)
+    return data;
+  })
+}
+router.route('/posts/get_recent_posts').post((req,res, next) => {
+  validateBody(req)
+  console.log( req.body.userID)
+  userID = req.body.userID // TODO: change
+  friendID = req.body.friendID
+  page = req.body.page ? req.body.page : 1
+  loopIDs = getLoopsContainingUser(userID)
+  Post.find({$or:[{receivingUserIds: userID },{receivingLoopIds: loopIDs }]})
+  .sort({created:-1})
+  .skip((page-1) * limit)
+  .exec((error, data) => {
+    if (error) {
+      console.log(error);
+      res.status(400);
+      return next();
+    }
+    //console.log(data);
+    res.json(data);
+    return next();
+  });
+});
 module.exports = router;

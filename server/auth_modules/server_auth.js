@@ -23,7 +23,6 @@ const firebaseTokenAuthenticator = (req, res, next) => {
     admin.auth().verifyIdToken(req.body.idToken)
       .then((decodedToken) => {
         console.log (decodedToken.uid) 
-
        req.body.userID = tokenIdToDbUserIdConverter(decodedToken.uid);
        console.log( req.body.userID )
        next();
