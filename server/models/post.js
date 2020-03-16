@@ -9,10 +9,6 @@ const mongoose = require('mongoose');
     created: { type: Date, default: () => new Date() }
   });
 
-  const test = mongoose.Schema({
-    testVal: {type: String, required: true, unique: true}
-  })
-  
   const message = mongoose.Schema({
     senderId: { type: mongoose.Types.ObjectId, required: true},
     receivingUserId: {type:  String , required: true},
@@ -30,11 +26,9 @@ const mongoose = require('mongoose');
   const postSchema = mongoose.model("post", post);
   const messageSchema = mongoose.model("message", message);
   const postAccessSchema = mongoose.model("postAccess", postAccess);
-  const testSchema = mongoose.model("test", test);
 
 module.exports = { 
   Post: postSchema, 
   Message: messageSchema , 
-  PostAccess: postAccessSchema,
-  Test: testSchema
+  PostAccess: postAccessSchema
 }

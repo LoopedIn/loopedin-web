@@ -4,9 +4,9 @@ const cookieParser = require('cookie-parser');
 const serverAuth = require('../auth_modules/server_auth.js');
 const mongoose = require('mongoose');
 const router = express.Router();
-
+const limit = 10;
 // eslint-disable-next-line no-unused-vars
-const { Post, Message, PostAccess, Test } = require('../models/post.js');
+const { Post, Message, PostAccess} = require('../models/post.js');
 
 const { User } = require('../models/user.js');
 
@@ -16,7 +16,7 @@ router.use(cors());
 router.use(cookieParser());
 
 //Registering authenticated middleware
-router.use(serverAuth.firebaseTokenAuthenticator);
+//router.use(serverAuth.firebaseTokenAuthenticator);
 
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
@@ -411,31 +411,39 @@ router.route('/users/get_recent_chats').post((req,res, next) => {
   console.log( req.body.userID)
   userID = req.body.userID // TODO: change
   friendID = req.body.friendID
+  page = req.body.page ? req.body.page : 1
   Message.find({$or:[{receivingUserId: userID },{senderId: userID }]})
-  .sort({created:-1}).exec((error, data) => {
+  .sort({created:-1})
+  .skip((page-1) * limit)
+  .exec((error, data) => {
     if (error) {
-      //res.status(400);
       console.log(error);
+      res.status(400);
     }
     console.log(data);
-    //res.json(data);
+    res.status(200).json(data);
+    return next();
   });
 });
 
 //get_chat_history 
-router.route('/users/get_chat_history ').post((req,res, next) => {
+router.route('/users/get_chat_history').post((req,res, next) => {
   console.log( req.body.userID)
   userID = req.body.userID // TODO: change
   friendID = req.body.friendID
+  page = req.body.page ? req.body.page : 1
   Message.find({$or:[{ $and:[{ receivingUserId: userID }, { senderId: friendID }],
     $and:[{ receivingUserId: friendID }, { senderId: userID }]}]})
-  .sort({created:-1}).exec((error, data) => {
+  .sort({created:-1})
+  .skip((page-1) * limit)
+  .exec((error, data) => {
     if (error) {
-      //res.status(400);
       console.log(error);
+      res.status(400);
     }
     console.log(data);
-    //res.json(data);
+    res.status(200).json(data);
+    return next();
   });
 });
 
