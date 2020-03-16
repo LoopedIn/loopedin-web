@@ -1,4 +1,6 @@
 const admin = require('firebase-admin');
+const { User } = require('../models/user.js');
+const mongoose = require('mongoose');
 
 const serviceAccount = process.env.FIREBASE_PRIVATE_KEY ?
  JSON.parse(process.env.FIREBASE_PRIVATE_KEY) : require("../config/serviceAccountKey.json");
@@ -8,31 +10,25 @@ admin.initializeApp({
   databaseURL: "https://loopedin-269607.firebaseio.com"
 });
 
-async function  tokenIdToDbUserIdConverter (tokenUid) {
-  return await User.find({authToken:tokenUid}, (error,data)=> {
-    console.log("data in db" + data)
-    return data._id;
+function tokenIdToDbUserIdConverter (tokenUid) {
+  const userData = User.find({authToken:tokenUid}, (error,data)=> {
+    return data;
   })
+  const id = mongoose.Types.ObjectId(userData._id);
+  return id;
 }
 
 const firebaseTokenAuthenticator = (req, res, next) => {
-  //next();// TODO : remove
-
   if (req.body.idToken) {
-    console.log(req.body.idToken)
-    admin.auth().verifyIdToken(req.body.idToken)
+     admin.auth().verifyIdToken(req.body.idToken)
       .then((decodedToken) => {
-        console.log (decodedToken.uid) 
-       req.body.userID = tokenIdToDbUserIdConverter(decodedToken.uid);
-       console.log( req.body.userID )
+       const userId = tokenIdToDbUserIdConverter(decodedToken.uid);
+       req.body.userID = userId;
        next();
       }).catch(() => {
-        console.log( req.body.authToken )
         res.status(403);
-        
       });
   } else {
-    console.log( req.body.authToken )
     res.status(403);
   }
 }
