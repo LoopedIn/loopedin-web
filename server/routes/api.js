@@ -42,6 +42,38 @@ router.route('/users/create/').post((req, res, next) => {
 //Registering authenticated middleware
 router.use(serverAuth.firebaseTokenAuthenticator);
 
+// Return the list of friends of a user
+router.route('/users/add_friend').post((req,res, next) => {
+
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).send('Post data not present');
+    return next('Post data not present');
+  }
+
+  const data = req.body;
+  console.log(req.body);
+  console.log(req.body.userID);
+
+  const userId = req.body.userID;
+  // Get userID from the _id field of the request.
+
+  UserConnection.update(
+    { userId: userId },
+    {
+      $set: data,
+    },
+    { upsert: true },
+    // eslint-disable-next-line consistent-return
+    (error, response) => {
+      if (error) {
+        console.log(`Error ${error}`);
+        return next(error);
+      }
+      res.status(200).json(response);
+    },
+  );
+});
+
 router.route('/create-post').post(( req, res, next) => { 
   // [TODO] Get user id from session
   const userID = req.userID;
@@ -355,34 +387,7 @@ router.route('/posts/:post_id/delete').delete((req,res, next) => {
   });
 });
 
-// Return the list of friends of a user
-router.route('/users/add_friend').post((req,res, next) => {
-  // [TODO] : get session and validate
-  // const userID = '123';
-  if (Object.keys(req.body).length === 0) {
-    res.status(400).send('Post data not present');
-    return next('Post data not present');
-  }
 
-  const { data, userID } = req.body;
-  // Get userID from the _id field of the request.
-
-  UserConnection.update(
-    { userId: userID },
-    {
-      $set: data,
-    },
-    { upsert: true },
-    // eslint-disable-next-line consistent-return
-    (error, response) => {
-      if (error) {
-        console.log(`Error ${error}`);
-        return next(error);
-      }
-      res.status(200).json(response);
-    },
-  );
-});
 
 router.route('/users/create_message').post((req,res, next) => {
   userID = req.userID
