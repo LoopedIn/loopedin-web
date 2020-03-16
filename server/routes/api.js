@@ -48,7 +48,29 @@ const { Loop, UserConnection } = require('../models/loop.js');
 //       },
 //     );
 // });
-
+router.route('/users/*').all((req,res,next)=>{
+  console.log("Getting username here")
+  //TODO get username from firebase
+  req.body.username="test";
+  next();
+})
+router.route('/users/get_recent_chats').get((req,res,next)=>{
+  Message.find({ senderId : req.body.username },(error, data) => {
+    if (error) {
+      res.status(400).send(error);
+      return next(error);
+    }
+    responsedata = responseData.concat(data)
+  });
+  Message.find({ receivingUserId : req.body.username },(error, data2) => {
+    if (error) {
+      res.status(400).send(error);
+      return next(error);
+    }
+    responseData = responsedata.concat(data)
+  });
+  console.log(req.body);
+})
 router.route('/create-post').post((req, res, next) => {
   // [TODO] Get user id from session
   const userID = '';
