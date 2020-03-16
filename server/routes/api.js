@@ -37,7 +37,7 @@ router.route('/users/create/').post((req, res, next) => {
   });
 });
 //Registering authenticated middleware
-//router.use(serverAuth.firebaseTokenAuthenticator);
+router.use(serverAuth.firebaseTokenAuthenticator);
 
 // Return the list of friends of a user
 router.route('/users/add_friend').post((req,res, next) => {
@@ -159,8 +159,9 @@ router.route('/users/create_loop').post((req,res, next) => {
     return next(error);
   }
 
-  const loopObject = req.body.loop;
-  loopObject.userId = mongoose.Types.ObjectId(loopObject.userId);
+  const loopObject = req.body;
+  loopObject.userId = req.body.userID;
+
   Loop.create(loopObject, (error, data) => {
     if (error) {
       if (error.name === 'ValidationError') {
