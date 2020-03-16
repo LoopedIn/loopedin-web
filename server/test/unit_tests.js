@@ -87,7 +87,7 @@ describe('application', async () => {
   async function createUserApi(token, userName, firstName, lastName, email){
     const input  = {
       'authToken' : token,
-      'userId' : userName,
+      'userName' : userName,
       'firstName' : firstName,
       'lastName' : lastName,
       'email' : email

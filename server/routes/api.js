@@ -15,9 +15,6 @@ const { Loop, UserConnection } = require('../models/loop.js');
 router.use(cors());
 router.use(cookieParser());
 
-//Registering authenticated middleware
-router.use(serverAuth.firebaseTokenAuthenticator);
-
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
   if (Object.keys(req.body).length === 0) {
@@ -25,14 +22,14 @@ router.route('/users/create/').post((req, res, next) => {
     const error = 'The data to create user is not present';
     return next(error);
   }
-
   User.create(req.body, (error, data) => {
     if (error) {
       if (error.name === 'ValidationError') {
-        res.status(400);
-        res.send('ValidationError');
+        res.status(400)
+        res.send(error);
       } else {
-          res.status(400).send(error);
+          res.status(400)
+          res.send(error);
       }
       return next(error);
     }
@@ -42,6 +39,8 @@ router.route('/users/create/').post((req, res, next) => {
     res.json(data);
   });
 });
+//Registering authenticated middleware
+router.use(serverAuth.firebaseTokenAuthenticator);
 
 router.route('/create-post').post(( req, res, next) => { 
   // [TODO] Get user id from session
