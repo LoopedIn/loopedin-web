@@ -79,11 +79,12 @@ server.on('error', onError);
 // /*
 // * Creating Mongodb connection
 // */
-const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : 'mongo';
+const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : 'localhost';
 const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';
 console.log(`${hostname}   ${portnumber}`);
+
 mongoose
   .connect(`mongodb://${hostname}:${portnumber}/InLooped`, {
     useNewUrlParser: true,

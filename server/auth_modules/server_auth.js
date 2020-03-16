@@ -1,5 +1,7 @@
 const admin = require('firebase-admin');
-const serviceAccount = require("../config/serviceAccountKey.json");
+
+const serviceAccount = process.env.FIREBASE_PRIVATE_KEY ?
+ JSON.parse(process.env.FIREBASE_PRIVATE_KEY) : require("../config/serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -11,11 +13,11 @@ const tokenIdToDbUserIdConverter = (tokenUid) =>{
 }
 
 const firebaseTokenAuthenticator = (req, res, next) => {
-  next();
+  next();// TODO : remove
   if (req.body.idToken) {
     admin.auth().verifyIdToken(req.body.idToken)
       .then((decodedToken) => {
-        next(tokenIdToDbUserIdConverter(decodedToken.uid));
+       req.userID = tokenIdToDbUserIdConverter(decodedToken.uid);
       }).catch(() => {
         res.status(403).send('Unauthorized');
       });
