@@ -63,24 +63,27 @@ describe('application', async () => {
     };
   }
 
-  async function createLoop(userId, loopName){
+  async function createLoop(myUserInput, loopName, receivingUsers){
+    console.log(userId)
+    console.log(receivingUsers)
     const random = randomString(5);
     if(loopName === undefined){
       loopName = random;
     }
     const createLoopInput = {
-      'loopId': random,
       'userId' : userId,
       'loopName': loopName,
-      'receivingUsers': []
+      'receivingUsers': [receivingUsers]
     }
-    return await client.post("/users/" +  userId + "/create_loop", createLoopInput);
+    const response = await sendAuthenticatedRequest(myUserInput, "/users/create_loop", createLoopInput);
+    return response
   }
 
   async function updateLoopName(loop_id, newLoopName){
     const updateLoopInput = {
       'loopName': newLoopName
     }
+    
     return await client.post("/loops/" +  loop_id + "/update", updateLoopInput);
   }
 
@@ -196,6 +199,18 @@ describe('application', async () => {
         const myUsersFriendInput = getRandomCreateUserInput();
         const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
         const resp = await addAsFriend(myUserInput, myUsersFriend.id);
+      //TODO: fetch users friends and assert users friend is present in the list
+        assert.strictEqual(resp.status, 200);
+      });
+
+      it('Create a loop ', async () => {
+        const myUserInput = getRandomCreateUserInput();
+        resultToUser(await registerAndCreateUser(myUserInput));
+        const myUsersFriendInput = getRandomCreateUserInput();
+        const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
+        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
+        const loop = await createLoop(myUserInput,undefined,myUsersFriend.id)
+        const message = await createPost()
       //TODO: fetch users friends and assert users friend is present in the list
         assert.strictEqual(resp.status, 200);
       });
