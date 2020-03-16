@@ -59,6 +59,7 @@ describe('application', async () => {
       email: random + '@email.com',
       firstName: random + '_fn',
       lastName: random + '_ln',
+      password: random + '_pass'
     };
   }
 
@@ -94,12 +95,13 @@ describe('application', async () => {
     return sendUnAuthenticatedRequest("/users/create", input);
   }
 
-  async function addAsFriend(user1Id, user2Id){
+  async function addAsFriend(myUserInput, user2Id){
     const addFriendInput = {
-      'userId': user2Id,
       'friendIds' : [user2Id],
     };
-    return await client.post("/users/" + user1Id + "/add_friend", addFriendInput);
+    const response = await sendAuthenticatedRequest(myUserInput, "/add_friend", addFriendInput);
+    console.log(response);
+    return response;
   }
 
   async function addFriendToLoop(loopId, friendId){
@@ -118,7 +120,7 @@ describe('application', async () => {
   }
 
   function resultToUser(result){
-    return {id: result.data.userId};
+    return {id: result['_id']};
   }
 
   async function sendMessage(userId, friendId, messageContent){
@@ -147,18 +149,16 @@ describe('application', async () => {
   return await client.get("/users/" + userId + "/posts",);
   }
 
-  async function registerAndCreateUser(username, firstName, lastName, email, password){
-    return myFirebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(response =>  createUserApi(response.user.uid, username,firstName, lastName, email));
+  async function registerAndCreateUser(userInput){   
+    const response = await myFirebase.auth().createUserWithEmailAndPassword(userInput['email'], userInput['password']);
+    const createUserResponse = await createUserApi(response.user.uid, userInput['userId'],userInput['firstName'], userInput['lastName'], userInput['email']);
+    return createUserResponse.data;
   }
 
-  async function sendAuthenticatedRequest(route, postBodyParams){
-    const authInfo = {
-      'idToken' : idToken
-    };
-    postBodyParams['authInfo'] = authInfo;
+  async function sendAuthenticatedRequest(myUserInput, route, postBodyParams){
+    const idToken = await getLoggedInUserToken(myUserInput.email, myUserInput.password);
+    postBodyParams['idToken'] = idToken;
+    console.log(postBodyParams);
     return client.post(route, postBodyParams);
   }
 
@@ -184,24 +184,23 @@ describe('application', async () => {
   describe('authenticated state', async () => {
     describe('Managing friends and loops', async () => {
 
-      it('Create a user', async () => {
-        const userInput = getRandomCreateUserInput();
-        const resp = await registerAndCreateUser(userInput['userId'], 
-            userInput['firstName'], 
-            userInput['lastName'], 
-            userInput['email'], 
-            userInput['userId'] + "_pass");
-        
-        assert.strictEqual(resp.status,200);
-      });
+      // it('Create a user', async () => {
+      //   const userInput = getRandomCreateUserInput();
+      //   const resp = await registerAndCreateUser(userInput);
+      //   assert.strictEqual(resp['firstName'],userInput['firstName']);
+      //   assert.strictEqual(resp['lastName'],userInput['lastName']);
+      //   assert.strictEqual(resp['email'],userInput['email']);
+      // });
 
-    //   it('Add a user as a friend ', async () => {
-    //     const myUser = resultToUser(await createUser());
-    //     const myUsersFriend = resultToUser(await createUser());
-    //     const resp = await addAsFriend(myUser.id, myUsersFriend.id);
-    //   //TODO: fetch users friends and assert users friend is present in the list
-    //     assert.strictEqual(resp.status, 200);
-    //   });
+      it('Add a user as a friend ', async () => {
+        const myUserInput = getRandomCreateUserInput();
+        resultToUser(await registerAndCreateUser(myUserInput));
+        const myUsersFriendInput = getRandomCreateUserInput();
+        const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
+        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
+      //TODO: fetch users friends and assert users friend is present in the list
+        assert.strictEqual(resp.status, 200);
+      });
 
     //   it('Create a loop ', async () => {
     //     const myUser = resultToUser(await createUser());

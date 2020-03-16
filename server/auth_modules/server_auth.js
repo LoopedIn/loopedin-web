@@ -11,11 +11,11 @@ const tokenIdToDbUserIdConverter = (tokenUid) =>{
 }
 
 const firebaseTokenAuthenticator = (req, res, next) => {
-  next();
   if (req.body.idToken) {
     admin.auth().verifyIdToken(req.body.idToken)
       .then((decodedToken) => {
-        next(tokenIdToDbUserIdConverter(decodedToken.uid));
+        console.log(decodedToken);
+        next();
       }).catch(() => {
         res.status(403).send('Unauthorized');
       });
