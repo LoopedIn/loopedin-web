@@ -8,26 +8,33 @@ admin.initializeApp({
   databaseURL: "https://loopedin-269607.firebaseio.com"
 });
 
-const tokenIdToDbUserIdConverter = (tokenUid) =>{
-  User.find({authToken:tokenUid}, (error,data)=> {
-    console.log(data)
+async function  tokenIdToDbUserIdConverter (tokenUid) {
+  return await User.find({authToken:tokenUid}, (error,data)=> {
+    console.log("data in db" + data)
     return data._id;
   })
 }
 
 const firebaseTokenAuthenticator = (req, res, next) => {
-  next();// TODO : remove
+  //next();// TODO : remove
+
   if (req.body.idToken) {
+    console.log(req.body.idToken)
     admin.auth().verifyIdToken(req.body.idToken)
       .then((decodedToken) => {
+        console.log (decodedToken.uid) 
+
        req.body.userID = tokenIdToDbUserIdConverter(decodedToken.uid);
        console.log( req.body.userID )
        next();
       }).catch(() => {
-        res.status(403).send('Unauthorized');
+        console.log( req.body.authToken )
+        res.status(403);
+        
       });
   } else {
-    res.status(403).send('Unauthorized');
+    console.log( req.body.authToken )
+    res.status(403);
   }
 }
 

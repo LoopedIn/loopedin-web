@@ -411,7 +411,7 @@ function validateBody(req){
     return next('Post data not present');
   }
   console.log("Post body present")
-  return ;
+  return;
 }
 //Get_recent_chats
 router.route('/users/get_recent_chats').post((req,res, next) => {
@@ -450,9 +450,10 @@ router.route('/users/get_chat_history').post((req,res, next) => {
     if (error) {
       console.log(error);
       res.status(400);
+      return next();
     }
     console.log(data);
-    res.status(200).json(data);
+    res.json(data);
     return next();
   });
 });
