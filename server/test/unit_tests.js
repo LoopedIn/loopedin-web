@@ -74,8 +74,6 @@ describe('application', async () => {
       'receivingUsers': receivingUsers
     }
     const response = await sendAuthenticatedRequest(myUserInput, "/users/create_loop", createLoopInput);
-    console.log(response.status);
-    console.log(response.data);
     return response.data;
   }
 
@@ -211,18 +209,10 @@ describe('application', async () => {
         const myUsersFriendInput = getRandomCreateUserInput();
         const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
         await addAsFriend(myUserInput, myUsersFriend.id);
-        const createLoopResponseData = await createLoop(myUserInput,undefined, [myUsersFriend.id]);
-        console.log(createLoopResponseData);
-        assert.strictEqual(createLoopResponseData)
-      //TODO: fetch users friends and assert users friend is present in the list
-
+        const loopName = randomString(6);
+        const createLoopResponseData = await createLoop(myUserInput,loopName, [myUsersFriend.id]);
+        assert.strictEqual(createLoopResponseData['loopName'], loopName);
       }).timeout(10000);
-
-    //   it('Create a loop ', async () => {
-    //     const myUser = resultToUser(await createUser());
-    //   //TODO: fetch loop and test if it exists
-    //     assert.strictEqual((await createLoop(myUser.id)).status,200);
-    //   });
 
     //   it('Create a loop with a duplicate name', async () => {
     //     const myUser = resultToUser(await createUser());
