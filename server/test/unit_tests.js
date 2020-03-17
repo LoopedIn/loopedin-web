@@ -252,7 +252,7 @@ describe('application', async () => {
         const resp = await addAsFriend(myUserInput, myUsersFriend.id);
       //TODO: fetch users friends and assert users friend is present in the list
         assert.strictEqual(resp.status, 200);
-      });
+      }).timeout(10000);
 
       it('Create a loop ', async () => {
         const myUserInput = getRandomCreateUserInput();
