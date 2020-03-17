@@ -4,9 +4,9 @@ const cookieParser = require('cookie-parser');
 const serverAuth = require('../auth_modules/server_auth.js');
 const mongoose = require('mongoose');
 const router = express.Router();
-
+const limit = 10;
 // eslint-disable-next-line no-unused-vars
-const { Post, Message, PostAccess, Test } = require('../models/post.js');
+const { Post, Message, PostAccess} = require('../models/post.js');
 
 const { User } = require('../models/user.js');
 
@@ -15,9 +15,6 @@ const { Loop, UserConnection } = require('../models/loop.js');
 router.use(cors());
 router.use(cookieParser());
 
-//Registering authenticated middleware
-router.use(serverAuth.firebaseTokenAuthenticator);
-
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
   if (Object.keys(req.body).length === 0) {
@@ -25,22 +22,50 @@ router.route('/users/create/').post((req, res, next) => {
     const error = 'The data to create user is not present';
     return next(error);
   }
-
   User.create(req.body, (error, data) => {
     if (error) {
       if (error.name === 'ValidationError') {
-        res.status(400);
-        res.send('ValidationError');
+        res.status(400)
+        res.send(error);
       } else {
-          res.status(400).send(error);
+          res.status(400)
+          res.send(error);
       }
       return next(error);
     }
-    // [TODO] : Create a session and send it along with db data
-    console.log(data);
-
     res.json(data);
   });
+});
+//Registering authenticated middleware
+router.use(serverAuth.firebaseTokenAuthenticator);
+
+// Return the list of friends of a user
+router.route('/users/add_friend').post((req,res, next) => {
+
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).send('Post data not present');
+    return next('Post data not present');
+  }
+
+  const data = req.body;
+  const userId = req.body.userID;
+  data.userId = userId;
+  // Get userID from the _id field of the request.
+
+  UserConnection.updateOne(
+    { userId: userId },
+    {
+      $set: data,
+    },
+    { upsert: true },
+    (error, response) => {
+      if (error) {
+        console.log(`Error ${error}`);
+        return next(error);
+      }
+      res.status(200).json(response);
+    },
+  );
 });
 
 router.route('/create-post').post(( req, res, next) => { 
@@ -52,7 +77,7 @@ router.route('/create-post').post(( req, res, next) => {
   }
 
   const postObject = req.body;
-  postObject.senderId = userID;
+  //postObject.senderId = userID;
   Post.create(postObject, (error, data) => {
     if (error) {
       if (error.name === 'ValidationError') {
@@ -134,8 +159,9 @@ router.route('/users/create_loop').post((req,res, next) => {
     return next(error);
   }
 
-  const loopObject = req.body.loop;
-  loopObject.userId = mongoose.Types.ObjectId(loopObject.userId);
+  const loopObject = req.body;
+  loopObject.userId = req.body.userID;
+
   Loop.create(loopObject, (error, data) => {
     if (error) {
       if (error.name === 'ValidationError') {
@@ -300,10 +326,10 @@ router.route('/users/create_post').post((req,res, next) => {
     return next('Post data not present');
   }
   const { post } = body;
-  post.senderId = mongoose.Types.ObjectId(post.senderId);
+  req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
 
   // body.post has senderId field which is the _id of the user object
-  Post.create(post, (error, data) => {
+  Post.create(req.body, (error, data) => {
     if (error) {
       res.status(400).send('ValidationError');
       console.log(error);
@@ -356,44 +382,16 @@ router.route('/posts/:post_id/delete').delete((req,res, next) => {
   });
 });
 
-// Return the list of friends of a user
-router.route('/users/add_friend').post((req,res, next) => {
-  // [TODO] : get session and validate
-  // const userID = '123';
-  if (Object.keys(req.body).length === 0) {
-    res.status(400).send('Post data not present');
-    return next('Post data not present');
-  }
 
-  const { data, userID } = req.body;
-  // Get userID from the _id field of the request.
-
-  UserConnection.update(
-    { userId: userID },
-    {
-      $set: data,
-    },
-    { upsert: true },
-    // eslint-disable-next-line consistent-return
-    (error, response) => {
-      if (error) {
-        console.log(`Error ${error}`);
-        return next(error);
-      }
-      res.status(200).json(response);
-    },
-  );
-});
 
 router.route('/users/create_message').post((req,res, next) => {
-  userID = req.userID
   const { body } = req;
   if (Object.keys(body).length === 0) {
     res.status(400).send('Post data not present');
     return next('Post data not present');
   }
   console.log (req.body)
-  req.body.senderId = mongoose.Types.ObjectId(req.body.senderId);
+  req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
 
   // body.post has senderId field which is the _id of the user object
   Message.create(req.body, (error, data) => {
@@ -403,41 +401,93 @@ router.route('/users/create_message').post((req,res, next) => {
       return next(error);
     }
     console.log(data);
-    //res.status(200).json(data);
+    res.status(200).json(data);
   });
 });
-
+function validateBody(req){
+  if (req.body.length === 0) {
+    res.status(400).send('Post data not present');
+    return next('Post data not present');
+  }
+  console.log("Post body present")
+  return;
+}
 //Get_recent_chats
 router.route('/users/get_recent_chats').post((req,res, next) => {
+  validateBody(req)
   console.log( req.body.userID)
   userID = req.body.userID // TODO: change
   friendID = req.body.friendID
+  page = req.body.page ? req.body.page : 1
   Message.find({$or:[{receivingUserId: userID },{senderId: userID }]})
-  .sort({created:-1}).exec((error, data) => {
+  .sort({created:-1})
+  .skip((page-1) * limit)
+  .exec((error, data) => {
     if (error) {
-      //res.status(400);
       console.log(error);
+      res.status(400);
+      next(error);
     }
     console.log(data);
-    //res.json(data);
+    res.status(200).json(data);
+    return next();
   });
 });
 
 //get_chat_history 
-router.route('/users/get_chat_history ').post((req,res, next) => {
+router.route('/users/get_chat_history').post((req,res, next) => {
+  validateBody(req)
   console.log( req.body.userID)
   userID = req.body.userID // TODO: change
   friendID = req.body.friendID
-  Message.find({$or:[{ $and:[{ receivingUserId: userID }, { senderId: friendID }],
-    $and:[{ receivingUserId: friendID }, { senderId: userID }]}]})
-  .sort({created:-1}).exec((error, data) => {
+  console.log("userid",userID)
+  console.log("friendID",friendID)
+  page = req.body.page ? req.body.page : 1
+  Message.find()
+  .or([
+    { $and: [{receivingUserId: userID}, {senderId: friendID}] },
+    { $and: [{receivingUserId: friendID}, {senderId: userID}] }])
+  .sort({created:-1})
+  .skip((page-1) * limit)
+  .exec((error, data) => {
     if (error) {
-      //res.status(400);
       console.log(error);
+      res.status(400);
+      return next();
     }
     console.log(data);
-    //res.json(data);
+    res.json(data);
+    return next();
   });
 });
-
+//get_recent_posts
+function  getLoopsContainingUser (userID) {
+  console.log(userID)
+  const loopData = Loop.find({ receivingUsers : userID}, (error,data)=> {
+    console.log("Loops: " + data)
+    return data;
+  })
+}
+router.route('/posts/get_recent_posts').post((req,res, next) => {
+  validateBody(req)
+  console.log( req.body.userID)
+  userID = req.body.userID // TODO: change
+  friendID = req.body.friendID
+  page = req.body.page ? req.body.page : 1
+  loopIDs = getLoopsContainingUser(userID)
+  console.log("LoopsIDS:",loopIDs)
+  Post.find({$or:[{receivingUserIds: userID },{receivingLoopIds: loopIDs }]})
+  .sort({created:-1})
+  .skip((page-1) * limit)
+  .exec((error, data) => {
+    if (error) {
+      console.log(error);
+      res.status(400);
+      return next();
+    }
+    console.log(data);
+    res.json(data);
+    return next();
+  });
+});
 module.exports = router;
