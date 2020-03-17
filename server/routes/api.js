@@ -440,9 +440,13 @@ router.route('/users/get_chat_history').post((req,res, next) => {
   console.log( req.body.userID)
   userID = req.body.userID // TODO: change
   friendID = req.body.friendID
+  console.log("userid",userID)
+  console.log("friendID",friendID)
   page = req.body.page ? req.body.page : 1
-  Message.find({$or:[{ $and:[{ receivingUserId: userID }, { senderId: friendID }],
-    $and:[{ receivingUserId: friendID }, { senderId: userID }]}]})
+  Message.find()
+  .or([
+    { $and: [{receivingUserId: userID}, {senderId: friendID}] },
+    { $and: [{receivingUserId: friendID}, {senderId: userID}] }])
   .sort({created:-1})
   .skip((page-1) * limit)
   .exec((error, data) => {
@@ -458,7 +462,8 @@ router.route('/users/get_chat_history').post((req,res, next) => {
 });
 //get_recent_posts
 function  getLoopsContainingUser (userID) {
-  return Loop.find({receivingUsers : userID}, '_id', (error,data)=> {
+  console.log(userID)
+  const loopData = Loop.find({ receivingUsers : userID}, (error,data)=> {
     console.log("Loops: " + data)
     return data;
   })
@@ -470,6 +475,7 @@ router.route('/posts/get_recent_posts').post((req,res, next) => {
   friendID = req.body.friendID
   page = req.body.page ? req.body.page : 1
   loopIDs = getLoopsContainingUser(userID)
+  console.log("LoopsIDS:",loopIDs)
   Post.find({$or:[{receivingUserIds: userID },{receivingLoopIds: loopIDs }]})
   .sort({created:-1})
   .skip((page-1) * limit)
@@ -479,7 +485,7 @@ router.route('/posts/get_recent_posts').post((req,res, next) => {
       res.status(400);
       return next();
     }
-    //console.log(data);
+    console.log(data);
     res.json(data);
     return next();
   });
