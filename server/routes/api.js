@@ -326,10 +326,10 @@ router.route('/users/create_post').post((req,res, next) => {
     return next('Post data not present');
   }
   const { post } = body;
-  post.senderId = mongoose.Types.ObjectId(req.body.userID);
+  req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
 
   // body.post has senderId field which is the _id of the user object
-  Post.create(post, (error, data) => {
+  Post.create(req.body, (error, data) => {
     if (error) {
       res.status(400).send('ValidationError');
       console.log(error);
@@ -391,7 +391,7 @@ router.route('/users/create_message').post((req,res, next) => {
     return next('Post data not present');
   }
   console.log (req.body)
-  req.body.senderId = mongoose.Types.ObjectId(req.body.userId);
+  req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
 
   // body.post has senderId field which is the _id of the user object
   Message.create(req.body, (error, data) => {
