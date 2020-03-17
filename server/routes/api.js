@@ -33,14 +33,11 @@ router.route('/users/create/').post((req, res, next) => {
       }
       return next(error);
     }
-    // [TODO] : Create a session and send it along with db data
-    console.log(data);
-
     res.json(data);
   });
 });
 //Registering authenticated middleware
-//router.use(serverAuth.firebaseTokenAuthenticator);
+router.use(serverAuth.firebaseTokenAuthenticator);
 
 // Return the list of friends of a user
 router.route('/users/add_friend').post((req,res, next) => {
@@ -51,19 +48,16 @@ router.route('/users/add_friend').post((req,res, next) => {
   }
 
   const data = req.body;
-  console.log(req.body);
-  console.log(req.body.userID);
-
   const userId = req.body.userID;
+  data.userId = userId;
   // Get userID from the _id field of the request.
 
-  UserConnection.update(
+  UserConnection.updateOne(
     { userId: userId },
     {
       $set: data,
     },
     { upsert: true },
-    // eslint-disable-next-line consistent-return
     (error, response) => {
       if (error) {
         console.log(`Error ${error}`);
@@ -165,8 +159,9 @@ router.route('/users/create_loop').post((req,res, next) => {
     return next(error);
   }
 
-  const loopObject = req.body.loop;
-  loopObject.userId = mongoose.Types.ObjectId(loopObject.userId);
+  const loopObject = req.body;
+  loopObject.userId = req.body.userID;
+
   Loop.create(loopObject, (error, data) => {
     if (error) {
       if (error.name === 'ValidationError') {

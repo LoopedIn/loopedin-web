@@ -64,7 +64,6 @@ describe('application', async () => {
   }
 
   async function createLoop(myUserInput, loopName, receivingUsers){
-    console.log(myUserInput)
     console.log(receivingUsers)
     const random = randomString(5);
     if(loopName === undefined){
@@ -72,10 +71,12 @@ describe('application', async () => {
     }
     const createLoopInput = {
       'loopName': loopName,
-      'receivingUsers': [receivingUsers]
+      'receivingUsers': receivingUsers
     }
     const response = await sendAuthenticatedRequest(myUserInput, "/users/create_loop", createLoopInput);
-    return response
+    console.log(response.status);
+    console.log(response.data);
+    return response.data;
   }
 
   async function createMessage(myUserInput,receivingUsers){
@@ -213,6 +214,8 @@ describe('application', async () => {
   describe('authenticated state', async () => {
     describe('Managing friends and loops', async () => {
 
+      
+
       // it('Create a user', async () => {
       //   const userInput = getRandomCreateUserInput();
       //   const resp = await registerAndCreateUser(userInput);
@@ -221,49 +224,28 @@ describe('application', async () => {
       //   assert.strictEqual(resp['email'],userInput['email']);
       // });
 
-      it('Add a user as a friend ', async () => {
-        const myUserInput = getRandomCreateUserInput();
-        resultToUser(await registerAndCreateUser(myUserInput));
-        const myUsersFriendInput = getRandomCreateUserInput();
-        const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
-        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
-      //TODO: fetch users friends and assert users friend is present in the list
-        assert.strictEqual(resp.status, 200);
-      }).timeout(10000);
-
-      // it('Create a loop ', async () => {
+      // it('Add a user as a friend ', async () => {
       //   const myUserInput = getRandomCreateUserInput();
       //   resultToUser(await registerAndCreateUser(myUserInput));
       //   const myUsersFriendInput = getRandomCreateUserInput();
       //   const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
       //   const resp = await addAsFriend(myUserInput, myUsersFriend.id);
-      //   const loop = await createLoop(myUserInput,undefined,myUsersFriend.id)
       // //TODO: fetch users friends and assert users friend is present in the list
       //   assert.strictEqual(resp.status, 200);
       // });
-
-      it('Create a message ', async () => {
-        const myUserInput = getRandomCreateUserInput();
-        resultToUser(await registerAndCreateUser(myUserInput));
-        const myUsersFriendInput = getRandomCreateUserInput();
-        const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
-        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
-        const message = await createMessage(myUserInput,myUsersFriend.id);
-      //TODO: fetch users friends and assert users friend is present in the list
-        assert.strictEqual(resp.status, 200);
-      }).timeout(10000);
 
       it('Create a post ', async () => {
         const myUserInput = getRandomCreateUserInput();
         resultToUser(await registerAndCreateUser(myUserInput));
         const myUsersFriendInput = getRandomCreateUserInput();
         const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
-        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
-        const message = await createPosts(myUserInput,myUsersFriend.id);
+        await addAsFriend(myUserInput, myUsersFriend.id);
+        const createLoopResponseData = await createLoop(myUserInput,undefined, [myUsersFriend.id]);
+        console.log(createLoopResponseData);
+        assert.strictEqual(createLoopResponseData)
       //TODO: fetch users friends and assert users friend is present in the list
-        assert.strictEqual(resp.status, 200);
+
       }).timeout(10000);
-      
 
     //   it('Create a loop ', async () => {
     //     const myUser = resultToUser(await createUser());
