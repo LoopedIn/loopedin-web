@@ -331,7 +331,7 @@ router.route('/users/create_post').post((req,res, next) => {
     return next('Post data not present');
   }
   const { post } = body;
-  post.senderId = mongoose.Types.ObjectId(post.senderId);
+  post.senderId = mongoose.Types.ObjectId(req.body.userID);
 
   // body.post has senderId field which is the _id of the user object
   Post.create(post, (error, data) => {

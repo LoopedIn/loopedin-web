@@ -92,6 +92,21 @@ describe('application', async () => {
     return response
   }
 
+  async function createPosts(myUserInput,receivingUsers,receivingLoopIds){
+    console.log(myUserInput)
+    console.log(receivingUsers)
+    const random = randomString(5);
+
+    const createPostInput = {
+      'receivingUserIds': receivingUsers,
+      'receivingLoopIds': receivingLoopIds,
+      'postType': "text",
+      'postContent' : randomString(10)
+    }
+    const response = await sendAuthenticatedRequest(myUserInput, "/users/create_post", createPostInput );
+    return response
+  }
+
   async function updateLoopName(loop_id, newLoopName){
     const updateLoopInput = {
       'loopName': newLoopName
@@ -237,6 +252,18 @@ describe('application', async () => {
       //TODO: fetch users friends and assert users friend is present in the list
         assert.strictEqual(resp.status, 200);
       }).timeout(10000);
+
+      it('Create a post ', async () => {
+        const myUserInput = getRandomCreateUserInput();
+        resultToUser(await registerAndCreateUser(myUserInput));
+        const myUsersFriendInput = getRandomCreateUserInput();
+        const myUsersFriend = resultToUser(await registerAndCreateUser(myUsersFriendInput));
+        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
+        const message = await createPosts(myUserInput,myUsersFriend.id);
+      //TODO: fetch users friends and assert users friend is present in the list
+        assert.strictEqual(resp.status, 200);
+      }).timeout(10000);
+      
 
     //   it('Create a loop ', async () => {
     //     const myUser = resultToUser(await createUser());
