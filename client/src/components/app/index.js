@@ -14,8 +14,7 @@ import {
 } from "react-router-dom";
 import { connect } from "react-redux";
 
-const App = props => {
-  const { isAuthenticated, isVerifying } = props;
+const App = ({ isAuthenticated, isVerifying } ) => {
   return (
     <Switch>
       {/* <Route exact path="/">

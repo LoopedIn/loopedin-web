@@ -119,7 +119,7 @@ export const registerUser = (firstName, lastName, email, password) => dispatch =
   myFirebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(response =>  createUserApi(response.user.uid, firstName, lastName, email))
+    .then(response =>  createUserApi(response.user.uid, firstName, firstName,lastName, email)) //TODO: needs username
     .then(response => {
       dispatch(registerSuccess(response));
     })

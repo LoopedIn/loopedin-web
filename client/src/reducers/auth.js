@@ -11,19 +11,20 @@ import {
   REGISTER_SUCCESS
 } from "../actions/";
 
+const initialState = {
+  isLoggingIn: false,
+  isLoggingOut: false,
+  isVerifying: false,
+  loginError: false,
+  logoutError: false,
+  isAuthenticated: false,
+  registerError: false,
+  registerSuccess: false,
+  user: {},
+  registerErrorMsg: ""
+}
 export default (
-  state = {
-    isLoggingIn: false,
-    isLoggingOut: false,
-    isVerifying: false,
-    loginError: false,
-    logoutError: false,
-    isAuthenticated: false,
-    registerError: false,
-    registerSuccess: false,
-    user: {},
-    registerErrorMsg: ""
-  },
+  state = initialState,
   action
 ) => {
   switch (action.type) {
@@ -82,6 +83,7 @@ export default (
         ...state,
         registerSuccess: true,
         registerError: false,
+        isAuthenticated: true,
         user: action.user
       };
     case REGISTER_FAILURE:

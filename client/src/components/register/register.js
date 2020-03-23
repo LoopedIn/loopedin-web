@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const register = props => {
+const register = ({registerSuccess, registerError, registerErrorMsg, registerUser}) => {
   const classes = useStyles();
 
   const [firstName, setFirstName] = useState("");
@@ -65,12 +65,9 @@ const register = props => {
   const [password, setPassword] = useState("");
 
   const handleSubmit = () => {
-    const { dispatch } = props;
-
-    dispatch(registerUser(firstName, lastName, email, password));
+    registerUser(firstName, lastName, email, password);
   };
 
-  const { registerSuccess, registerError, registerErrorMsg } = props;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -179,4 +176,6 @@ function mapStateToProps(state) {
     registerErrorMsg: state.auth.registerErrorMsg
   };
 }
-export default connect(mapStateToProps)(register);
+
+
+export default connect(mapStateToProps, {registerUser})(register);

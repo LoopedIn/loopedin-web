@@ -1,6 +1,6 @@
 const url = require('url');
 
-export const base = 'http://localhost:8000/';
+export const base = 'http://localhost:3000/';
 
 const resolveToBase = (route) =>  url.resolve(base, route);
 
