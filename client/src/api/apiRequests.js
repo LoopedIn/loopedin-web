@@ -1,4 +1,5 @@
-import { sendAuthenticatedRequest, sendUnAuthenticatedRequest } from  "../utils/requestUtils";
+import { authenticatedRequest, unAuthenticatedRequest } from  "../utils/requestUtils";
+import axios from 'axios';
 import { routes } from "../utils/serverRoutes";
 
 export const createUserApi = (token, userName, firstName, lastName, email) =>{
@@ -9,9 +10,9 @@ export const createUserApi = (token, userName, firstName, lastName, email) =>{
         "userName":userName,
         "lastName":lastName
     }
-    return sendUnAuthenticatedRequest(routes.createUser, postBodyParams);
+    return unAuthenticatedRequest(routes.createUser, postBodyParams);
 };
 
-export const getCurrentUserApi = () => {
-    return sendUnAuthenticatedRequest(routes.createUser, {});
+export const getCurrentUserApi = (postGet) => {
+    authenticatedRequest(routes.getCurrentUser, {}, postGet);
 }

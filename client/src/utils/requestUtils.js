@@ -1,21 +1,29 @@
 import axios from 'axios';
+import { myFirebase } from '../firebase/firebase';
 
-export const sendAuthenticatedRequest = (route, postBodyParams) =>{
-    return firebase.auth()
+export const authenticatedRequest = (route, postBodyParams, postGet) =>{
+    myFirebase.auth()
         .currentUser
         .getIdToken()
-        .then(idToken => {
-          const csrfToken = getCookie('csrfToken');
-          const authInfo = {
-            'idToken' : idToken, 
-            'csrfToken' : csrfToken
-          };
-          postBodyParams['authInfo'] = authInfo;
-          return axios.post(route, postBodyParams);
-      });
+        .then(idToken =>  axios.post(route, constructPostBodyParams(idToken, postBodyParams)))
+        .then(resp => {
+            console.log("Requested current user")
+            postGet(resp)
+        })
+        .then(() => console.log("here"));
 }
 
-export const sendUnAuthenticatedRequest = (route, postBodyParams) =>{
+function constructPostBodyParams(idToken, postBodyParams){
+    const csrfToken = getCookie('csrfToken');
+    const authInfo = {
+      'idToken' : idToken, 
+      'csrfToken' : csrfToken
+    };
+    postBodyParams['authInfo'] = authInfo;
+    return postBodyParams;
+}
+
+export const unAuthenticatedRequest = (route, postBodyParams) =>{
     return axios.post(route, postBodyParams);
 }
 

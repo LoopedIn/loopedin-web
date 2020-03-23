@@ -1,6 +1,8 @@
 import { myFirebase } from "../firebase/firebase";
-import { sendAuthenticatedRequest, sendUnAuthenticatedRequest } from  "../utils/requestUtils";
-import { createUserApi } from "../api/apiRequests";
+import { sendAuthenticatedRequest, unAuthenticatedRequest } from  "../utils/requestUtils";
+import { createUserApi,
+        getCurrentUserApi 
+} from "../api/apiRequests";
 import { routes } from "../utils/serverRoutes";
 import firebase from "firebase/app";
 import axios from 'axios';
@@ -87,6 +89,12 @@ export const loginUser = (email, password) => dispatch => {
   myFirebase
     .auth()
     .signInWithEmailAndPassword(email, password)
+    .then(user => {
+      dispatch(receiveLogin(user))
+      getCurrentUserApi((dbUSer) => {
+        console.log(dbUSer)
+      });
+    })
     .catch(error => {
       dispatch(loginError());
     });

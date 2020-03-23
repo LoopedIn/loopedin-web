@@ -8,5 +8,5 @@ export const routes = {
     testAuthenticated : resolveToBase('test_authenticated'),
     testUnauthenticated : resolveToBase('test_unauthenticated'),
     createUser: resolveToBase('users/create'),
-    getCurrentUser: (id) => url.resolve(resolveToBase('users/logged_in_user_info'), id)
+    getCurrentUser: resolveToBase('users/logged_in_user_info')
 }
