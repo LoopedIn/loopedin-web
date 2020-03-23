@@ -15,6 +15,7 @@ async function tokenIdToDbUserIdConverter (tokenUid,req,res,next) {
     if (error){
       res.status(403);
     }
+    req.body.currentUser = data;
     req.body.userID = data._id;
     next();
   })

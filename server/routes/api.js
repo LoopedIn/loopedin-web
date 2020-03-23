@@ -39,6 +39,11 @@ router.route('/users/create/').post((req, res, next) => {
 //Registering authenticated middleware
 router.use(serverAuth.firebaseTokenAuthenticator);
 
+router.route('users/logged_in_user_info').post((req, res, next) => {
+  console.log("recieved");
+  res.json(req.body.currentUser)
+})
+
 // Return the list of friends of a user
 router.route('/users/add_friend').post((req,res, next) => {
 
