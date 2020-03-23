@@ -12,6 +12,7 @@ import {
   useHistory,
   useLocation
 } from "react-router-dom";
+import { PersistGate } from 'redux-persist/integration/react'
 import { connect } from "react-redux";
 
 const App = ({ isAuthenticated, isVerifying } ) => {
