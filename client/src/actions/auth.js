@@ -3,7 +3,6 @@ import { sendAuthenticatedRequest, unAuthenticatedRequest } from  "../utils/requ
 import { createUserApi,
         getCurrentUserApi 
 } from "../api/apiRequests";
-import { routes } from "../utils/serverRoutes";
 import firebase from "firebase/app";
 import axios from 'axios';
 
