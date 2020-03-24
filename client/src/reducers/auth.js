@@ -39,7 +39,8 @@ export default (
         ...state,
         isLoggingIn: false,
         isAuthenticated: true,
-        user: action.user
+        user: action.user,
+        firebaseUser: action.firebaseUser
       };
     case LOGIN_FAILURE:
       return {

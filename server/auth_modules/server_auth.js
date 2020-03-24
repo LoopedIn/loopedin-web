@@ -10,27 +10,23 @@ admin.initializeApp({
   databaseURL: "https://loopedin-269607.firebaseio.com"
 });
 
-async function tokenIdToDbUserIdConverter (tokenUid,req,res,next) {
-  const userData = User.findOne({authToken:tokenUid}, (error,data)=> {
-    if (error){
-      res.status(403);
-    }
-    req.body.currentUser = data;
-    req.body.userID = data._id;
-    next();
-  })
+async function tokenIdToDbUser (tokenUid) {
+    return await User.findOne({authToken:tokenUid}).exec()
 }
 
 const firebaseTokenAuthenticator = (req, res, next) => {
   if (req.body.idToken) {
      admin.auth().verifyIdToken(req.body.idToken)
-      .then((decodedToken) => {
-       const userId = tokenIdToDbUserIdConverter(decodedToken.uid,req,res,next);
+      .then(async (decodedToken) => {
+        const user = await tokenIdToDbUser(decodedToken.uid);
+        req.body.userID = user._id
+        req.body.user = user
+        next()
       }).catch(() => {
         res.status(403);
       });
   } else {
-    res.status(403);
+    res.status(403).send();
   }
 }
 

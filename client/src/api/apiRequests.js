@@ -13,6 +13,6 @@ export const createUserApi = (token, userName, firstName, lastName, email) =>{
     return unAuthenticatedRequest(routes.createUser, postBodyParams);
 };
 
-export const getCurrentUserApi = (postGet) => {
-    authenticatedRequest(routes.getCurrentUser, {}, postGet);
+export const getCurrentUserApi = async () => {
+    return authenticatedRequest(routes.getCurrentUser, {});
 }

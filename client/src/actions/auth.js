@@ -27,10 +27,11 @@ const requestLogin = () => {
   };
 };
 
-const receiveLogin = user => {
+const receiveLogin = (user, firebaseUser) => {
   return {
     type: LOGIN_SUCCESS,
-    user
+    user,
+    firebaseUser
   };
 };
 
@@ -89,11 +90,9 @@ export const loginUser = (email, password) => dispatch => {
   myFirebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then(user => {
-      dispatch(receiveLogin(user))
-      getCurrentUserApi((dbUSer) => {
-        console.log(dbUSer)
-      });
+    .then(async firebaseUser => {
+      const user = (await getCurrentUserApi()).data
+      dispatch(receiveLogin(user, firebaseUser))
     })
     .catch(error => {
       dispatch(loginError());
@@ -115,9 +114,10 @@ export const logoutUser = () => dispatch => {
 
 export const verifyAuth = () => dispatch => {
   dispatch(verifyRequest());
-  myFirebase.auth().onAuthStateChanged(user => {
-    if (user !== null) {
-      dispatch(receiveLogin(user));
+  myFirebase.auth().onAuthStateChanged(async firebaseUser => {
+    if (firebaseUser !== null) {
+      const user = (await getCurrentUserApi()).data
+      dispatch(receiveLogin(user, firebaseUser))
     }
     dispatch(verifySuccess());
   });
