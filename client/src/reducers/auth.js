@@ -23,6 +23,7 @@ const initialState = {
   user: {},
   registerErrorMsg: ""
 }
+
 export default (
   state = initialState,
   action

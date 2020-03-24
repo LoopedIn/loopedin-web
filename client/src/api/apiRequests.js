@@ -1,7 +1,8 @@
 import { authenticatedRequest, unAuthenticatedRequest } from  "../utils/requestUtils";
-import axios from 'axios';
 
 export const base = 'http://localhost:3000/';
+
+const url = require('url');
 
 const r = (route) =>  url.resolve(base, route);
 

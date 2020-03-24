@@ -1,8 +1,6 @@
 import { myFirebase } from "../firebase/firebase";
 import { sendAuthenticatedRequest, unAuthenticatedRequest } from  "../utils/requestUtils";
-import { createUserApi,
-        getCurrentUserApi 
-} from "../api/apiRequests";
+import { serverRequests } from "../api/apiRequests";
 import firebase from "firebase/app";
 import axios from 'axios';
 
@@ -90,7 +88,7 @@ export const loginUser = (email, password) => dispatch => {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(async firebaseUser => {
-      const user = (await getCurrentUserApi()).data
+      const user = (await serverRequests.getCurrentUserApi()).data
       dispatch(receiveLogin(user, firebaseUser))
     })
     .catch(error => {
@@ -115,7 +113,7 @@ export const verifyAuth = () => dispatch => {
   dispatch(verifyRequest());
   myFirebase.auth().onAuthStateChanged(async firebaseUser => {
     if (firebaseUser !== null) {
-      const user = (await getCurrentUserApi()).data
+      const user = (await serverRequests.getCurrentUserApi()).data
       dispatch(receiveLogin(user, firebaseUser))
     }
     dispatch(verifySuccess());
@@ -126,7 +124,7 @@ export const registerUser = (firstName, lastName, email, password) => dispatch =
   myFirebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(response =>  createUserApi(response.user.uid, firstName, firstName,lastName, email)) //TODO: needs username
+    .then(response =>  serverRequests.createUserApi(response.user.uid, firstName, firstName,lastName, email)) //TODO: needs username
     .then(response => {
       dispatch(registerSuccess(response));
     })

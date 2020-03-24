@@ -6,13 +6,17 @@ import {constants} from "../utils/constants"
 
 //Fetch all friends of user
 export const getUserFriends = () => async dispatch => {
-    const friendsList = (await serverRequests.getUserFriendsApi()).data;  
+    const friendsList = (await serverRequests.getUserFriendsApi()).data; 
+    // const friendsList = ['abc', 'def'] 
+    console.log(friendsList);
     dispatch(dispatches.user.userFriendsLoaded(friendsList)); //Persist user's friends into state
 };
 
 //Fetch all loops of user
 export const getUserLoops = () => async dispatch => {
     const loopsList = (await serverRequests.getUsersLoopsApi()).data;  
+    // const loopsList = ['ghi','jkl']
+    console.log(loopsList);
     dispatch(dispatches.user.userLoopsLoaded(loopsList)); //Persist user's loops info into state
 };
 
@@ -22,7 +26,7 @@ export const updateLoop = () => async dispatch => {
 }
 
 //Add another user as a friend
-export const updateLoop = (userName) => async dispatch => {
+export const addFriendToUser = (userName) => async dispatch => {
     const response = (await serverRequests.addFriendToUserApi());
     if(response.status === 400){
         dispatch(dispatches.addUserFailed(`{userName} does not exist`));
