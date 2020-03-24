@@ -1,7 +1,6 @@
 import { myFirebase } from "../firebase/firebase";
-import { sendAuthenticatedRequest, sendUnAuthenticatedRequest } from  "../utils/requestUtils";
-import { createUserApi } from "../api/apiRequests";
-import { routes } from "../utils/serverRoutes";
+import { sendAuthenticatedRequest, unAuthenticatedRequest } from  "../utils/requestUtils";
+import { serverRequests } from "../api/apiRequests";
 import firebase from "firebase/app";
 import axios from 'axios';
 
@@ -25,10 +24,11 @@ const requestLogin = () => {
   };
 };
 
-const receiveLogin = user => {
+const receiveLogin = (user, firebaseUser) => {
   return {
     type: LOGIN_SUCCESS,
-    user
+    user,
+    firebaseUser
   };
 };
 
@@ -87,6 +87,10 @@ export const loginUser = (email, password) => dispatch => {
   myFirebase
     .auth()
     .signInWithEmailAndPassword(email, password)
+    .then(async firebaseUser => {
+      const user = (await serverRequests.getCurrentUserApi()).data
+      dispatch(receiveLogin(user, firebaseUser))
+    })
     .catch(error => {
       dispatch(loginError());
     });
@@ -107,9 +111,10 @@ export const logoutUser = () => dispatch => {
 
 export const verifyAuth = () => dispatch => {
   dispatch(verifyRequest());
-  myFirebase.auth().onAuthStateChanged(user => {
-    if (user !== null) {
-      dispatch(receiveLogin(user));
+  myFirebase.auth().onAuthStateChanged(async firebaseUser => {
+    if (firebaseUser !== null) {
+      const user = (await serverRequests.getCurrentUserApi()).data
+      dispatch(receiveLogin(user, firebaseUser))
     }
     dispatch(verifySuccess());
   });
@@ -119,7 +124,7 @@ export const registerUser = (firstName, lastName, email, password) => dispatch =
   myFirebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(response =>  createUserApi(response.user.uid, firstName, lastName, email))
+    .then(response =>  serverRequests.createUserApi(response.user.uid, firstName, firstName,lastName, email)) //TODO: needs username
     .then(response => {
       dispatch(registerSuccess(response));
     })
