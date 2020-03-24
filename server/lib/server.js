@@ -83,14 +83,12 @@ const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : 'localhos
 const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';
-console.log(`${hostname}   ${portnumber}`);
 
 mongoose
   .connect(`mongodb://${hostname}:${portnumber}/InLooped`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log('connection succesful'))
   .catch((err) => console.error(err));
 
 module.exports = { mongoose, serverListener };

@@ -39,6 +39,10 @@ router.route('/users/create/').post((req, res, next) => {
 //Registering authenticated middleware
 router.use(serverAuth.firebaseTokenAuthenticator);
 
+router.route('/users/logged_in_user_info').post((req, res, next) => {
+  res.json(req.body.user).send()
+})
+
 // Return the list of friends of a user
 router.route('/users/add_friend').post((req,res, next) => {
 
@@ -49,7 +53,7 @@ router.route('/users/add_friend').post((req,res, next) => {
 
   const data = req.body;
   const userId = req.body.userID;
-  data.userId = userId;
+  // data.userId = userId;
   // Get userID from the _id field of the request.
 
   UserConnection.updateOne(
@@ -61,9 +65,10 @@ router.route('/users/add_friend').post((req,res, next) => {
     (error, response) => {
       if (error) {
         console.log(`Error ${error}`);
+        res.status(400).send(error)
         return next(error);
       }
-      res.status(200).json(response);
+      res.status(200).send(response);
     },
   );
 });
@@ -165,14 +170,15 @@ router.route('/users/create_loop').post((req,res, next) => {
   Loop.create(loopObject, (error, data) => {
     if (error) {
       if (error.name === 'ValidationError') {
-        res.status(400).send('ValidationError');
+        res.status(400).send(error);
         // res.send("ValidationError")
       }
       console.log(error);
+      res.status(400).send(error);
       return next(error);
     }
     // console.log(data)
-    res.status(200).json(data);
+    res.status(200).send(data);
   });
 });
 
@@ -184,7 +190,7 @@ router.route('/loops').post((req,res, next) => {
   userID = mongoose.Types.ObjectId(userID);
   Loop.find({ userId: userID }, (error, data) => {
     if (error) {
-      res.status(400);
+      res.status(400).send(error);
       return next(error);
     }
 
@@ -200,24 +206,26 @@ router.route('/loops/:loop_id/update_loop').post((req,res, next) => {
   const { body } = req;
   if (Object.keys(body).length === 0) {
     const error = 'Data not present in POST request body';
+    res.status(400).send(error);
     return next(error);
   }
 
   let loopID = req.params.loop_id;
-  const { contacts } = req.body.loop;
+  const userID = req.body.userID;
+  const { contacts, loopName } = req.body.loop;
   if (Object.keys(contacts).length === 0) {
     const error = 'Contacts Details cannot be empty';
-    res.status(400).statusMessage(error);
+    res.status(400).send(error);
     return next(error);
   }
   loopID = mongoose.Types.ObjectId(loopID);
   // Update the members of the loop of a user
   Loop.update(
-    { _id: loopID },
-    { $set: { receivingUsers: contacts } },
+    { _id: loopID,userId:userID },
+    { $set: { receivingUsers: contacts,loopName:loopName } },
     (error, response) => {
       if (error) {
-        res.status(400).statusMessage(error);
+        res.status(400).send(error);
         return next(error);
       }
       res.status(200).send(response);
@@ -237,7 +245,8 @@ router.route('/loops/:loop_id/get_contacts').post((req,res, next) => {
       return next(error);
     }
 
-    res.send(response);
+    console.log("SERVER "+response)
+    res.status(200).send(response);
   });
 });
 
@@ -257,6 +266,20 @@ router.route('/users/send_message').post((req,res, next) => {
     res.json(data);
   });
 });
+
+
+router.route('/users/getcontacts').post((req,res,next) => {
+  const userid = req.body.userID;
+  UserConnection.find({userId:userid},{friendIds:1},(err,data) => {
+    if(err){
+      res.status(400).send(err)
+      return next(error)
+    }
+    console.log("SERVER "+data)
+    res.status(200).send(data)
+  })
+})
+
 
 // Get list of messages between two persons
 router.route('/users/show_messages_persons').post((req,res, next) => {
@@ -280,6 +303,7 @@ router.route('/users/show_messages_persons').post((req,res, next) => {
     { skip: numberOfItems * (pageNumber - 1), limit: numberOfItems },
     (error, data) => {
       if (error) {
+        res.status(400).send(error);
         return next(error);
       }
       res.json(data);
@@ -306,7 +330,7 @@ router.route('/users/show_messages').post((req,res, next) => {
     { skip: numberOfItems * (pageNumber - 1), limit: numberOfItems },
     (error, response) => {
       if (error) {
-        res.status(400);
+        res.status(400).send(error);
         return next(error);
       }
 
@@ -333,10 +357,11 @@ router.route('/users/create_post').post((req,res, next) => {
     if (error) {
       res.status(400).send('ValidationError');
       console.log(error);
+      res.status(400).send(error);
       return next(error);
     }
     console.log(data);
-    res.status(200).json(data);
+    res.status(200).send(data);
   });
 });
 
@@ -398,6 +423,7 @@ router.route('/users/create_message').post((req,res, next) => {
     if (error) {
       //res.status(400).send('ValidationError');
       console.log(error);
+      res.status(400).send(error);
       return next(error);
     }
     console.log(data);

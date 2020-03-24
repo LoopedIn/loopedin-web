@@ -1,18 +1,25 @@
 import { applyMiddleware, createStore, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 import { verifyAuth } from "./actions/";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import rootReducer from "./reducers";
 
-const composeEnhancers =
-  (typeof window !== "undefined" &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-  compose;
+const persistConfig = {
+  key: "root",
+  storage
+};
 
-export default function configureStore() {
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export default function configureStore(persistedState) {
   const store = createStore(
-    rootReducer,
-    composeEnhancers(applyMiddleware(thunkMiddleware))
+    persistedReducer,
+    persistedState,
+    composeWithDevTools(applyMiddleware(thunkMiddleware))
   );
+  let persistor = persistStore(store);
   store.dispatch(verifyAuth());
-  return store;
+  return { store, persistor };
 }

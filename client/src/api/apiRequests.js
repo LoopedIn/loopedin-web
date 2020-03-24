@@ -1,16 +1,30 @@
-import { sendAuthenticatedRequest, sendUnAuthenticatedRequest } from  "../utils/requestUtils";
-import { routes } from "../utils/serverRoutes";
+import { authenticatedRequest, unAuthenticatedRequest } from  "../utils/requestUtils";
 
-export const createUserApi = (token, firstName, lastName, email) =>{
-    const postBodyParams = {
-        "authToken":token,
-        "email":email,
-        "firstName":firstName,
-        "lastName":lastName
-    }
-    return sendUnAuthenticatedRequest(routes.createUser, postBodyParams);
-};
+export const base = 'http://localhost:3000/';
 
-export const getCurrentUserApi = () => {
-    return sendUnAuthenticatedRequest(routes.createUser, {});
+const url = require('url');
+
+const r = (route) =>  url.resolve(base, route);
+
+export const serverRequests = {
+
+    getCurrentUserApi : async () => authenticatedRequest(r('/users/logged_in_user_info'), {}),
+
+    getUserFriendsApi : async () => authenticatedRequest(r('/users/getcontacts'), {}),
+
+    createUserApi : async (token, userName, firstName, lastName, email) => {
+        const postBodyParams = {
+            "authToken":token,
+            "email":email,
+            "firstName":firstName,
+            "userName":userName,
+            "lastName":lastName
+        }
+        return unAuthenticatedRequest(r('/users/create'), postBodyParams);
+    },
+
+    getUsersLoopsApi : async () => authenticatedRequest(r('/loops'), {}),
+
+    //TODO: fix input
+    updateLoopApi: async (loopId, params) => authenticatedRequest(r(`/loops/{loopId}/update_loop`), params)
 }
