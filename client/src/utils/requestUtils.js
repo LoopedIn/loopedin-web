@@ -2,6 +2,11 @@ import axios from 'axios';
 import { connect } from "react-redux";
 import { myFirebase } from '../firebase/firebase';
 
+export const authenticatedRequest = async (route, postBodyParams) =>{
+    const idToken = await myFirebase.auth().currentUser.getIdToken()
+    return axios.post(route, constructPostBodyParams(idToken, postBodyParams))
+}
+
 export const constructPostBodyParams = (idToken, postBodyParams) => {
     const csrfToken = getCookie('csrfToken');
     postBodyParams['idToken'] = idToken;
