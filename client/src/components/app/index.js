@@ -3,6 +3,7 @@ import Register from "../register/register";
 import LoginSide from "../login/login";
 import ProtectedRoute from "../protected-route/protectedRoute";
 import Home from "../home/home";
+import ConnectionManagerHome from  "../connection-management/connection-manager"
 import {
   BrowserRouter as Router,
   Switch,
@@ -31,6 +32,13 @@ const App = ({ isAuthenticated, isVerifying } ) => {
         exact
         path="/"
         component={Home}
+        isAuthenticated={isAuthenticated}
+        isVerifying={isVerifying}
+      />
+      <ProtectedRoute
+        exact
+        path="/loops"
+        component={ConnectionManagerHome}
         isAuthenticated={isAuthenticated}
         isVerifying={isVerifying}
       />

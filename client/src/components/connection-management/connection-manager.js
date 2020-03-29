@@ -12,6 +12,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox"
 import IconButton from '@material-ui/core/IconButton';
 import CommentIcon from '@material-ui/icons/Comment';
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 
 
 
@@ -123,16 +125,35 @@ const ConnectionManagerHome = props => {
       className={classes.root}
       style={{ backgroundColor: "#cfe8fc", height: "100vh" }}
     >
-      <Container maxWidth="sm">
-        <Grid container spacing={3} justify="center">
-          <Grid item xs={6}>
-            <List>
-              {loopsListMockData.map(val => renderLoopsListItem(val))}
-            </List>
-          </Grid>
-          <Grid item xs={6}>
-            {renderLoopsFriendConfig(selectedLoop)}
-          </Grid>
+      <Container maxWidth="sm" border={1}>
+        <Grid container spacing={3} justify="center" alignItems="center" border={1}>
+        <Grid item xs={12} container direction="row" border={1}>
+            <Grid item xs={5}>
+                  <TextField id="outlined-basic" label="New loop name" variant="outlined" />
+            </Grid>
+            <Grid item xs={5}>
+              <Button
+                  variant="contained"
+                  color="secondary">
+                  Create loop
+              </Button>
+            </Grid>
+        </Grid>
+        <Grid item xs={6}>
+          <List>
+            {loopsListMockData.map(val => renderLoopsListItem(val))}
+          </List>
+        </Grid>
+        <Grid item xs={6}>
+          {renderLoopsFriendConfig(selectedLoop)}
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+              variant="contained"
+              color="secondary">
+              Save
+          </Button>
+        </Grid>
         </Grid>
       </Container>
     </div>
