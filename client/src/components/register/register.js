@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -15,8 +12,6 @@ import Container from "@material-ui/core/Container";
 import { Link as RouterLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions";
-
-import { myFirebase } from "../../firebase/firebase";
 
 function Copyright() {
   return (
@@ -56,7 +51,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const register = ({registerSuccess, registerError, registerErrorMsg, registerUser}) => {
+const register = ({
+  registerSuccess,
+  registerError,
+  registerErrorMsg,
+  registerUser
+}) => {
   const classes = useStyles();
 
   const [firstName, setFirstName] = useState("");
@@ -68,10 +68,8 @@ const register = ({registerSuccess, registerError, registerErrorMsg, registerUse
     registerUser(firstName, lastName, email, password);
   };
 
-
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h3">
           LoopedIn
@@ -177,5 +175,4 @@ function mapStateToProps(state) {
   };
 }
 
-
-export default connect(mapStateToProps, {registerUser})(register);
+export default connect(mapStateToProps, { registerUser })(register);
