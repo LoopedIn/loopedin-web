@@ -26,5 +26,7 @@ export const serverRequests = {
     getUsersLoopsApi : async () => authenticatedRequest(r('/loops'), {}),
 
     //TODO: fix input
-    updateLoopApi: async (loopId, params) => authenticatedRequest(r(`/loops/{loopId}/update_loop`), params)
+    updateLoopApi: async (loopId, params) => authenticatedRequest(r(`/loops/{loopId}/update_loop`), params),
+
+    addFriendToUserApi: async (userName) => authenticatedRequest(r('/users/add_friend'))
 }

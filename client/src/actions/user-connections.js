@@ -27,9 +27,9 @@ export const updateLoop = () => async dispatch => {
 
 //Add another user as a friend
 export const addFriendToUser = (userName) => async dispatch => {
-    const response = (await serverRequests.addFriendToUserApi());
+    const response = (await serverRequests.addFriendToUserApi(userName));
     if(response.status === 400){
-        dispatch(dispatches.addUserFailed(`{userName} does not exist`));
+        dispatch(dispatches.user.addUserFailed(`{userName} does not exist`));
     } else if (response.status === 200){
         dispatch(dispatches.user.addUserSuccess(username));
     } else {
