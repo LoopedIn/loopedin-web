@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const assert = require('assert');
 const axios = require('axios');
 const axiosCookieJarSupport = require('axios-cookiejar-support').default;
@@ -66,7 +65,7 @@ describe('application', async () => {
   }
 
   async function createLoop(myUserInput, loopName, receivingUsers) {
-    console.log(receivingUsers);
+    // console.log(receivingUsers);
     const random = randomString(5);
     if (loopName === undefined) {
       loopName = random;
@@ -80,12 +79,11 @@ describe('application', async () => {
       '/users/create_loop',
       createLoopInput,
     );
-    console.log(`RESPONSE IS ${JSON.stringify(response.data)}`);
+    // console.log(`RESPONSE IS ${JSON.stringify(response.data)}`);
     return response.data;
   }
 
   async function createMessage(myUserInput, receivingUsers) {
-    const random = randomString(5);
 
     const createMessageInput = {
       receivingUserId: receivingUsers,
@@ -102,9 +100,8 @@ describe('application', async () => {
   }
 
   async function createPosts(myUserInput, receivingUsers, receivingLoopIds) {
-    console.log(myUserInput);
-    console.log(receivingUsers);
-    const random = randomString(5);
+    // console.log(myUserInput);
+    // console.log(receivingUsers);
 
     const createPostInput = {
       receivingUserIds: [receivingUsers],
@@ -112,7 +109,7 @@ describe('application', async () => {
       postType: 'text',
       postContent: randomString(10),
     };
-    console.log(myUserInput, createPostInput);
+    // console.log(myUserInput, createPostInput);
     const response = await sendAuthenticatedRequest(
       myUserInput,
       '/users/create_post',
@@ -207,46 +204,8 @@ describe('application', async () => {
     );
   }
 
-  async function removeFriendFromLoop(loopId) {
-    const updateLoopInput = {
-      friendIds: [],
-      loop_id: loopId,
-    };
-    return await client.post(`/loops/${loopId}/update_loop`, updateLoopInput);
-  }
-
   function resultToUser(result) {
     return { id: result._id };
-  }
-
-  async function sendMessage(userId, friendId, messageContent) {
-    const messageInput = {
-      senderId: userId,
-      receivingUserId: friendId,
-      messageType: 'text',
-      messageContent,
-    };
-    return await client.post(`/users/${userId}/send_message`, messageInput);
-  }
-
-  async function sendPostFromUser(
-    senderId,
-    receivingLoopIds,
-    receivingUserIds,
-    postContent,
-  ) {
-    const createPostInput = {
-      senderId,
-      receivingLoopIds,
-      receivingUserIds,
-      postType: 'text',
-      postContent,
-    };
-    return await client.post(`/users/${senderId}/create_post`, createPostInput);
-  }
-
-  async function showPostsSharedToUser(userId) {
-    return await client.get(`/users/${userId}/posts`);
   }
 
   async function registerAndCreateUser(userInput) {
@@ -285,9 +244,6 @@ describe('application', async () => {
       });
   }
 
-  function resultToLoop(result) {
-    return { id: result.data.loopId };
-  }
 
   describe('authenticated state', async () => {
     describe('Managing friends and loops', async () => {
@@ -314,13 +270,13 @@ describe('application', async () => {
           '/users/getcontacts',
           {},
         );
-        // console.log("response "+)
+        // // console.log("response "+)
         assert.strictEqual(response.status, 200);
         const friends = response.data[0].friendIds;
         let isFound = false;
         for (let i = 0; i < friends.length; i++) {
           const element = friends[i];
-          console.log(`response ${element}`);
+          // console.log(`response ${element}`);
           if (element === myUsersFriend.id) {
             isFound = true;
             break;
@@ -352,10 +308,10 @@ describe('application', async () => {
         const myUsersFriend = resultToUser(
           await registerAndCreateUser(myUsersFriendInput),
         );
-        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
         const message = await createMessage(myUserInput, myUsersFriend.id);
-        console.log(message);
-        // TODO: fetch users friend and assert users friend is present in the list
+        // console.log(message);
+        // TODO: fetch users friend and assert 
+        // users friend is present in the list
         assert.strictEqual(message.receivingUserId, myUsersFriend.id);
       }).timeout(10000);
 
@@ -378,7 +334,7 @@ describe('application', async () => {
           myUsersFriend.id,
           createLoopResponseData._id,
         );
-        console.log(createPostResponseData);
+        // console.log(createPostResponseData);
         assert.equal(
           createPostResponseData.receivingUserIds[0],
           myUsersFriend.id,
@@ -397,27 +353,11 @@ describe('application', async () => {
           await registerAndCreateUser(myUsersFriendInput),
         );
         await addAsFriend(myUserInput, myUsersFriend.id);
-        const createLoopResponseData = await createLoop(
-          myUserInput,
-          undefined,
-          myUsersFriend.id,
-        );
-
-        const createPostResponseData = await createPosts(
-          myUserInput,
-          myUsersFriend.id,
-          createLoopResponseData._id,
-        );
-        const createPostResponseData2 = await createPosts(
-          myUserInput,
-          myUsersFriend.id,
-          createLoopResponseData._id,
-        );
 
         const getPostsResponse = await getPosts(myUsersFriendInput);
         assert.equal(getPostsResponse[0].receivingUserIds[0], myUsersFriend.id);
         assert.equal(getPostsResponse[1].receivingUserIds[0], myUsersFriend.id);
-        // console.log(getPostsResponse);
+        // // console.log(getPostsResponse);
       }).timeout(10000);
 
       it('Get this users messages ', async () => {
@@ -427,13 +367,12 @@ describe('application', async () => {
         const myUsersFriend = resultToUser(
           await registerAndCreateUser(myUsersFriendInput),
         );
-        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
         const message1 = await createMessage(myUserInput, myUsersFriend.id);
         const message2 = await createMessage(myUsersFriendInput, myUser.id);
         const message3 = await createMessage(myUserInput, myUsersFriend.id);
         const getMessages = await getRecentChats(myUserInput);
 
-        console.log(getMessages);
+        // console.log(getMessages);
         assert(message1.messageContent);
         assert(message2.messageContent);
         assert(message3.messageContent);
@@ -446,13 +385,12 @@ describe('application', async () => {
         const myUsersFriend = resultToUser(
           await registerAndCreateUser(myUsersFriendInput),
         );
-        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
         const message1 = await createMessage(myUserInput, myUsersFriend.id);
         const message2 = await createMessage(myUsersFriendInput, myUser.id);
         const message3 = await createMessage(myUserInput, myUsersFriend.id);
         const getMessages = await getFriendChats(myUserInput, myUsersFriend.id);
 
-        console.log(getMessages);
+        // console.log(getMessages);
         assert(message1.messageContent);
         assert(message2.messageContent);
         assert(message3.messageContent);
@@ -461,15 +399,15 @@ describe('application', async () => {
       it('Create a loop with a duplicate name', async () => {
         const myUserInput = getRandomCreateUserInput();
         const id = resultToUser(await registerAndCreateUser(myUserInput));
-        console.log(`_ID ${id}`);
+        // console.log(`_ID ${id}`);
         const loop = await createLoop(myUserInput, undefined, []);
-        // console.log("CREATED loop "+JSON.stringify(loop))
+        // // console.log("CREATED loop "+JSON.stringify(loop))
         const duplicateLoopReqResponse = await createLoop(
           myUserInput,
           loop.loopName,
           [],
         );
-        console.log(`MONGO ERROR ${JSON.stringify(duplicateLoopReqResponse)}`);
+        // console.log(`MONGO ERROR ${JSON.stringify(duplicateLoopReqResponse)}`);
         assert.strictEqual(duplicateLoopReqResponse.name, 'MongoError');
       }).timeout(10000);
 
@@ -477,14 +415,14 @@ describe('application', async () => {
         const myUserInput = getRandomCreateUserInput();
         const loop1 = await createLoop(myUserInput, undefined, []);
         const loop2 = await createLoop(myUserInput, undefined, []);
-        console.log(`loop is ${JSON.stringify(loop2)}`);
-        console.log(`loop2 is ${JSON.stringify(loop1)}`);
+        // console.log(`loop is ${JSON.stringify(loop2)}`);
+        // console.log(`loop2 is ${JSON.stringify(loop1)}`);
         const updateNameReqResponse = await updateLoopName(
           myUserInput,
           loop2._id,
           loop1.loopName,
         );
-        // console.log("ERROR"+ (updateNameReqResponse));
+        // // console.log("ERROR"+ (updateNameReqResponse));
         assert.strictEqual(updateNameReqResponse.status, 400);
       }).timeout(10000);
 
@@ -513,14 +451,14 @@ describe('application', async () => {
           {},
         );
         assert.strictEqual(resp.status, 200);
-        // console.log(resp)
+        // // console.log(resp)
         if (resp.status === 200) {
           const contacts = resp.data[0].receivingUsers;
-          // console.log("Receiving users "+Object.keys())
+          // // console.log("Receiving users "+Object.keys())
           let isFound = false;
           for (let i = 0; i < contacts.length; i++) {
             const element = contacts[i];
-            console.log(element);
+            // console.log(element);
             if (element === myUsersFriend.id) {
               isFound = true;
               break;
@@ -530,106 +468,6 @@ describe('application', async () => {
         }
       }).timeout(10000);
 
-      // it('Remove a friend from a loop ', async () => {
-      //   const myUser = resultToUser(await createUser());
-      //   const myUsersFriend = resultToUser(await createUser());
-      //   await addAsFriend(myUser.id, myUsersFriend.id);
-      //   const loop = resultToLoop(await createLoop(myUser.id));
-      //   await addFriendToLoop(loop,  myUsersFriend.id);
-      // //TODO: fetch loop and test if friend is present in loop
-      //   const result = await removeFriendFromLoop(loop.id, myUsersFriend.id);
-      //  //TODO: fetch loop and test if friend is removed from loop
-      //   assert.strictEqual(result.status, 200);
-      // });
-
-      // describe('Private messages', async () => {
-      //   it('Send a message to a user ', async () => {
-      //     const myUser = resultToUser(await createUser());
-      //     const myUsersFriend = resultToUser(await createUser());
-      //     await addAsFriend(myUser.id, myUsersFriend.id);
-      //     const message = "Hello";
-      //     const result = await sendMessage(myUser.id, myUsersFriend.id, message);
-      //   //TODO: fetch users messages and test message is present
-      //     assert.strictEqual(result.status, 200);
-      //   });
-      //   it('Recieve messages from other users ', async () => {}); //TBD
-      //   it('Read chat history with a user ', async () => {}); //TBD
-      // });
-
-      // describe('Post sharing', async () => {
-      //   it('Create a post and share with a list of loops', async () => {
-      //     const myUser = resultToUser(await createUser());
-      //     const myUsersFriend = resultToUser(await createUser());
-      //     await addAsFriend(myUser.id, myUsersFriend.id);
-      //     const loop1 = resultToLoop(await createLoop(myUser.id));
-      //     const loop2 = resultToLoop(await createLoop(myUser.id));
-      //     const allowedLoops = [loop1.id, loop2.id];
-      //     const allowedUsers = [myUsersFriend.id];
-      //     const myUsersPostContent = "Hello all";
-      //     const result = await
-      //     sendPostFromUser(
-      //       myUser.id,
-      //       allowedLoops,
-      //       allowedUsers,
-      //       myUsersPostContent);
-      //     assert.strictEqual(result.status, 200);
-      //   });
-
-      //   it('Incorrect loop names in above request (not allowed)', async () => {
-      //     const myUser = resultToUser(await createUser());
-      //     const myUsersFriend = resultToUser(await createUser());
-      //     await addAsFriend(myUser.id, myUsersFriend.id);
-      //     const loop1 = resultToLoop(await createLoop(myUser.id));
-      //     const allowedLoops = [loop1.id, '123'];
-      //     const allowedUsers = [myUsersFriend.id];
-      //     const myUsersPostContent = "Hello all";
-      //     const result = await
-      //     sendPostFromUser(
-      //       myUser.id,
-      //       allowedLoops,
-      //       allowedUsers,
-      //       myUsersPostContent);
-      //     assert.strictEqual(result.status, 400);
-      //   });
-
-      //   // it('User views their own posts ', async () => {}); //TBD
-      //   it('User deletes their post', async () => {
-      //     const myUser = resultToUser(await createUser());
-      //     const myUsersFriend = resultToUser(await createUser());
-      //     await addAsFriend(myUser.id, myUsersFriend.id);
-      //     const allowedLoops = [];
-      //     const allowedUsers = [myUsersFriend.id];
-      //     const myUsersPostContent = "Hello all";
-      //     const result = await sendPostFromUser(
-      //       myUser.id,
-      //       allowedLoops,
-      //       allowedUsers,
-      //       myUsersPostContent);
-      //     const postId = result.data._id;
-      //     console.log(postId);
-      //     const deleteReq = await client.delete("/posts/" + postId + "/delete");
-      //     assert.strictEqual(deleteReq.status, 200);
-      //   });
-      // });
-
-      // describe('Feed', async () => {
-      //   it('User reads all posts shared to user', async () => {
-      //     const myUser = resultToUser(await createUser());
-      //     const myUsersFriend = resultToUser(await createUser());
-      //     await addAsFriend(myUser.id, myUsersFriend.id);
-      //     const allowedLoops = [];
-      //     const allowedUsers = [myUsersFriend.id];
-      //     const myUsersPostContent = "Hello all";
-      //     await sendPostFromUser(
-      //       myUser.id,
-      //       allowedLoops,
-      //       allowedUsers,
-      //       myUsersPostContent);
-      //     const result = await showPostsSharedToUser(myUser.id);
-      //     assert.strictEqual(result.status, 200);
-      //   });
-      //   it('User replies to a post shared to them', async () => {}); //TBD
-      // });
     });
   });
 });

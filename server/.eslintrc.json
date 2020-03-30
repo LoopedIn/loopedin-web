@@ -9,9 +9,7 @@
     "node": true
   },
   "extends": [
-    "eslint:recommended",
-    "airbnb-base",
-    "plugin:prettier/recommended"
+    "eslint:recommended"
   ],
   "rules": {
     // mimic airbnb, but at 80 characters instead of 100
