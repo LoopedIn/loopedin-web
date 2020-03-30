@@ -65,6 +65,8 @@ The deliverables for checkpoint 2 will support a few functionalities via API and
 
 By this checkpoint we will add UI functionalities for the API end points we created for checkpoint 2, and a few more features.
 
+**Since all of the API functionality and associated tests are finished in checkpoint 3, we will most likely not be adding additional tests. If we run into bugs/corner cases as part our UI devlopment, we will consider corresponding regression tests as our only testcases deliverables**
+
 **New functionalities that will be supported via UI:-**
  - Create/Read and Update a loop
  - Create a post
@@ -72,10 +74,6 @@ By this checkpoint we will add UI functionalities for the API end points we crea
  - Delete a post shared by the user.
  - Messages accept plain text, with urls automatically converted into links (No other HTML is accepted in messages).
  - Manage user's friends and loops
-
-**Other deliverables:-**
- - Adding required test cases 
- - Boilerplate for migrating app to use cloud resources
 
 
 ## Deliverables for final project
