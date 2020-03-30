@@ -126,4 +126,7 @@ docker-compose up
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
 - https://itnext.io/firebase-login-functionality-from-scratch-with-react-redux-2bf316e5820f
+- https://github.com/bradtraversy/devconnector_2.0
+- https://www.youtube.com/watch?v=xm4LX5fJKZ8&list=PLcCp4mjO-z98WAu4sd0eVha1g-NMfzHZk
+
 
