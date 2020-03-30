@@ -429,6 +429,7 @@ describe('application', async () => {
 
       it("Update a loop's name to a duplicate name (not allowed)", async () => {
         const myUserInput = getRandomCreateUserInput();
+        resultToUser(await registerAndCreateUser(myUserInput));
         const loop1 = await createLoop(myUserInput, undefined, []);
         const loop2 = await createLoop(myUserInput, undefined, []);
         // console.log(`loop is ${JSON.stringify(loop2)}`);
@@ -438,7 +439,7 @@ describe('application', async () => {
           loop2._id,
           loop1.loopName,
         );
-        // // console.log("ERROR"+ (updateNameReqResponse));
+        // console.log("ERROR"+ (updateNameReqResponse));
         assert.strictEqual(updateNameReqResponse.status, 400);
       }).timeout(10000);
 
