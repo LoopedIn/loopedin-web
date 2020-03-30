@@ -112,6 +112,9 @@ You will need to update 2 keys to link your firebase app to this project :-
 3. **The private key**
 	Create a private key for your firebase app and add it in the file ```server/config/serviceAccountKey.json``` . *Do not check in this file into your branch.*
 	
+See [this](https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1/blob/checkpoint_3/Screen%20Shot%202020-03-30%20at%204.17.22%20PM.png) for reference.
+
+
 **Running the app**:
 
 After setting up the firebase credentials, and installing docker.
@@ -123,4 +126,7 @@ docker-compose up
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
 - https://itnext.io/firebase-login-functionality-from-scratch-with-react-redux-2bf316e5820f
+- https://github.com/bradtraversy/devconnector_2.0
+- https://www.youtube.com/watch?v=xm4LX5fJKZ8&list=PLcCp4mjO-z98WAu4sd0eVha1g-NMfzHZk
+
 
