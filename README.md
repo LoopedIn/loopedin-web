@@ -71,7 +71,6 @@ By this checkpoint we will add UI functionalities for the API end points we crea
  - Send a message from one user to another (no socket/notification)
  - Delete a post shared by the user.
  - Messages accept plain text, with urls automatically converted into links (No other HTML is accepted in messages).
- - Show unread messages
  - Manage user's friends and loops
 
 **Other deliverables:-**
