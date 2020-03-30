@@ -32,7 +32,6 @@ const App = ({ isAuthenticated, isVerifying }) => {
           <Register />
         </Route>
         <ProtectedRoute
-          exact
           path="/"
           component={Home}
           isAuthenticated={isAuthenticated}

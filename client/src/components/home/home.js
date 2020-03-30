@@ -1,8 +1,10 @@
 import React, { useEffect, Fragment, useState } from "react";
 import { connect } from "react-redux";
+import classNames from "classNames";
 import { logoutUser, getUserFriends, getUserLoops } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import NavBar from "../home/NavBar";
+import Routing from "./Routing";
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -48,6 +50,9 @@ const Home = props => {
   return (
     <Fragment>
       <NavBar selectedTab={selectedTab} logoutUser={logoutUser} />
+      <main className={classNames(classes.main)}>
+        <Routing />
+      </main>
     </Fragment>
   );
 };
