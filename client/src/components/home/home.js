@@ -47,7 +47,7 @@ const Home = props => {
 
   return (
     <Fragment>
-      <NavBar selectedTab={selectedTab} />
+      <NavBar selectedTab={selectedTab} logoutUser={logoutUser} />
     </Fragment>
   );
 };
