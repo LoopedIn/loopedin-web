@@ -89,9 +89,12 @@ export const loginUser = (email, password) => dispatch => {
     .signInWithEmailAndPassword(email, password)
     .then(async firebaseUser => {
       const user = (await serverRequests.getCurrentUserApi()).data
+      const idToken = await myFirebase.auth().currentUser.getIdToken()
+      console.log(idToken)
       dispatch(receiveLogin(user, firebaseUser))
     })
     .catch(error => {
+      console.log(error)
       dispatch(loginError());
     });
 };

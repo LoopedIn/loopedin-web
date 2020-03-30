@@ -49,7 +49,19 @@ const AddFriend = props => {
 
   const [newUser, setNewUser] = React.useState('');
 
-  const handleBtnSubmit = () => {}
+  const handleBtnSubmit = () => {
+    
+  }
+
+  const renderFriendsList = (friend) => {
+    return (
+      <ListItem>
+        <Paper className={classes.paper_users} style={{ width: 200 }}>
+          {friend}
+        </Paper>
+      </ListItem>
+    );
+  }
 
   return (
     <Grid container spacing={5} style={{ backgroundColor: "#cfe8fc", padding: 100 }} justify="center">

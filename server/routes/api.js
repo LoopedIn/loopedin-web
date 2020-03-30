@@ -5,7 +5,7 @@ const serverAuth = require('../auth_modules/server_auth.js');
 const mongoose = require('mongoose');
 const router = express.Router();
 const limit = 10;
-// eslint-disable-next-line no-unused-vars
+
 const { Post, Message, PostAccess} = require('../models/post.js');
 
 const { User } = require('../models/user.js');
