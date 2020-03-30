@@ -7,8 +7,7 @@ import {constants} from "../utils/constants"
 //Fetch all friends of user
 export const getUserFriends = () => async dispatch => {
     const friendsList = (await serverRequests.getUserFriendsApi()).data; 
-    // const friendsList = ['abc', 'def'] 
-    console.log(friendsList);
+    console.log("Here")
     dispatch(dispatches.user.userFriendsLoaded(friendsList)); //Persist user's friends into state
 };
 

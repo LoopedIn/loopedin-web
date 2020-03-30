@@ -1,6 +1,7 @@
 import React from "react";
 import Register from "../register/Register";
 import LoginSide from "../login/Login";
+import AddFriend from "../connection-management/add-friend";
 import ProtectedRoute from "../protected-route/ProtectedRoute";
 import Home from "../home/Home";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
@@ -35,6 +36,13 @@ const App = ({ isAuthenticated, isVerifying }) => {
           exact
           path="/"
           component={Home}
+          isAuthenticated={isAuthenticated}
+          isVerifying={isVerifying}
+        />
+        <ProtectedRoute
+          exact
+          path="/add_friend"
+          component={AddFriend}
           isAuthenticated={isAuthenticated}
           isVerifying={isVerifying}
         />

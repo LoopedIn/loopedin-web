@@ -79,7 +79,7 @@ export const dispatches = {
 
     //TODO: The functions above are not used, need to refactor
     user: {
-      userFriendsLoaded : userFriends =>{
+      userFriendsLoaded : userFriends => {
         return{
             type: USER_FRIENDS_LOADED,
             userFriends
