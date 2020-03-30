@@ -112,8 +112,9 @@ You will need to update 2 keys to link your firebase app to this project :-
 3. **The private key**
 	Create a private key for your firebase app and add it in the file ```server/config/serviceAccountKey.json``` . *Do not check in this file into your branch.*
 	
-	
 See [this](https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1/blob/checkpoint_3/Screen%20Shot%202020-03-30%20at%204.17.22%20PM.png) for reference.
+
+
 **Running the app**:
 
 After setting up the firebase credentials, and installing docker.
