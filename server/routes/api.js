@@ -15,7 +15,7 @@ const { Loop, UserConnection } = require('../models/loop.js');
 router.use(cors());
 router.use(cookieParser());
 
-router.route('/').get((req, res, next) => {
+router.route('/').get((req, res, ) => {
   res.send("Works");
 });
 
