@@ -15,6 +15,10 @@ const { Loop, UserConnection } = require('../models/loop.js');
 router.use(cors());
 router.use(cookieParser());
 
+router.route('/').get((req, res, next) => {
+  res.send("Works");
+});
+
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
   if (Object.keys(req.body).length === 0) {
