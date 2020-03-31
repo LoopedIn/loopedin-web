@@ -484,7 +484,26 @@ describe('application', async () => {
           assert.strictEqual(isFound, true);
         }
       }).timeout(10000);
+      
+
 
     });
+  });
+  describe("Input validation tests", async () => {
+        
+    describe("Email-id given by user is in a valid email address format.", async () => {
+    it("works");
+    });
+    
+    describe("Username input for adding a new friend is an invalid username", async () => {
+      it("works");
+      });
+      
+    describe("Post body contains unfiltered text", async () => {
+        it("works");
+        });
+        describe("Message body contains unfiltered text", async () => {
+          it("works");
+          });
   });
 });
