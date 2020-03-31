@@ -33,3 +33,4 @@ jobs:
         # If we were running the job on the VM this would be localhost
         MONGODB_HOST: mongodb
         MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
+        FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBAS_AUTH_SECRET }}

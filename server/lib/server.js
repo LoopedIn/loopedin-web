@@ -1,14 +1,12 @@
-'use strict';
-
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+
 const app = express();
 app.use(cors());
 const indexRouter = require('../routes/api');
-const loginTestsRouter = require('../routes/login_test');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -36,10 +34,11 @@ function normalizePort(val) {
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-app.use('/login/', loginTestsRouter);
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use("/", indexRouter);
+app.use('/', indexRouter);
+
+console.log("Starting app on port " + port)
 
 /**
  * Create HTTP server.
@@ -73,7 +72,6 @@ function onError(error) {
   }
 }
 
-
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -83,12 +81,16 @@ server.on('error', onError);
 // /*
 // * Creating Mongodb connection
 // */
-const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST:"mongo"
-const portnumber = process.env.MONGODB_PORT ? process.env.MONGODB_PORT:"27017"
+const hostname = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : 'localhost';
+const portnumber = process.env.MONGODB_PORT
+  ? process.env.MONGODB_PORT
+  : '27017';
 
-mongoose.connect('mongodb://'+ hostname + ":" + portnumber + '/InLooped', { useNewUrlParser: true,useUnifiedTopology: true  })
-  .then(() =>  console.log('connection succesful'))
+mongoose
+  .connect(`mongodb://${hostname}:${portnumber}/InLooped`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .catch((err) => console.error(err));
 
-
-module.exports = {mongoose,serverListener};
+module.exports = { mongoose, serverListener };

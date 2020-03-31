@@ -65,17 +65,15 @@ The deliverables for checkpoint 2 will support a few functionalities via API and
 
 By this checkpoint we will add UI functionalities for the API end points we created for checkpoint 2, and a few more features.
 
+**Since all of the API functionality and associated tests are finished in checkpoint 3, we will most likely not be adding additional tests. If we run into bugs/corner cases as part our UI devlopment, we will consider corresponding regression tests as our only testcases deliverables**
+
 **New functionalities that will be supported via UI:-**
  - Create/Read and Update a loop
  - Create a post
  - Send a message from one user to another (no socket/notification)
  - Delete a post shared by the user.
  - Messages accept plain text, with urls automatically converted into links (No other HTML is accepted in messages).
- - Show unread messages
-
-**Other deliverables:-**
- - Adding required test cases 
- - Boilerplate for migrating app to use cloud resources
+ - Manage user's friends and loops
 
 
 ## Deliverables for final project
@@ -95,24 +93,40 @@ By this checkpoint we will add UI functionalities for the API end points we crea
  2. **DevOps**: We will implement a CI/CD pipeline for smooth deployment using Docker and Kubernetes.
  3. **FrontEnd**: We will use a JS framework like React and explore styling frameworks Bootstrap/Material UI.
  4. **Security**: We will implement security features mentioned in the Security analysis. Additionally, we will implement role-management, strong password security, configuring IAM roles in GCP, keeping secrets in secret store using GitHub actions.
- 
-# Installation
 
-Checkpoint 2: 
-Registration and Login UI
-```bash
-git clone https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1.git
-cd final-project-cookie-crumbs-1
-cd client
-npm install 
-npm run watch
-```
-Running the server code and mongodb:
+#  Installation
+  
+**Prerequisites**:
+1. Docker
+2. Firebase account
 
+**Setting up firebase credentials:**
+
+We use firebase to authenticate our users and as a store for user credentials, you will need to create your own firebase account to create an independent build.
+
+You will need to update 2 keys to link your firebase app to this project :-
+
+1. **The public key**
+	 Replace the firebaseConfig json in the file  ```client/src/firebase.js```
+	
+3. **The private key**
+	Create a private key for your firebase app and add it in the file ```server/config/serviceAccountKey.json``` . *Do not check in this file into your branch.*
+	
+See [this](https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1/blob/checkpoint_3/Screen%20Shot%202020-03-30%20at%204.17.22%20PM.png) for reference.
+
+
+**Running the app**:
+
+After setting up the firebase credentials, and installing docker.
 ```bash
-docker compose up
+docker-compose build
+docker-compose up
 ```
+
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
 - https://itnext.io/firebase-login-functionality-from-scratch-with-react-redux-2bf316e5820f
+- https://github.com/bradtraversy/devconnector_2.0
+- https://www.youtube.com/watch?v=xm4LX5fJKZ8&list=PLcCp4mjO-z98WAu4sd0eVha1g-NMfzHZk
+
 

@@ -1,10 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -13,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as RouterLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { registerUser } from "../../actions";
 
 function Copyright() {
   return (
@@ -44,15 +43,33 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
+  },
+  errorText: {
+    color: "#f50057",
+    marginBottom: 5,
+    textAlign: "center"
   }
 }));
 
-export default function register() {
+const register = ({
+  registerSuccess,
+  registerError,
+  registerErrorMsg,
+  registerUser
+}) => {
   const classes = useStyles();
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    registerUser(firstName, lastName, email, password);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h3">
           LoopedIn
@@ -73,6 +90,7 @@ export default function register() {
               fullWidth
               id="firstName"
               label="First Name"
+              onChange={event => setFirstName(event.target.value)}
               autoFocus
             />
           </Grid>
@@ -85,6 +103,7 @@ export default function register() {
               label="Last Name"
               name="lastName"
               autoComplete="lname"
+              onChange={event => setLastName(event.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
@@ -96,6 +115,7 @@ export default function register() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              onChange={event => setEmail(event.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
@@ -108,6 +128,7 @@ export default function register() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={event => setPassword(event.target.value)}
             />
           </Grid>
         </Grid>
@@ -117,9 +138,20 @@ export default function register() {
           variant="contained"
           color="primary"
           className={classes.submit}
+          onClick={handleSubmit}
         >
           Sign Up
         </Button>
+        {registerSuccess && (
+          <Typography component="p" className={classes.errorText}>
+            You have succesfully created the account!
+          </Typography>
+        )}
+        {registerError && (
+          <Typography component="p" className={classes.errorText}>
+            {`${registerErrorMsg}`}
+          </Typography>
+        )}
         <Grid container justify="flex-end">
           <Grid item>
             <Link component={RouterLink} to="/login" variant="body2">
@@ -133,4 +165,14 @@ export default function register() {
       </Box>
     </Container>
   );
+};
+
+function mapStateToProps(state) {
+  return {
+    registerSuccess: state.auth.registerSuccess,
+    registerError: state.auth.registerError,
+    registerErrorMsg: state.auth.registerErrorMsg
+  };
 }
+
+export default connect(mapStateToProps, { registerUser })(register);
