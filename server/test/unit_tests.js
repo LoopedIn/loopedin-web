@@ -353,7 +353,21 @@ describe('application', async () => {
           await registerAndCreateUser(myUsersFriendInput),
         );
         await addAsFriend(myUserInput, myUsersFriend.id);
-
+        const createLoopResponseData = await createLoop(
+          myUserInput,
+          undefined,
+          myUsersFriend.id,
+        );
+        await createPosts(
+          myUserInput,
+          myUsersFriend.id,
+          createLoopResponseData._id,
+        );
+        await createPosts(
+          myUserInput,
+          myUsersFriend.id,
+          createLoopResponseData._id,
+        );
         const getPostsResponse = await getPosts(myUsersFriendInput);
         assert.equal(getPostsResponse[0].receivingUserIds[0], myUsersFriend.id);
         assert.equal(getPostsResponse[1].receivingUserIds[0], myUsersFriend.id);
@@ -370,7 +384,7 @@ describe('application', async () => {
         const message1 = await createMessage(myUserInput, myUsersFriend.id);
         const message2 = await createMessage(myUsersFriendInput, myUser.id);
         const message3 = await createMessage(myUserInput, myUsersFriend.id);
-        const getMessages = await getRecentChats(myUserInput);
+        await getRecentChats(myUserInput);
 
         // console.log(getMessages);
         assert(message1.messageContent);
@@ -388,7 +402,7 @@ describe('application', async () => {
         const message1 = await createMessage(myUserInput, myUsersFriend.id);
         const message2 = await createMessage(myUsersFriendInput, myUser.id);
         const message3 = await createMessage(myUserInput, myUsersFriend.id);
-        const getMessages = await getFriendChats(myUserInput, myUsersFriend.id);
+        await getFriendChats(myUserInput, myUsersFriend.id);
 
         // console.log(getMessages);
         assert(message1.messageContent);
@@ -398,7 +412,7 @@ describe('application', async () => {
 
       it('Create a loop with a duplicate name', async () => {
         const myUserInput = getRandomCreateUserInput();
-        const id = resultToUser(await registerAndCreateUser(myUserInput));
+        resultToUser(await registerAndCreateUser(myUserInput));
         // console.log(`_ID ${id}`);
         const loop = await createLoop(myUserInput, undefined, []);
         // // console.log("CREATED loop "+JSON.stringify(loop))
@@ -407,12 +421,15 @@ describe('application', async () => {
           loop.loopName,
           [],
         );
-        // console.log(`MONGO ERROR ${JSON.stringify(duplicateLoopReqResponse)}`);
+        // console.log(
+        //   `MONGO ERROR ${JSON.stringify(duplicateLoopReqResponse)}`
+        //   );
         assert.strictEqual(duplicateLoopReqResponse.name, 'MongoError');
       }).timeout(10000);
 
       it("Update a loop's name to a duplicate name (not allowed)", async () => {
         const myUserInput = getRandomCreateUserInput();
+        resultToUser(await registerAndCreateUser(myUserInput));
         const loop1 = await createLoop(myUserInput, undefined, []);
         const loop2 = await createLoop(myUserInput, undefined, []);
         // console.log(`loop is ${JSON.stringify(loop2)}`);
@@ -422,7 +439,7 @@ describe('application', async () => {
           loop2._id,
           loop1.loopName,
         );
-        // // console.log("ERROR"+ (updateNameReqResponse));
+        // console.log("ERROR"+ (updateNameReqResponse));
         assert.strictEqual(updateNameReqResponse.status, 400);
       }).timeout(10000);
 

@@ -121,7 +121,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NavBar = props => {
-  const { selectedTab, width } = props;
+  const { selectedTab, width, logoutUser } = props;
 
   let links = [];
 
@@ -133,9 +133,7 @@ const NavBar = props => {
     {
       link: "/posts",
       name: "Posts",
-      onClick: () => {
-        this.closeMobileDrawer();
-      },
+      onClick: () => {},
       icon: {
         desktop: (
           <TollRoundedIcon
@@ -151,9 +149,7 @@ const NavBar = props => {
     {
       link: "/directmessage",
       name: "Direct Message",
-      onClick: () => {
-        this.closeMobileDrawer();
-      },
+      onClick: () => {},
       icon: {
         desktop: (
           <EmailRoundedIcon
@@ -171,6 +167,10 @@ const NavBar = props => {
     {
       link: "/",
       name: "Logout",
+      onClick: e => {
+        e.preventDefault();
+        logoutUser();
+      },
       icon: {
         desktop: (
           <PowerSettingsNewIcon className="text-white" fontSize="small" />
@@ -269,9 +269,6 @@ const NavBar = props => {
                     button
                     divider={index !== menuItems.length - 1}
                     className={classes.permanentDrawerListItem}
-                    onClick={() => {
-                      links[index].click();
-                    }}
                     aria-label={
                       element.name === "Logout"
                         ? "Logout"
