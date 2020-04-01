@@ -12,9 +12,6 @@ const PostHome = props => {
         <Grid item xs={12} md={6}>
           <Posts />
         </Grid>
-        <Grid item xs={12} md={6}>
-          <PostLists />
-        </Grid>
       </Grid>
     </Fragment>
   );
