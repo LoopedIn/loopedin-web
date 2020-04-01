@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
-import Posts from "../posts/Post";
+import Posts from "../posts/PostHome";
 import DirectMessages from "../directmessage/DirectMessage";
 import PropsRoute from "../../utils/PropsRoute";
 
