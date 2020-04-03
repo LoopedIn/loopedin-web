@@ -1,6 +1,5 @@
 const admin = require('firebase-admin');
 const { User } = require('../models/user.js');
-const mongoose = require('mongoose');
 
 const serviceAccount = process.env.FIREBASE_PRIVATE_KEY ?
  JSON.parse(process.env.FIREBASE_PRIVATE_KEY) : require("../config/serviceAccountKey.json");

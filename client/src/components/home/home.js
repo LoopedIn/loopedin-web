@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment, useState } from "react";
 import { connect } from "react-redux";
-import classNames from "classNames";
+import classNames from "classnames";
 import { logoutUser, getUserFriends, getUserLoops } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import NavBar from "../home/NavBar";

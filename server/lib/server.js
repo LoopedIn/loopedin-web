@@ -38,6 +38,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/', indexRouter);
 
+console.log("Starting app on port " + port)
+
 /**
  * Create HTTP server.
  */
