@@ -1,8 +1,11 @@
 import { myFirebase } from "../firebase/firebase";
-import { sendAuthenticatedRequest, unAuthenticatedRequest } from  "../utils/requestUtils";
+import {
+  sendAuthenticatedRequest,
+  unAuthenticatedRequest
+} from "../utils/requestUtils";
 import { serverRequests } from "../api/apiRequests";
 import firebase from "firebase/app";
-import axios from 'axios';
+import axios from "axios";
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -88,10 +91,8 @@ export const loginUser = (email, password) => dispatch => {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(async firebaseUser => {
-      const user = (await serverRequests.getCurrentUserApi()).data
-      const idToken = await myFirebase.auth().currentUser.getIdToken()
-      console.log(idToken)
-      dispatch(receiveLogin(user, firebaseUser))
+      const user = (await serverRequests.getCurrentUserApi()).data;
+      dispatch(receiveLogin(user, firebaseUser));
     })
     .catch(error => {
       console.log(error)
@@ -116,18 +117,32 @@ export const verifyAuth = () => dispatch => {
   dispatch(verifyRequest());
   myFirebase.auth().onAuthStateChanged(async firebaseUser => {
     if (firebaseUser !== null) {
-      const user = (await serverRequests.getCurrentUserApi()).data
-      dispatch(receiveLogin(user, firebaseUser))
+      const user = (await serverRequests.getCurrentUserApi()).data;
+      dispatch(receiveLogin(user, firebaseUser));
     }
     dispatch(verifySuccess());
   });
 };
 
-export const registerUser = (firstName, lastName, email, password) => dispatch => {
+export const registerUser = (
+  firstName,
+  lastName,
+  userName,
+  email,
+  password
+) => dispatch => {
   myFirebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(response =>  serverRequests.createUserApi(response.user.uid, firstName, firstName,lastName, email)) //TODO: needs username
+    .then(response =>
+      serverRequests.createUserApi(
+        response.user.uid,
+        userName,
+        firstName,
+        lastName,
+        email
+      )
+    )
     .then(response => {
       dispatch(registerSuccess(response));
     })

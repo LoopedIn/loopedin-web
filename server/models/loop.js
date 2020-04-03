@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 
 // listofLoops contains loop ids created by the user.
 const userConnection = mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true },
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    required: true, 
+    unique: true 
+  },
   friendIds: [String],
   listOfLoops: [String],
 });

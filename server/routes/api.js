@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const limit = 10;
 
-const { Post, Message, PostAccess} = require('../models/post.js');
+const { Post, Message} = require('../models/post.js');
 
 const { User } = require('../models/user.js');
 
@@ -14,6 +14,10 @@ const { Loop, UserConnection } = require('../models/loop.js');
 
 router.use(cors());
 router.use(cookieParser());
+
+router.route('/').get((req, res, ) => {
+  res.send("Works");
+});
 
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
@@ -41,6 +45,7 @@ router.use(serverAuth.firebaseTokenAuthenticator);
 
 router.route('/users/logged_in_user_info').post((req, res, next) => {
   res.json(req.body.user).send()
+  next()
 })
 
 // Return the list of friends of a user
@@ -64,7 +69,7 @@ router.route('/users/add_friend').post((req,res, next) => {
     { upsert: true },
     (error, response) => {
       if (error) {
-        console.log(`Error ${error}`);
+        // console.log(`Error ${error}`);
         res.status(400).send(error)
         return next(error);
       }
@@ -75,7 +80,6 @@ router.route('/users/add_friend').post((req,res, next) => {
 
 router.route('/create-post').post(( req, res, next) => { 
   // [TODO] Get user id from session
-  const userID = req.userID;
   if (Object.keys(req.body).length === 0) {
     const error = 'Data not present in POST request body';
     return next(error);
@@ -89,17 +93,16 @@ router.route('/create-post').post(( req, res, next) => {
         res.status(400);
         res.send('ValidationError');
       }
-      // console.log(error)
+      // // console.log(error)
       return next(error);
     }
-    // console.log(data)
+    // // console.log(data)
     res.json(data);
   });
 });
 
 router.route('/update-post/:id').post(( req, res, next) => {
   // [TODO] Get user id from session
-  const userID = req.userID;
   Post.findOneAndUpdate(
     { postId: req.params.id },
     {
@@ -114,14 +117,13 @@ router.route('/update-post/:id').post(( req, res, next) => {
         return next(error);
       }
       res.json(data);
-      // console.log('Post updated successfully !')
+      // // console.log('Post updated successfully !')
     },
   );
 });
 
 router.route('/delete-post/:id').delete((req,res, next) => {
   // [TODO] Get user id from session
-  const userID = req.userID;
   Post.findOneAndDelete({ postId: req.params.id }, (error, data) => {
     if (error) {
       return next(error);
@@ -148,7 +150,7 @@ router.route('/post/updatepost').post((req,res, next) => {
       }
 
       res.json(data);
-      // console.log('User updated successfully !');
+      // // console.log('User updated successfully !');
     },
   );
 });
@@ -173,11 +175,11 @@ router.route('/users/create_loop').post((req,res, next) => {
         res.status(400).send(error);
         // res.send("ValidationError")
       }
-      console.log(error);
+      // console.log(error);
       res.status(400).send(error);
       return next(error);
     }
-    // console.log(data)
+    // // console.log(data)
     res.status(200).send(data);
   });
 });
@@ -194,7 +196,7 @@ router.route('/loops').post((req,res, next) => {
       return next(error);
     }
 
-    console.log(data);
+    // console.log(data);
     res.json(data);
   });
 });
@@ -245,7 +247,7 @@ router.route('/loops/:loop_id/get_contacts').post((req,res, next) => {
       return next(error);
     }
 
-    console.log("SERVER "+response)
+    // console.log("SERVER "+response)
     res.status(200).send(response);
   });
 });
@@ -258,11 +260,11 @@ router.route('/users/send_message').post((req,res, next) => {
   MessageObject.senderId = mongoose.Types.ObjectId(MessageObject.senderId);
   Message.create(MessageObject, (error, data) => {
     if (error) {
-      console.log(error);
+      // console.log(error);
       res.status(400).send(error);
       return next(error);
     }
-    console.log(data);
+    // console.log(data);
     res.json(data);
   });
 });
@@ -273,9 +275,9 @@ router.route('/users/getcontacts').post((req,res,next) => {
   UserConnection.find({userId:userid},{friendIds:1},(err,data) => {
     if(err){
       res.status(400).send(err)
-      return next(error)
+      return next(err)
     }
-    console.log("SERVER "+data)
+    // console.log("SERVER "+data)
     res.status(200).send(data)
   })
 })
@@ -321,8 +323,9 @@ router.route('/users/show_messages').post((req,res, next) => {
   const senderId = mongoose.Types.ObjectId(req.body.senderId);
   const { pageNumber } = req.body;
   const { numberOfItems } = req.body;
-  // eslint-disable-next-line max-len
-  // Formula to paginate : skip(NUMBER_OF_ITEMS * (PAGE_NUMBER - 1)).limit(NUMBER_OF_ITEMS )
+
+  // Formula to paginate : 
+  // skip(NUMBER_OF_ITEMS * (PAGE_NUMBER - 1)).limit(NUMBER_OF_ITEMS )
   // Initial Value (Example) :  PAGE_NUMBER=1, NUMBER_OF_ITEMS=10
   Message.find(
     { senderId },
@@ -349,18 +352,17 @@ router.route('/users/create_post').post((req,res, next) => {
     res.status(400).send('Post data not present');
     return next('Post data not present');
   }
-  const { post } = body;
   req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
 
   // body.post has senderId field which is the _id of the user object
   Post.create(req.body, (error, data) => {
     if (error) {
       res.status(400).send('ValidationError');
-      console.log(error);
+      // console.log(error);
       res.status(400).send(error);
       return next(error);
     }
-    console.log(data);
+    // console.log(data);
     res.status(200).send(data);
   });
 });
@@ -385,7 +387,7 @@ router.route('/users/user_posts').post((req,res, next) => {
     { skip: numberOfItems * (pageNumber - 1), limit: numberOfItems },
     (error, data) => {
       if (error) {
-        console.log(`Error ${error}`);
+        // console.log(`Error ${error}`);
         res.status(400).send(error);
         return next(error);
       }
@@ -415,46 +417,47 @@ router.route('/users/create_message').post((req,res, next) => {
     res.status(400).send('Post data not present');
     return next('Post data not present');
   }
-  console.log (req.body)
+  // console.log (req.body)
   req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
 
   // body.post has senderId field which is the _id of the user object
   Message.create(req.body, (error, data) => {
     if (error) {
       //res.status(400).send('ValidationError');
-      console.log(error);
+      // console.log(error);
       res.status(400).send(error);
       return next(error);
     }
-    console.log(data);
+    // console.log(data);
     res.status(200).json(data);
   });
 });
-function validateBody(req){
+
+function validateBody(req, res, next){
   if (req.body.length === 0) {
     res.status(400).send('Post data not present');
     return next('Post data not present');
   }
-  console.log("Post body present")
+  // console.log("Post body present")
   return;
 }
+
 //Get_recent_chats
 router.route('/users/get_recent_chats').post((req,res, next) => {
   validateBody(req)
-  console.log( req.body.userID)
-  userID = req.body.userID // TODO: change
-  friendID = req.body.friendID
-  page = req.body.page ? req.body.page : 1
+  // console.log( req.body.userID)
+  const userID = req.body.userID // TODO: change
+  const page = req.body.page ? req.body.page : 1
   Message.find({$or:[{receivingUserId: userID },{senderId: userID }]})
   .sort({created:-1})
   .skip((page-1) * limit)
   .exec((error, data) => {
     if (error) {
-      console.log(error);
+      // console.log(error);
       res.status(400);
       next(error);
     }
-    console.log(data);
+    // console.log(data);
     res.status(200).json(data);
     return next();
   });
@@ -463,12 +466,12 @@ router.route('/users/get_recent_chats').post((req,res, next) => {
 //get_chat_history 
 router.route('/users/get_chat_history').post((req,res, next) => {
   validateBody(req)
-  console.log( req.body.userID)
-  userID = req.body.userID // TODO: change
-  friendID = req.body.friendID
-  console.log("userid",userID)
-  console.log("friendID",friendID)
-  page = req.body.page ? req.body.page : 1
+  // console.log( req.body.userID)
+  const userID = req.body.userID // TODO: change
+  const friendID = req.body.friendID
+  // console.log("userid",userID)
+  // console.log("friendID",friendID)
+  const page = req.body.page ? req.body.page : 1
   Message.find()
   .or([
     { $and: [{receivingUserId: userID}, {senderId: friendID}] },
@@ -477,41 +480,42 @@ router.route('/users/get_chat_history').post((req,res, next) => {
   .skip((page-1) * limit)
   .exec((error, data) => {
     if (error) {
-      console.log(error);
+      // console.log(error);
       res.status(400);
       return next();
     }
-    console.log(data);
+    // console.log(data);
     res.json(data);
     return next();
   });
 });
+
 //get_recent_posts
 function  getLoopsContainingUser (userID) {
-  console.log(userID)
-  const loopData = Loop.find({ receivingUsers : userID}, (error,data)=> {
-    console.log("Loops: " + data)
+  // console.log(userID)
+  Loop.find({ receivingUsers : userID}, (error,data)=> {
+    // console.log("Loops: " + data)
     return data;
   })
 }
+
 router.route('/posts/get_recent_posts').post((req,res, next) => {
   validateBody(req)
-  console.log( req.body.userID)
-  userID = req.body.userID // TODO: change
-  friendID = req.body.friendID
-  page = req.body.page ? req.body.page : 1
-  loopIDs = getLoopsContainingUser(userID)
-  console.log("LoopsIDS:",loopIDs)
+  // console.log( req.body.userID)
+  const userID = req.body.userID // TODO: change
+  const page = req.body.page ? req.body.page : 1
+  const loopIDs = getLoopsContainingUser(userID)
+  // console.log("LoopsIDS:",loopIDs)
   Post.find({$or:[{receivingUserIds: userID },{receivingLoopIds: loopIDs }]})
   .sort({created:-1})
   .skip((page-1) * limit)
   .exec((error, data) => {
     if (error) {
-      console.log(error);
+      // console.log(error);
       res.status(400);
       return next();
     }
-    console.log(data);
+    // console.log(data);
     res.json(data);
     return next();
   });
