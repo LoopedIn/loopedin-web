@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, Fragment, useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CommentIcon from '@material-ui/icons/Comment';
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import { getUserLoopInfo, createLoop } from "../../actions";
 
 
 
@@ -27,14 +28,6 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary
   }
 }));
-
-function generate(element) {
-  return [0, 1, 2].map(value =>
-    React.cloneElement(element, {
-      key: value
-    })
-  );
-}
 
 const loopsListMockData = ["loop1", "loop2", "loop3"];
 
@@ -58,6 +51,22 @@ const loopsVsFriendsMockData = {
 
 const ConnectionManagerHome = props => {
   const classes = useStyles();
+
+  const {
+    createLoopSuccessFulMsg,
+    createLoopFailedMsg,
+
+    //Methods
+    getUserLoopInfo,
+    createLoop
+  } = props;
+  
+  useEffect(() => {
+    getUserLoopInfo();
+  }, [getUserLoopInfo]);
+
+
+  const [newLoop, setNewLoop] = React.useState('');
   const [selectedLoop, setSelectedLoop] = React.useState(loopsListMockData[0]);
   const [toggle, setToggle] = React.useState(false);
   const [loopVsFriendsConfig, setLoopVsFriendsConfig] = React.useState(loopsVsFriendsMockData);
@@ -65,6 +74,10 @@ const ConnectionManagerHome = props => {
   const handleListItemClick = (event, selectedLoop) => {
     setSelectedLoop(selectedLoop);
   };
+
+  const handleCreateLoopBtnSubmit = () => {
+    createLoop(newLoop)
+  }
 
   const renderLoopsListItem = val => {
     return (
@@ -127,14 +140,20 @@ const ConnectionManagerHome = props => {
     >
       <Container maxWidth="sm" border={1}>
         <Grid container spacing={3} justify="center" alignItems="center" border={1}>
-        <Grid item xs={12} container direction="row" border={1}>
+        <Grid item xs={12} container direction="row" style={{marginTop:20}} border={1}>
             <Grid item xs={5}>
-                  <TextField id="outlined-basic" label="New loop name" variant="outlined" />
+            <TextField id="outlined-basic" 
+                label="Loop name" variant="outlined" size="small" 
+                onChange={e => setNewLoop(e.target.value)}
+                defaultValue={newLoop}/>
+                {createLoopSuccessFulMsg}{createLoopFailedMsg}
             </Grid>
             <Grid item xs={5}>
               <Button
                   variant="contained"
-                  color="secondary">
+                  color="secondary"
+                  onClick={handleCreateLoopBtnSubmit}
+                  >
                   Create loop
               </Button>
             </Grid>
@@ -160,4 +179,14 @@ const ConnectionManagerHome = props => {
   );
 };
 
-export default connect(null)(ConnectionManagerHome);
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user,
+    createLoopSuccessFulMsg:  state.userConnections.createLoopSuccessFulMsg,
+    createLoopFailedMsg: state.userConnections.createLoopFailedMsg
+  };
+}
+
+export default connect(mapStateToProps, {getUserLoopInfo,
+  createLoop
+})(ConnectionManagerHome);

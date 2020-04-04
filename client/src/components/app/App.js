@@ -41,7 +41,7 @@ const App = ({ isAuthenticated, isVerifying }) => {
         /> */}
         <ProtectedRoute
           path="/add_friend"
-          component={AddFriend}
+          component={ConnectionManagerHome}
           isAuthenticated={isAuthenticated}
           isVerifying={isVerifying}
         />

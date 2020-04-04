@@ -18,6 +18,9 @@ export const USER_LOOPS_LOADED = "USER_LOOPS_LOADED";
 export const ADD_USER_SUCESS = "ADD_USER_SUCESS";
 export const ADD_USER_FAILED = "ADD_USER_FAILED";
 
+export const CREATE_LOOP_SUCCESSFUL = "CREATE_LOOP_SUCCESSFUL";
+export const CREATE_LOOP_FAILED = "CREATE_LOOP_FAILED";
+
 
 export const dispatches = {
     auth: {
@@ -103,6 +106,22 @@ export const dispatches = {
               type: ADD_USER_FAILED,
               errorMsg
           }
+      }
+    },
+
+    loop: {
+      createLoopSuccess: msg => {
+        return {
+          type: CREATE_LOOP_SUCCESSFUL,
+          msg
+        }
+      },
+
+      createLoopFailed: msg => {
+        return {
+          type: CREATE_LOOP_FAILED,
+          msg
+        }
       }
     }
 }

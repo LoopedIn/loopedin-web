@@ -25,6 +25,13 @@ export const serverRequests = {
 
     getUsersLoopsApi : async () => authenticatedRequest(r('/loops'), {}),
 
+    createLoopApi : async (loopName) => {
+        const postBodyParams = {
+            "loopName": loopName
+        }
+        return authenticatedRequest(r('/users/create_loop'),  postBodyParams)
+    },
+
     //TODO: fix input
     updateLoopApi: async (loopId, params) => authenticatedRequest(r(`/loops/{loopId}/update_loop`), params),
 

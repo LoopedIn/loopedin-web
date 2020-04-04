@@ -10,11 +10,28 @@ export const getUserFriends = () => async dispatch => {
     dispatch(dispatches.user.userFriendsLoaded(friendsList[0])); //Persist user's friends into state //TODO: why is this a list?
 };
 
+export const createLoop = (loopName) => async dispatch =>{
+    console.log("Create loop called with " + loopName);
+    try{
+        (await serverRequests.createLoopApi(loopName))
+        dispatch(dispatches.loop.createLoopSuccess("Loop created!"));
+    } catch(error){
+        console.log(error)
+        const errorResp = error.response.data;
+        if(errorResp.includes("dup")) {
+            dispatch(dispatches.loop.createLoopFailed("A loop with this name already exists!"));
+        } else{
+            dispatch(dispatches.loop.createLoopFailed(constants.error500));
+        }
+    }
+}
+
 //Fetch all loops of user
-export const getUserLoops = () => async dispatch => {
-    const loopsList = (await serverRequests.getUsersLoopsApi()).data;  
-    // const loopsList = ['ghi','jkl']
-    console.log(loopsList);
+export const getUserLoopInfo = () => async dispatch => {
+    const loopsList = (await serverRequests.getUsersLoopsApi()).data;
+    const friendsList = (await serverRequests.getUserFriendsApi()).data;
+    console.log({loopsList});
+    console.log({friendsList});
     dispatch(dispatches.user.userLoopsLoaded(loopsList)); //Persist user's loops info into state
 };
 
@@ -33,7 +50,7 @@ export const addFriendToUser = (userName, userFriendsState, setUserFriendsState)
         dispatch(dispatches.user.addUserSuccess(`${userName} is now your friend!`));
         setUserFriendsState([...userFriendsState,userName])
     } catch (error){
-        const errorResp = error.response.data;
+       const errorResp = error.response.data;
        if(errorResp.includes("does not exist")){
             dispatch(dispatches.user.addUserFailed("The user you are trying to add does not exist"));
        } else if(errorResp.includes("already a friend")){
