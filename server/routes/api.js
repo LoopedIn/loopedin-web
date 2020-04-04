@@ -224,15 +224,10 @@ router.route('/loops/:loop_id/update_loop').post((req,res, next) => {
     res.status(400).send(error);
     return next(error);
   }
-
+  
   let loopID = req.params.loop_id;
   const userID = req.body.userID;
   const { contacts, loopName } = req.body.loop;
-  if (Object.keys(contacts).length === 0) {
-    const error = 'Contacts Details cannot be empty';
-    res.status(400).send(error);
-    return next(error);
-  }
   loopID = mongoose.Types.ObjectId(loopID);
   // Update the members of the loop of a user
   Loop.update(

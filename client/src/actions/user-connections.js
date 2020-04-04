@@ -43,8 +43,24 @@ export const getUserLoopInfo = () => async dispatch => {
 
 //Update loop
 export const updateLoop = (loopVsSelectedFriendsConfig) => async dispatch => {
-    console.log({loopVsSelectedFriendsConfig})
-    //TODO: will update this when the form of input from the UI is more clear
+    const loopsList = (await serverRequests.getUsersLoopsApi()).data;
+    Object.keys(loopVsSelectedFriendsConfig).forEach(async loopName => {
+        const loopId = loopsList.filter(rec => rec["loopName"] === loopName)[0]["_id"]
+        const contacts = []
+        const vals = {}
+        const reqParam = {}
+        Object.keys(loopVsSelectedFriendsConfig[loopName]).forEach(friendName => {
+            if(loopVsSelectedFriendsConfig[loopName][friendName]){
+                contacts.push(friendName)
+            }
+        })
+        vals["loopId"] = loopId
+        vals["loopName"] = loopName
+        vals["contacts"] = contacts
+        reqParam["loop"] = vals
+        console.log(reqParam);
+        (await serverRequests.updateLoopApi(loopId, reqParam))
+    })
 }
 
 //Add another user as a friend

@@ -33,7 +33,7 @@ export const serverRequests = {
     },
 
     //TODO: fix input
-    updateLoopApi: async (loopId, params) => authenticatedRequest(r(`/loops/{loopId}/update_loop`), params),
+    updateLoopApi: async (loopId, params) => authenticatedRequest(r(`/loops/${loopId}/update_loop`), params),
 
     addFriendToUserApi: async (params) => authenticatedRequest(r('/users/add_friend'), params)
 }
