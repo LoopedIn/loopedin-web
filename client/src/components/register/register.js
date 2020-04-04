@@ -61,11 +61,12 @@ const register = ({
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = () => {
-    registerUser(firstName, lastName, email, password);
+    registerUser(firstName, lastName, userName ,email, password);
   };
 
   return (
@@ -104,6 +105,18 @@ const register = ({
               name="lastName"
               autoComplete="lname"
               onChange={event => setLastName(event.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              id="username"
+              label="User name"
+              name="username"
+              autoComplete="username"
+              onChange={event => setUserName(event.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
