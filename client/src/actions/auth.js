@@ -126,6 +126,7 @@ export const verifyAuth = () => dispatch => {
 export const registerUser = (
   firstName,
   lastName,
+  userName,
   email,
   password
 ) => dispatch => {
@@ -135,12 +136,12 @@ export const registerUser = (
     .then(response =>
       serverRequests.createUserApi(
         response.user.uid,
-        firstName,
+        userName,
         firstName,
         lastName,
         email
       )
-    ) //TODO: needs username
+    )
     .then(response => {
       dispatch(registerSuccess(response));
     })
