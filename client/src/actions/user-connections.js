@@ -29,14 +29,21 @@ export const createLoop = (loopName) => async dispatch =>{
 //Fetch all loops of user
 export const getUserLoopInfo = () => async dispatch => {
     const loopsList = (await serverRequests.getUsersLoopsApi()).data;
-    const friendsList = (await serverRequests.getUserFriendsApi()).data;
-    console.log({loopsList});
-    console.log({friendsList});
-    dispatch(dispatches.user.userLoopsLoaded(loopsList)); //Persist user's loops info into state
+    const friendsList = (await serverRequests.getUserFriendsApi()).data[0].friendIds;
+    const loopsWithAllContactInfo = {}
+    loopsList.forEach(rec => {
+        let friendNameVsIsSeleted = {}
+        friendsList.forEach(friendRec => {
+            friendNameVsIsSeleted[friendRec] = rec.receivingUsers.includes(friendRec)
+        })
+        loopsWithAllContactInfo[rec.loopName] = friendNameVsIsSeleted
+    })
+    dispatch(dispatches.user.userLoopsLoaded(loopsWithAllContactInfo)); //Persist user's loops info into state
 };
 
 //Update loop
-export const updateLoop = () => async dispatch => {
+export const updateLoop = (loopVsSelectedFriendsConfig) => async dispatch => {
+    console.log({loopVsSelectedFriendsConfig})
     //TODO: will update this when the form of input from the UI is more clear
 }
 

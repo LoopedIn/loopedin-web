@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -6,16 +6,10 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox"
-import IconButton from '@material-ui/core/IconButton';
-import CommentIcon from '@material-ui/icons/Comment';
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { getUserLoopInfo, createLoop } from "../../actions";
-
+import { getUserLoopInfo, createLoop, updateLoop } from "../../actions";
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,47 +23,28 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const loopsListMockData = ["loop1", "loop2", "loop3"];
-
-const loopsVsFriendsMockData = {
-  loop1: {
-    friend1: true,
-    friend2: true,
-    friend3: true
-  },
-  loop2: {
-    friend1: true,
-    friend2: false,
-    friend3: true
-  },
-  loop3: {
-    friend1: false,
-    friend2: false,
-    friend3: false
-  }
-};
-
 const ConnectionManagerHome = props => {
   const classes = useStyles();
 
   const {
     createLoopSuccessFulMsg,
     createLoopFailedMsg,
+    loopsWithContactInfo,
 
     //Methods
     getUserLoopInfo,
-    createLoop
+    createLoop,
+    updateLoop
   } = props;
   
   useEffect(() => {
     getUserLoopInfo();
   }, [getUserLoopInfo]);
 
-
   const [newLoop, setNewLoop] = React.useState('');
-  const [selectedLoop, setSelectedLoop] = React.useState(loopsListMockData[0]);
+  const [selectedLoop, setSelectedLoop] = React.useState(Object.keys(loopsWithContactInfo)[0]);
   const [toggle, setToggle] = React.useState(false);
-  const [loopVsFriendsConfig, setLoopVsFriendsConfig] = React.useState(loopsVsFriendsMockData);
+  const [loopVsFriendsConfig, setLoopVsFriendsConfig] = React.useState(loopsWithContactInfo);
 
   const handleListItemClick = (event, selectedLoop) => {
     setSelectedLoop(selectedLoop);
@@ -77,6 +52,10 @@ const ConnectionManagerHome = props => {
 
   const handleCreateLoopBtnSubmit = () => {
     createLoop(newLoop)
+  }
+
+  const handleSaveLoopConfigsBtnSubmit = () => {
+    updateLoop(loopVsFriendsConfig)
   }
 
   const renderLoopsListItem = val => {
@@ -97,7 +76,6 @@ const ConnectionManagerHome = props => {
       let loopConfig = loopVsFriendsConfig[loop]
       loopConfig[name] = !loopConfig[name]
       loopVsFriendsConfig[loop] = loopConfig
-      console.log(name)
       let newToggle = toggle;
       newToggle =! newToggle;
       setToggle(newToggle) 
@@ -110,8 +88,7 @@ const ConnectionManagerHome = props => {
         ? {}
         : loopVsFriendsConfig[loop];
     const list = [];
-    console.log("Rendering friends")
-    Object.keys(config).map((key, index) => {
+    Object.keys(config).map((key) => {
       let name = key;
       let isPresent = config[key];
       const labelId = `checkbox-list-label-${name}`;
@@ -160,7 +137,7 @@ const ConnectionManagerHome = props => {
         </Grid>
         <Grid item xs={6}>
           <List>
-            {loopsListMockData.map(val => renderLoopsListItem(val))}
+            {Object.keys(loopVsFriendsConfig).map(val => renderLoopsListItem(val))}
           </List>
         </Grid>
         <Grid item xs={6}>
@@ -169,7 +146,9 @@ const ConnectionManagerHome = props => {
         <Grid item xs={6}>
           <Button
               variant="contained"
-              color="secondary">
+              color="secondary"
+              onClick={handleSaveLoopConfigsBtnSubmit}
+              >
               Save
           </Button>
         </Grid>
@@ -182,11 +161,14 @@ const ConnectionManagerHome = props => {
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
+    loopsWithContactInfo: state.userConnections.userLoops,
     createLoopSuccessFulMsg:  state.userConnections.createLoopSuccessFulMsg,
     createLoopFailedMsg: state.userConnections.createLoopFailedMsg
   };
 }
 
-export default connect(mapStateToProps, {getUserLoopInfo,
-  createLoop
+export default connect(mapStateToProps, {
+  getUserLoopInfo,
+  createLoop,
+  updateLoop
 })(ConnectionManagerHome);

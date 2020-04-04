@@ -14,7 +14,7 @@ admin.initializeApp({
 // }
 
 const firebaseTokenAuthenticator = async (req, res, next) => {
-  const user = await User.findOne({authToken: "mgSfCEOD9kXRq9NYiCcN5VlD6yn1"})
+  const user = await User.findOne({authToken: "Umm9sECtpPUuWjPeUSwRsrAAzYg1"})
   req.body.userID = user._id
   req.body.userId= user._id
   req.body.user = user
