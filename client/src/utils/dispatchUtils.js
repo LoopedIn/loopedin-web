@@ -92,10 +92,10 @@ export const dispatches = {
               userLoops
           }
       },
-      addUserSuccess: userName => {
+      addUserSuccess: msg => {
           return {
               type:ADD_USER_SUCESS,
-              userName
+              msg
           }
       },
       addUserFailed: errorMsg => {

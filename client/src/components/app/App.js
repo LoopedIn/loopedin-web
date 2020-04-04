@@ -33,16 +33,15 @@ const App = ({ isAuthenticated, isVerifying }) => {
         <Route path="/register">
           <Register />
         </Route>
-        <ProtectedRoute
+        {/* <ProtectedRoute
           path="/"
           component={Home}
           isAuthenticated={isAuthenticated}
           isVerifying={isVerifying}
-        />
+        /> */}
         <ProtectedRoute
-          exact
           path="/add_friend"
-          component={ConnectionManagerHome}
+          component={AddFriend}
           isAuthenticated={isAuthenticated}
           isVerifying={isVerifying}
         />

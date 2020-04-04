@@ -28,5 +28,5 @@ export const serverRequests = {
     //TODO: fix input
     updateLoopApi: async (loopId, params) => authenticatedRequest(r(`/loops/{loopId}/update_loop`), params),
 
-    addFriendToUserApi: async (userName) => authenticatedRequest(r('/users/add_friend'))
+    addFriendToUserApi: async (params) => authenticatedRequest(r('/users/add_friend'), params)
 }

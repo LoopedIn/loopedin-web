@@ -15,7 +15,7 @@ import CommentIcon from '@material-ui/icons/Comment';
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { Typography } from "@material-ui/core";
-import {getUserFriends } from "../../actions";
+import { getUserFriends , addFriendToUser} from "../../actions";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,9 +38,12 @@ const AddFriend = props => {
   const classes = useStyles();
 
   const {
-    addFriendErrMsg,
+    addFriendToUserActionMsg,
     usersFriends,
-    getUserFriends
+
+    //Methods
+    getUserFriends,
+    addFriendToUser
   } = props;
 
   useEffect(() => {
@@ -49,13 +52,15 @@ const AddFriend = props => {
 
   const [newUser, setNewUser] = React.useState('');
 
+  const [userFriendsState, setUserFriendsState] = React.useState(usersFriends === undefined? [] : usersFriends["friendIds"]);
+
   const handleBtnSubmit = () => {
-    
+    addFriendToUser(newUser, userFriendsState, setUserFriendsState)
   }
 
   const renderFriendsList = (friend) => {
     return (
-      <ListItem>
+      <ListItem id={friend}>
         <Paper className={classes.paper_users} style={{ width: 200 }}>
           {friend}
         </Paper>
@@ -81,7 +86,7 @@ const AddFriend = props => {
                 defaultValue={newUser}/>
               </Grid>
               <Grid item xs={6} style={{marginTop: 15}} >
-                {addFriendErrMsg}
+                {addFriendToUserActionMsg}
               </Grid>
               <Grid item xs={6} style={{marginTop: 15}} >
                 <Button
@@ -97,7 +102,7 @@ const AddFriend = props => {
         </Grid>
         <Grid item xs={3}>
           <List>
-          {usersFriends.map(val => renderFriendsList(val))}
+          {userFriendsState.map(val => renderFriendsList(val))}
           </List>
         </Grid>
     </Grid>
@@ -107,10 +112,12 @@ const AddFriend = props => {
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
-    usersFriends: state.userConnections.userFriends
+    usersFriends: state.userConnections.userFriends,
+    addFriendToUserActionMsg:  state.userConnections.addFriendToUserActionMsg
   };
 }
 
 export default connect(mapStateToProps, {
-  getUserFriends
+  getUserFriends,
+  addFriendToUser
 })(AddFriend);

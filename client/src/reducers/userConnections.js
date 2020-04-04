@@ -8,7 +8,7 @@ import {
 const initialState = {
     userLoops : [],
     userFriends : [],
-    addFriendToUserErrMsg:{}
+    addFriendToUserActionMsg: ""
 }
 
 export default (state=initialState, action) => {
@@ -17,6 +17,10 @@ export default (state=initialState, action) => {
             return {...state, userFriends: action.userFriends}
         case USER_LOOPS_LOADED:
             return {...state, userLoops: action.userLoops}
+        case ADD_USER_SUCESS:
+            return {...state, addFriendToUserActionMsg: action.msg}
+        case ADD_USER_FAILED:
+            return {...state, addFriendToUserActionMsg: action.errorMsg}
         default:
             return state;
     }

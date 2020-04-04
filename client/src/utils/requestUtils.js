@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { myFirebase } from "../firebase/firebase";
 
 export const authenticatedRequest = async (route, postBodyParams) => {
-  const idToken = await myFirebase.auth().currentUser.getIdToken();
+  const idToken = "dummy"
+  // const idToken = await myFirebase.auth().currentUser.getIdToken();
   return axios.post(route, constructPostBodyParams(idToken, postBodyParams));
 };
 
