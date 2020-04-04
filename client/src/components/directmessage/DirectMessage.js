@@ -1,14 +1,15 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
+import { Grid } from "@material-ui/core";
+import Chat from "./Chat";
 
 const DirectMessages = props => {
   return (
-    <div>
-      <h1>
-        Hi you will see your DMs here. Be careful of wet floor, you may slide
-        into DMs
-      </h1>
-    </div>
+    <Fragment>
+      <Grid item xs={12} md={6}>
+        <Chat />
+      </Grid>
+    </Fragment>
   );
 };
 

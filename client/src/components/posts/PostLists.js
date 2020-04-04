@@ -10,7 +10,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
-import { Button, Toolbar, Paper } from "@material-ui/core";
+import SendIcon from "@material-ui/icons/Send";
+import { Button, Toolbar, Paper, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -48,7 +49,18 @@ const PostLists = props => {
     <Fragment>
       <Paper>
         <Toolbar className={classes.toolbar}>
-          <ListItemText primary="Loops" />
+          <Typography variant="h4" className="header-message">
+            Loops
+          </Typography>
+
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            endIcon={<SendIcon>send</SendIcon>}
+          >
+            Send
+          </Button>
         </Toolbar>
       </Paper>
       <Paper className={classes.paperRoot}>
