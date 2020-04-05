@@ -451,12 +451,14 @@ router.route('/users/get_recent_chats').post((req,res, next) => {
   Message.find({$or:[{receivingUserId: userID },{senderId: userID }]})
   .sort({created:-1})
   .skip((page-1) * limit)
+  .populate('senderId')
   .exec((error, data) => {
     if (error) {
       // console.log(error);
       res.status(400);
       next(error);
     }
+    
     // console.log(data);
     res.status(200).json(data);
     return next();
