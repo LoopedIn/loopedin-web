@@ -1,11 +1,19 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import Posts from "./Post";
+import Posts from "./Posts";
 import PostLists from "./PostLists";
 import PostChat from "./PostChat";
-import { Grid } from "@material-ui/core";
+import { Grid, makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles(theme => ({
+  postsRoot: {
+    height: "80vh"
+  }
+}));
 
 const PostHome = props => {
+  const classes = useStyles();
+
   return (
     <Fragment>
       <Grid container spacing={3}>
@@ -13,10 +21,9 @@ const PostHome = props => {
           <PostChat />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Posts />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <PostLists />
+          <div className={classes.postsRoot}>
+            <Posts />
+          </div>
         </Grid>
       </Grid>
     </Fragment>

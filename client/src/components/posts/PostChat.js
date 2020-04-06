@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PostLists from "./PostLists";
 import PropTypes from "prop-types";
 import {
   Paper,
@@ -25,6 +26,7 @@ const PostChat = props => {
             fullWidth="matchParent"
           />
         </Paper>
+        <PostLists />
       </Box>
     </Fragment>
   );
