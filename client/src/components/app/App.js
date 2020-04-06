@@ -33,18 +33,18 @@ const App = ({ isAuthenticated, isVerifying }) => {
         <Route path="/register">
           <Register />
         </Route>
-        {/* <ProtectedRoute
+        <ProtectedRoute
           path="/"
           component={Home}
           isAuthenticated={isAuthenticated}
           isVerifying={isVerifying}
-        /> */}
-        <ProtectedRoute
+        />
+        {/* <ProtectedRoute
           path="/add_friend"
           component={ConnectionManagerHome}
           isAuthenticated={isAuthenticated}
           isVerifying={isVerifying}
-        />
+        /> */}
       </Switch>
     </MuiThemeProvider>
   );

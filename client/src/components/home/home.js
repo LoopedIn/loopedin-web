@@ -33,13 +33,13 @@ const Home = props => {
   const classes = useStyles();
 
   //Runs getUserFriends and getUserloops when component is loaded
-  useEffect(() => {
-    getUserFriends();
-  }, [getUserFriends]);
+  // useEffect(() => {
+  //   getUserFriends();
+  // }, [getUserFriends]);
 
-  useEffect(() => {
-    getUserLoops();
-  }, [getUserLoops]);
+  // useEffect(() => {
+  //   getUserLoops();
+  // }, [getUserLoops]);
 
   const [selectedTab, setSelectedTab] = useState(null);
 
