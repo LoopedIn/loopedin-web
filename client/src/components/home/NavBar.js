@@ -24,6 +24,7 @@ import TollRoundedIcon from "@material-ui/icons/TollRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import MenuIcon from "@material-ui/icons/Menu";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+import SettingsInputCompositeIcon from "@material-ui/icons/SettingsInputComposite";
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -162,6 +163,24 @@ const NavBar = props => {
           />
         ),
         mobile: <EmailRoundedIcon className="text-white" />
+      }
+    },
+    {
+      link: "/manageconnection",
+      name: "Manage Connections",
+      onClick: () => {},
+      icon: {
+        desktop: (
+          <SettingsInputCompositeIcon
+            className={
+              selectedTab === "Manage Connection"
+                ? classes.textPrimary
+                : "text-white"
+            }
+            fontSize="small"
+          />
+        ),
+        mobile: <SettingsInputCompositeIcon className="text-white" />
       }
     },
     {
