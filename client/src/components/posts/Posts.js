@@ -1,5 +1,6 @@
-import React, { Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
+import { getUserPosts } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Post from "./Post";
@@ -18,7 +19,6 @@ const useStyles = makeStyles(theme => ({
 const Posts = props => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  const [expanded, setExpanded] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [posts, setItems] = React.useState([]);
@@ -27,44 +27,44 @@ const Posts = props => {
     setExpanded(!expanded);
   };
 
-  const posts = [
-    {
-      message:
-        "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-      loopName: "Loop 1",
-      timeStamp: "September 14, 2016"
-    },
-    {
-      message:
-        "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-      loopName: "Loop 1",
-      timeStamp: "September 14, 2017"
-    },
-    {
-      message:
-        "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-      loopName: "Loop 1",
-      timeStamp: "September 14, 2017"
-    },
-    {
-      message:
-        "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-      loopName: "Loop 1",
-      timeStamp: "September 14, 2017"
-    },
-    {
-      message:
-        "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-      loopName: "Loop 1",
-      timeStamp: "September 14, 2017"
-    },
-    {
-      message:
-        "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-      loopName: "Loop 1",
-      timeStamp: "September 14, 2017"
-    }
-  ];
+  // const posts = [
+  //   {
+  //     message:
+  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
+  //     loopName: "Loop 1",
+  //     timeStamp: "September 14, 2016"
+  //   },
+  //   {
+  //     message:
+  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
+  //     loopName: "Loop 1",
+  //     timeStamp: "September 14, 2017"
+  //   },
+  //   {
+  //     message:
+  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
+  //     loopName: "Loop 1",
+  //     timeStamp: "September 14, 2017"
+  //   },
+  //   {
+  //     message:
+  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
+  //     loopName: "Loop 1",
+  //     timeStamp: "September 14, 2017"
+  //   },
+  //   {
+  //     message:
+  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
+  //     loopName: "Loop 1",
+  //     timeStamp: "September 14, 2017"
+  //   },
+  //   {
+  //     message:
+  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
+  //     loopName: "Loop 1",
+  //     timeStamp: "September 14, 2017"
+  //   }
+  // ];
 
   useEffect(() => {
     getUserPosts()
@@ -97,10 +97,13 @@ const Posts = props => {
             return (
               <Post
                 message={value.message}
-                loopName={value.loopName}
+                firstName={value.firstName}
+                lastName={value.lastName}
                 timeStamp={value.timeStamp}
               />
+              
             );
+            
           })}
         </List>
       </ScrollBar>

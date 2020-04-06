@@ -1,10 +1,9 @@
 import React, { useEffect,Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { getUserPosts } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
-import { Card, Box, makeStyles } from "@material-ui/core";
+import { Card, Box } from "@material-ui/core";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
@@ -17,7 +16,6 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ReplyIcon from "@material-ui/icons/Reply";
-import PropTypes from "prop-types";
 import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
@@ -52,7 +50,7 @@ const handleExpandClick = () => {
 
 const Post = props => {
   const classes = useStyles();
-  const { message, loopName, timeStamp } = props;
+  const { message, firstName,lastName, timeStamp } = props;
   return (
     <Card>
       <Box pt={2} px={2} pb={4}>
@@ -60,10 +58,10 @@ const Post = props => {
           <CardHeader
             avatar={
               <Avatar aria-label="recipe" className={classes.avatar}>
-                TP
+                {firstName.charAt(0)+lastName.charAt(0)}
               </Avatar>
             }
-            title={loopName}
+            title={firstName+" "+lastName}
             subheader={timeStamp}
           />
         </Box>
