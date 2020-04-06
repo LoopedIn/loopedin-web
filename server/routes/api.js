@@ -378,9 +378,9 @@ router.route('/users/user_posts').post((req,res, next) => {
   }
 
   // senderId is the _id of the user object
-  const senderId = mongoose.Types.ObjectId(req.body.post.senderId);
-  const { pageNumber } = req.body.post;
-  const { numberOfItems } = req.body.post;
+  const senderId = mongoose.Types.ObjectId(req.body.senderId);
+  const { pageNumber } = req.body;
+  const { numberOfItems } = req.body;
   Post.find(
     { senderId },
     null,
@@ -505,20 +505,18 @@ router.route('/posts/get_recent_posts').post((req,res, next) => {
   validateBody(req)
   // console.log( req.body.userID)
   const userID = req.body.userID // TODO: change
-  const page = req.body.page ? req.body.page : 1
   const loopIDs = getLoopsContainingUser(userID)
   // console.log("LoopsIDS:",loopIDs)
   Post.find({$or:[{receivingUserIds: userID },{receivingLoopIds: loopIDs }]})
   .sort({created:-1})
-  .skip((page-1) * limit)
   .exec((error, data) => {
     if (error) {
       // console.log(error);
       res.status(400);
       return next();
     }
-    // console.log(data);
-    res.json(data);
+    console.log(data);
+    res.status(200).send({"posts":data});
     return next();
   });
 });
