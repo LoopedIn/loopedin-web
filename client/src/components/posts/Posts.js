@@ -27,44 +27,6 @@ const Posts = props => {
     setExpanded(!expanded);
   };
 
-  // const posts = [
-  //   {
-  //     message:
-  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-  //     loopName: "Loop 1",
-  //     timeStamp: "September 14, 2016"
-  //   },
-  //   {
-  //     message:
-  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-  //     loopName: "Loop 1",
-  //     timeStamp: "September 14, 2017"
-  //   },
-  //   {
-  //     message:
-  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-  //     loopName: "Loop 1",
-  //     timeStamp: "September 14, 2017"
-  //   },
-  //   {
-  //     message:
-  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-  //     loopName: "Loop 1",
-  //     timeStamp: "September 14, 2017"
-  //   },
-  //   {
-  //     message:
-  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-  //     loopName: "Loop 1",
-  //     timeStamp: "September 14, 2017"
-  //   },
-  //   {
-  //     message:
-  //       "This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.",
-  //     loopName: "Loop 1",
-  //     timeStamp: "September 14, 2017"
-  //   }
-  // ];
 
   useEffect(() => {
     getUserPosts()
