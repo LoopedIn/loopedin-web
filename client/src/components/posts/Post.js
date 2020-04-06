@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, { useEffect,Fragment } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
@@ -11,16 +12,13 @@ import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ReplyIcon from "@material-ui/icons/Reply";
+import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    maxWidth: 345
-  },
   media: {
     height: 0,
     paddingTop: "56.25%" // 16:9
@@ -46,56 +44,50 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const handleExpandClick = () => {
+  setExpanded(!expanded);
+};
+
 const Post = props => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
+  const { message, firstName,lastName, timeStamp } = props;
   return (
-    <Fragment>
-      <Card>
-        <Box pt={2} px={2} pb={4}>
-          <Box display="flex" justifyContent="space-between">
-            <CardHeader
-              avatar={
-                <Avatar aria-label="recipe" className={classes.avatar}>
-                  TP
-                </Avatar>
-              }
-              title="Test Loop 1"
-              subheader="September 14, 2016"
-            />
-          </Box>
+    <Card>
+      <Box pt={2} px={2} pb={4}>
+        <Box display="flex" justifyContent="space-between">
+          <CardHeader
+            avatar={
+              <Avatar aria-label="recipe" className={classes.avatar}>
+                {firstName.charAt(0)+lastName.charAt(0)}
+              </Avatar>
+            }
+            title={firstName+" "+lastName}
+            subheader={timeStamp}
+          />
         </Box>
-        <CardContent>
-          <Box className={classes.cardContentInner} height="50px">
-            <Typography variant="body2" color="textSecondary" component="p">
-              This impressive paella is a perfect party dish and a fun meal to
-              cook together with your guests. Add 1 cup of frozen peas along
-              with the mussels, if you like.
-            </Typography>
-          </Box>
-        </CardContent>
-        <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton
-            className={classes.reply}
-            onClick={handleExpandClick}
-            aria-label="reply"
-          >
-            <ReplyIcon />
-          </IconButton>
-        </CardActions>
-      </Card>
-    </Fragment>
+      </Box>
+      <CardContent>
+        <Box className={classes.cardContentInner} height="50px">
+          <Typography variant="body2" color="textSecondary" component="p">
+            {message}
+          </Typography>
+        </Box>
+      </CardContent>
+      <CardActions disableSpacing>
+        <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton>
+        <IconButton
+          className={classes.reply}
+          onClick={handleExpandClick}
+          aria-label="reply"
+        >
+          <ReplyIcon />
+        </IconButton>
+      </CardActions>
+    </Card>
   );
 };
 
 Post.propTypes = {};
-
 export default Post;

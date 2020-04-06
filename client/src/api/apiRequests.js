@@ -25,6 +25,8 @@ export const serverRequests = {
 
     getUsersLoopsApi : async () => authenticatedRequest(r('/loops'), {}),
 
+    getUserPosts : async () => authenticatedRequest(r('/posts/get_recent_posts'),{}),
+
     //TODO: fix input
     updateLoopApi: async (loopId, params) => authenticatedRequest(r(`/loops/{loopId}/update_loop`), params)
 }
