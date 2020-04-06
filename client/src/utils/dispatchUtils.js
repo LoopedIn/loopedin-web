@@ -13,7 +13,6 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAILURE = "REGISTER_FAILURE";
 
 export const USER_FRIENDS_LOADED = "USER_FRIENDS_LOADED";
-export const USER_LOOPS_LOADED = "USER_LOOPS_LOADED";
 export const USER_POSTS_LOADED = "USER_POSTS_LOADED"
 
 export const ADD_USER_SUCESS = "ADD_USER_SUCESS";
@@ -86,13 +85,6 @@ export const dispatches = {
             userFriends
         }
       },
-      userPostsLoaded : userPosts =>{
-        return{
-            type: USER_POSTS_LOADED,
-            userPosts
-        }
-      },
-
       userLoopsLoaded : userLoops => {
           return {
               type: USER_LOOPS_LOADED,

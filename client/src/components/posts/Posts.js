@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
-import { getUserPosts } from "../../actions";
+import { getUserPosts } from "../../utils/posts";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Post from "./Post";
