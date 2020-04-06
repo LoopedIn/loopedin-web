@@ -1,5 +1,7 @@
-import React, { Fragment } from "react";
+import React, { useEffect,Fragment } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { getUserPosts } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import { Card, Box } from "@material-ui/core";
@@ -49,53 +51,135 @@ const useStyles = makeStyles(theme => ({
 const Post = props => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [error, setError] = React.useState(null);
+  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [items, setItems] = React.useState([]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  return (
-    <Fragment>
-      <Card>
-        <Box pt={2} px={2} pb={4}>
-          <Box display="flex" justifyContent="space-between">
-            <CardHeader
-              avatar={
-                <Avatar aria-label="recipe" className={classes.avatar}>
-                  TP
-                </Avatar>
-              }
-              title="Test Loop 1"
-              subheader="September 14, 2016"
-            />
+  useEffect(() => {
+    getUserPosts()
+      .then(
+        (result) => {
+          console.log(result);
+          setIsLoaded(true);
+          console.log(result);
+          setItems(result.posts);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      )
+  }, [])
+
+  
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  } else if (!isLoaded) {
+    return <div>Loading...</div>;
+  } else {
+    return (
+      <Fragment>
+        {items.map(item => (
+          <Card>
+          <Box pt={2} px={2} pb={4}>
+            <Box display="flex" justifyContent="space-between">
+              <CardHeader
+                avatar={
+                  <Avatar aria-label="recipe" className={classes.avatar}>
+                    TP
+                  </Avatar>
+                }
+                title="Test Loop 1"
+                subheader={item.created}
+              />
+            </Box>
           </Box>
-        </Box>
-        <CardContent>
-          <Box className={classes.cardContentInner} height="50px">
-            <Typography variant="body2" color="textSecondary" component="p">
-              This impressive paella is a perfect party dish and a fun meal to
-              cook together with your guests. Add 1 cup of frozen peas along
-              with the mussels, if you like.
-            </Typography>
-          </Box>
-        </CardContent>
-        <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton
-            className={classes.reply}
-            onClick={handleExpandClick}
-            aria-label="reply"
-          >
-            <ReplyIcon />
-          </IconButton>
-        </CardActions>
-      </Card>
-    </Fragment>
-  );
+          <CardContent>
+            <Box className={classes.cardContentInner} height="50px">
+              <Typography variant="body2" color="textSecondary" component="p">
+                {item.postContent}
+              </Typography>
+            </Box>
+          </CardContent>
+          <CardActions disableSpacing>
+            <IconButton aria-label="add to favorites">
+              <FavoriteIcon />
+            </IconButton>
+            <IconButton
+              className={classes.reply}
+              onClick={handleExpandClick}
+              aria-label="reply"
+            >
+              <ReplyIcon />
+            </IconButton>
+          </CardActions>
+        </Card>
+        ))}
+      </Fragment>
+    );
+  }
+
+  // return (
+  //   <Fragment>
+  //     <Card>
+  //       <Box pt={2} px={2} pb={4}>
+  //         <Box display="flex" justifyContent="space-between">
+  //           <CardHeader
+  //             avatar={
+  //               <Avatar aria-label="recipe" className={classes.avatar}>
+  //                 TP
+  //               </Avatar>
+  //             }
+  //             title="Test Loop 1"
+  //             subheader="September 14, 2016"
+  //           />
+  //         </Box>
+  //       </Box>
+  //       <CardContent>
+  //         <Box className={classes.cardContentInner} height="50px">
+  //           <Typography variant="body2" color="textSecondary" component="p">
+  //             This impressive paella is a perfect party dish and a fun meal to
+  //             cook together with your guests. Add 1 cup of frozen peas along
+  //             with the mussels, if you like.
+  //           </Typography>
+  //         </Box>
+  //       </CardContent>
+  //       <CardActions disableSpacing>
+  //         <IconButton aria-label="add to favorites">
+  //           <FavoriteIcon />
+  //         </IconButton>
+  //         <IconButton
+  //           className={classes.reply}
+  //           onClick={handleExpandClick}
+  //           aria-label="reply"
+  //         >
+  //           <ReplyIcon />
+  //         </IconButton>
+  //       </CardActions>
+  //     </Card>
+  //   </Fragment>
+  // );
 };
 
-Post.propTypes = {};
+// Post.propTypes = {};
+function mapStateToProps(state) {
+  return {
+    isLoggingOut: state.auth.isLoggingOut,
+    logoutError: state.auth.logoutError,
+    user: state.auth.user,
+    loops: state.userConnections.userLoops,
+    friends: state.userConnections.userFriends
+  };
+}
+// export default connect(mapStateToProps, {
+// getUserPosts
+// })(Post);
 
-export default Post;
+ export default Post;

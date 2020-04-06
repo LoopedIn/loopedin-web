@@ -36,3 +36,10 @@ export const addFriendToUser = (userName) => async dispatch => {
         dispatch(dispatches.user.addUserFailed(constants.error500));
     }
 }
+
+export const getUserPosts = async () => {
+    const userPosts = (await serverRequests.getUserPosts()).data
+    console.log("here " + JSON.stringify(userPosts))
+    return userPosts
+    // dispatch(dispatches.user.userLoopsLoaded(loopsList));
+}
