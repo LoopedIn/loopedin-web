@@ -386,9 +386,9 @@ router.route('/users/user_posts').post((req,res, next) => {
   }
 
   // senderId is the _id of the user object
-  const senderId = mongoose.Types.ObjectId(req.body.post.senderId);
-  const { pageNumber } = req.body.post;
-  const { numberOfItems } = req.body.post;
+  const senderId = mongoose.Types.ObjectId(req.body.senderId);
+  const { pageNumber } = req.body;
+  const { numberOfItems } = req.body;
   Post.find(
     { senderId },
     null,
@@ -459,12 +459,14 @@ router.route('/users/get_recent_chats').post((req,res, next) => {
   Message.find({$or:[{receivingUserId: userID },{senderId: userID }]})
   .sort({created:-1})
   .skip((page-1) * limit)
+  .populate('senderId')
   .exec((error, data) => {
     if (error) {
       // console.log(error);
       res.status(400);
       next(error);
     }
+    
     // console.log(data);
     res.status(200).json(data);
     return next();
@@ -500,10 +502,17 @@ router.route('/users/get_chat_history').post((req,res, next) => {
 
 //get_recent_posts
 function  getLoopsContainingUser (userID) {
-  // console.log(userID)
-  Loop.find({ receivingUsers : userID}, (error,data)=> {
-    // console.log("Loops: " + data)
-    return data;
+  console.log(userID)
+  return new Promise((resolve,reject) => {
+    Loop.find({ receivingUsers : userID}, (error,data)=> {
+      if(error){
+        reject(error)
+      }
+      else {
+        console.log("Loops: " + data)
+        resolve(data)
+      }
+    })
   })
 }
 
@@ -511,21 +520,64 @@ router.route('/posts/get_recent_posts').post((req,res, next) => {
   validateBody(req)
   // console.log( req.body.userID)
   const userID = req.body.userID // TODO: change
-  const page = req.body.page ? req.body.page : 1
-  const loopIDs = getLoopsContainingUser(userID)
-  // console.log("LoopsIDS:",loopIDs)
-  Post.find({$or:[{receivingUserIds: userID },{receivingLoopIds: loopIDs }]})
-  .sort({created:-1})
-  .skip((page-1) * limit)
-  .exec((error, data) => {
-    if (error) {
-      // console.log(error);
-      res.status(400);
-      return next();
-    }
-    // console.log(data);
-    res.json(data);
-    return next();
-  });
+  getLoopsContainingUser(userID).then((data) => {
+    var loopIDS=[]
+
+    data.forEach((loop) => {
+      loopIDS.push(loop._id);
+    })
+    console.log("LOOPSIDS "+ JSON.stringify(loopIDS))
+    // eslint-disable-next-line max-len
+    Post.find({$or:[{receivingUserIds: userID },{receivingLoopIds: loopIDS }]})
+    .sort({created:-1})
+    .exec((error, data) => {
+      if (error) {
+        // console.log(error);
+        res.status(400).send(error);
+        return next();
+      }
+      console.log(data);
+      var senderIds=[]
+      // create an array of senderIds to query mongodb
+      data.forEach((post) => {
+        senderIds.push(mongoose.Types.ObjectId(post.senderId))
+      })
+      console.log("SENDERIDS "+senderIds)
+      // eslint-disable-next-line max-len
+      User.find({_id: {$in: senderIds}},(error,response) => {
+        if(error){
+          res.status(400).send(error)
+          return next()
+        }
+        console.log("User details  "+response)
+        var finalPostsData=[]
+        var resultObject={}
+        // form a map of the form : userId:{firstName,lastName}
+        response.forEach((user) => {
+          resultObject[user._id]={}
+          resultObject[user._id]['firstName']=user.firstName;
+          resultObject[user._id]['lastName']=user.lastName;
+        })
+        // eslint-disable-next-line max-len
+        // Iterate through posts data and create each final item of the form : firstName, 
+        // lastName,postContents, timestamp
+        data.forEach((post) => {
+          var postObject={}
+          postObject['message']=post.postContent
+          postObject['timestamp']=post.created
+          postObject['firstName']= resultObject[post.senderId]['firstName']
+          postObject['lastName']=resultObject[post.senderId]['lastName']
+          finalPostsData.push(postObject)
+        })
+        console.log(finalPostsData)
+        res.status(200).send({"posts":finalPostsData});
+        return next();
+      })
+
+    });
+  }).catch((error)=>{
+    res.status(400).send(error);
+  })
+
 });
 module.exports = router;

@@ -1,39 +1,41 @@
-import { authenticatedRequest, unAuthenticatedRequest } from  "../utils/requestUtils";
+import {
+  authenticatedRequest,
+  unAuthenticatedRequest
+} from "../utils/requestUtils";
 
-export const base = 'http://localhost:3000/';
+export const base = "http://localhost:3000/";
 
-const url = require('url');
+const url = require("url");
 
-const r = (route) =>  url.resolve(base, route);
+const r = route => url.resolve(base, route);
 
 export const serverRequests = {
+  getCurrentUserApi: async () =>
+    authenticatedRequest(r("/users/logged_in_user_info"), {}),
 
-    getCurrentUserApi : async () => authenticatedRequest(r('/users/logged_in_user_info'), {}),
+  getUserFriendsApi: async () =>
+    authenticatedRequest(r("/users/getcontacts"), {}),
 
-    getUserFriendsApi : async () => authenticatedRequest(r('/users/getcontacts'), {}),
+  createUserApi: async (token, userName, firstName, lastName, email) => {
+    const postBodyParams = {
+      authToken: token,
+      email: email,
+      firstName: firstName,
+      userName: userName,
+      lastName: lastName
+    };
+    return unAuthenticatedRequest(r("/users/create"), postBodyParams);
+  },
 
-    createUserApi : async (token, userName, firstName, lastName, email) => {
-        const postBodyParams = {
-            "authToken":token,
-            "email":email,
-            "firstName":firstName,
-            "userName":userName,
-            "lastName":lastName
-        }
-        return unAuthenticatedRequest(r('/users/create'), postBodyParams);
-    },
+  getUsersLoopsApi: async () => authenticatedRequest(r("/loops"), {}),
 
-    getUsersLoopsApi : async () => authenticatedRequest(r('/loops'), {}),
+  getUserPosts: async () =>
+    authenticatedRequest(r("/posts/get_recent_posts"), {}),
 
-    createLoopApi : async (loopName) => {
-        const postBodyParams = {
-            "loopName": loopName
-        }
-        return authenticatedRequest(r('/users/create_loop'),  postBodyParams)
-    },
+  //TODO: fix input
+  updateLoopApi: async (loopId, params) =>
+    authenticatedRequest(r(`/loops/${loopId}/update_loop`), params),
 
-    //TODO: fix input
-    updateLoopApi: async (loopId, params) => authenticatedRequest(r(`/loops/${loopId}/update_loop`), params),
-
-    addFriendToUserApi: async (params) => authenticatedRequest(r('/users/add_friend'), params)
-}
+  addFriendToUserApi: async params =>
+    authenticatedRequest(r("/users/add_friend"), params)
+};
