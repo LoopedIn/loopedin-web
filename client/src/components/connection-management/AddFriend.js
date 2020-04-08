@@ -11,6 +11,8 @@ import { Typography } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import { getUserFriends, addFriendToUser } from "../../actions";
 import Scrollbar from "../../utils/Scrollbar";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import { Fab } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,7 +32,13 @@ const useStyles = makeStyles(theme => ({
   usernameTextbox: {
     width: "100%"
   },
-  addFriendBtn: { justifyContent: "center", marginTop: "10px" }
+  addFriendBtn: {
+    justifyContent: "center",
+    marginTop: "10px"
+  },
+  addFAB: {
+    alignSelf: "flex-end"
+  }
 }));
 
 const AddFriend = props => {
@@ -100,7 +108,7 @@ const AddFriend = props => {
   return (
     <Box
       display="flex"
-      justifyContent="space-between"
+      justifyContent="space-evenly"
       alignItems="center"
       flexDirection="column"
     >
@@ -125,10 +133,15 @@ const AddFriend = props => {
       ) : (
         <div></div>
       )}
-      <div style={{ width: 100, height: "70vh" }}>
+      <div style={{ width: 100, height: "65vh" }}>
         <Scrollbar>
           <List>{userFriendsStateMock.map(val => renderFriendsList(val))}</List>
         </Scrollbar>
+      </div>
+      <div className={classes.addFAB}>
+        <Fab color="secondary" onClick={() => {}}>
+          <PersonAddIcon className="material-icons" />
+        </Fab>
       </div>
     </Box>
   );

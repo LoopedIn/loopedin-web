@@ -8,9 +8,10 @@ const ConnectionsHome = props => {
   return (
     <Fragment>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={3}></Grid>
-        <Grid item xs={12} md={5}></Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={7}>
+          <ConnectionManager />
+        </Grid>
+        <Grid item xs={12} md={5}>
           <AddFriend />
         </Grid>
       </Grid>
