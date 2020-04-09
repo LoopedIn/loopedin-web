@@ -27,25 +27,23 @@ const Posts = props => {
     setExpanded(!expanded);
   };
 
-
   useEffect(() => {
-    getUserPosts()
-      .then(
-        (result) => {
-          console.log(result);
-          setIsLoaded(true);
-          console.log(result);
-          setItems(result.posts);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      )
-  }, [])
+    getUserPosts().then(
+      result => {
+        console.log(result);
+        setIsLoaded(true);
+        console.log(result);
+        setItems(result.posts);
+      },
+      // Note: it's important to handle errors here
+      // instead of a catch() block so that we don't swallow
+      // exceptions from actual bugs in components.
+      error => {
+        setIsLoaded(true);
+        setError(error);
+      }
+    );
+  }, []);
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -55,18 +53,20 @@ const Posts = props => {
     return (
       <ScrollBar className={classes.scrollbar}>
         <List dense className={classes.root}>
-          {posts.map((value, index) => {
-            return (
-              <Post
-                message={value.message}
-                firstName={value.firstName}
-                lastName={value.lastName}
-                timeStamp={value.timeStamp}
-              />
-              
-            );
-            
-          })}
+          {posts != undefined ? (
+            posts.map((value, index) => {
+              return (
+                <Post
+                  message={value.message}
+                  firstName={value.firstName}
+                  lastName={value.lastName}
+                  timeStamp={value.timeStamp}
+                />
+              );
+            })
+          ) : (
+            <div></div>
+          )}
         </List>
       </ScrollBar>
     );

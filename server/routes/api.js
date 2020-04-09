@@ -49,7 +49,7 @@ router.route('/users/logged_in_user_info').post((req, res, next) => {
 })
 
 // Return the list of friends of a user
-router.route('/users/add_friend').post((req,res, next) => {
+router.route('/users/add_friend').post(async (req,res, next) => {
 
   if (Object.keys(req.body).length === 0) {
     res.status(400).send('Post data not present');
@@ -61,21 +61,34 @@ router.route('/users/add_friend').post((req,res, next) => {
   // data.userId = userId;
   // Get userID from the _id field of the request.
 
-  UserConnection.updateOne(
-    { userId: userId },
-    {
-      $set: data,
-    },
-    { upsert: true },
-    (error, response) => {
-      if (error) {
-        // console.log(`Error ${error}`);
-        res.status(400).send(error)
-        return next(error);
-      }
-      res.status(200).send(response);
-    },
-  );
+  const newUsername = data.friendIds[0]
+  const val = await User.find({"userName":newUsername}).count();
+  if( val == 0) {
+    // console.log("No user found with name " + newUsername)
+    res.status(400).send("User does not exist");
+  } else{
+    const records = await UserConnection.find({"userId":userId});
+    const currentFriends = records.length > 0 ? records[0].friendIds:[];
+    if(currentFriends.includes(newUsername)){
+      res.status(400).send("User is already a friend");
+    } else{
+        UserConnection.updateOne(
+          { userId: userId },
+          {
+            $set: {"friendIds": [...currentFriends, newUsername]},
+          },
+          { upsert: true },
+          (error, response) => {
+            if (error) {
+              // console.log(`Error ${error}`);
+              res.status(400).send(error)
+              return next(error);
+            }
+            res.status(200).send(response);
+          },
+        );
+    }
+  }
 });
 
 router.route('/create-post').post(( req, res, next) => { 
@@ -211,15 +224,10 @@ router.route('/loops/:loop_id/update_loop').post((req,res, next) => {
     res.status(400).send(error);
     return next(error);
   }
-
+  
   let loopID = req.params.loop_id;
   const userID = req.body.userID;
   const { contacts, loopName } = req.body.loop;
-  if (Object.keys(contacts).length === 0) {
-    const error = 'Contacts Details cannot be empty';
-    res.status(400).send(error);
-    return next(error);
-  }
   loopID = mongoose.Types.ObjectId(loopID);
   // Update the members of the loop of a user
   Loop.update(

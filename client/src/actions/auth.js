@@ -95,6 +95,7 @@ export const loginUser = (email, password) => dispatch => {
       dispatch(receiveLogin(user, firebaseUser));
     })
     .catch(error => {
+      console.log(error)
       dispatch(loginError());
     });
 };

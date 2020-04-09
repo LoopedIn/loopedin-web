@@ -18,6 +18,9 @@ export const USER_POSTS_LOADED = "USER_POSTS_LOADED"
 export const ADD_USER_SUCESS = "ADD_USER_SUCESS";
 export const ADD_USER_FAILED = "ADD_USER_FAILED";
 
+export const CREATE_LOOP_SUCCESSFUL = "CREATE_LOOP_SUCCESSFUL";
+export const CREATE_LOOP_FAILED = "CREATE_LOOP_FAILED";
+
 
 export const dispatches = {
     auth: {
@@ -79,7 +82,7 @@ export const dispatches = {
 
     //TODO: The functions above are not used, need to refactor
     user: {
-      userFriendsLoaded : userFriends =>{
+      userFriendsLoaded : userFriends => {
         return{
             type: USER_FRIENDS_LOADED,
             userFriends
@@ -91,10 +94,10 @@ export const dispatches = {
               userLoops
           }
       },
-      addUserSuccess: userName => {
+      addUserSuccess: msg => {
           return {
               type:ADD_USER_SUCESS,
-              userName
+              msg
           }
       },
       addUserFailed: errorMsg => {
@@ -102,6 +105,22 @@ export const dispatches = {
               type: ADD_USER_FAILED,
               errorMsg
           }
+      }
+    },
+
+    loop: {
+      createLoopSuccess: msg => {
+        return {
+          type: CREATE_LOOP_SUCCESSFUL,
+          msg
+        }
+      },
+
+      createLoopFailed: msg => {
+        return {
+          type: CREATE_LOOP_FAILED,
+          msg
+        }
       }
     }
 }
