@@ -20,7 +20,7 @@ export default (state=initialState, action) => {
         case USER_FRIENDS_LOADED:
             return {...state, userFriends: action.userFriends}
         case USER_LOOPS_LOADED:
-            return {...state, userLoops: action.userLoops}
+            return {...state, userLoops: action.userLoops, friendsList: action.friendsList}
         case ADD_USER_SUCESS:
             return {...state, addFriendToUserActionMsg: action.msg}
         case ADD_USER_FAILED:

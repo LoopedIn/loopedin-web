@@ -32,21 +32,21 @@ export const createLoop = loopName => async dispatch => {
 //Fetch all loops of user
 export const getUserLoopInfo = () => async dispatch => {
   const loopsList = (await serverRequests.getUsersLoopsApi()).data;
-  const friendsList = (await serverRequests.getUserFriendsApi()).data[0]
-    .friendIds;
+  const userFriendsResp = (await serverRequests.getUserFriendsApi());
+  const friendsList = userFriendsResp.data.length === 0 ? [] : userFriendsResp.data[0].friendIds;
   const loopsWithAllContactInfo = {};
   loopsList.forEach(rec => {
     let friendNameVsIsSeleted = {};
     friendsList.forEach(friendRec => {
-      friendNameVsIsSeleted[friendRec] = rec.receivingUsers.includes(friendRec);
+      friendNameVsIsSeleted[friendRec.userName] = rec.receivingUsers.includes(friendRec._id);
     });
     loopsWithAllContactInfo[rec.loopName] = friendNameVsIsSeleted;
   });
-  dispatch(dispatches.user.userLoopsLoaded(loopsWithAllContactInfo)); //Persist user's loops info into state
+  dispatch(dispatches.user.userLoopsLoaded(loopsWithAllContactInfo, friendsList)); //Persist user's loops info into state
 };
 
 //Update loop
-export const updateLoop = loopVsSelectedFriendsConfig => async dispatch => {
+export const updateLoop = (loopVsSelectedFriendsConfig, friendsList) => async dispatch => {
   const loopsList = (await serverRequests.getUsersLoopsApi()).data;
   Object.keys(loopVsSelectedFriendsConfig).forEach(async loopName => {
     const loopId = loopsList.filter(rec => rec["loopName"] === loopName)[0][
@@ -57,14 +57,14 @@ export const updateLoop = loopVsSelectedFriendsConfig => async dispatch => {
     const reqParam = {};
     Object.keys(loopVsSelectedFriendsConfig[loopName]).forEach(friendName => {
       if (loopVsSelectedFriendsConfig[loopName][friendName]) {
-        contacts.push(friendName);
+        let friendId = friendsList.filter(friend => friend.userName === friendName)[0]._id;
+        contacts.push(friendId);
       }
     });
     vals["loopId"] = loopId;
     vals["loopName"] = loopName;
     vals["contacts"] = contacts;
     reqParam["loop"] = vals;
-    console.log(reqParam);
     await serverRequests.updateLoopApi(loopId, reqParam);
   });
 };

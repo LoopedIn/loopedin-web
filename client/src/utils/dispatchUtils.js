@@ -89,10 +89,11 @@ export const dispatches = {
         userFriends
       };
     },
-    userLoopsLoaded: userLoops => {
+    userLoopsLoaded: (userLoops,friendsList) => {
       return {
         type: USER_LOOPS_LOADED,
-        userLoops
+        userLoops,
+        friendsList
       };
     },
     addUserSuccess: msg => {

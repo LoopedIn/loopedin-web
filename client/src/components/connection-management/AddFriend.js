@@ -67,30 +67,6 @@ const AddFriend = props => {
       : []
   );
 
-  //Mock Data
-  const userFriendsStateMock = [
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" }
-  ];
-
   const handleBtnSubmit = () => {
     addFriendToUser(newUser, userFriendsState, setUserFriendsState);
   };
@@ -99,7 +75,7 @@ const AddFriend = props => {
     return (
       <Paper style={{ marginTop: "10px" }}>
         <ListItem id={friend}>
-          <ListItemText id={friend} primary={`${friend.firstName}`} />
+          <ListItemText id={friend} primary={`${friend.firstName} ${friend.lastName}`} />
         </ListItem>
       </Paper>
     );
@@ -135,7 +111,7 @@ const AddFriend = props => {
       )}
       <div style={{ width: "50%", height: "65vh" }}>
         <Scrollbar>
-          <List>{userFriendsStateMock.map(val => renderFriendsList(val))}</List>
+          <List>{userFriendsState.map(val => renderFriendsList(val))}</List>
         </Scrollbar>
       </div>
       <div className={classes.addFAB}>
