@@ -37,5 +37,12 @@ export const serverRequests = {
     authenticatedRequest(r(`/loops/${loopId}/update_loop`), params),
 
   addFriendToUserApi: async params =>
-    authenticatedRequest(r("/users/add_friend"), params)
+    authenticatedRequest(r("/users/add_friend"), params),
+
+  createLoopApi: async loopName => {
+    const postBodyParams = {
+      loopName: loopName
+    };
+    return authenticatedRequest(r("/users/create_loop"), postBodyParams);
+  }
 };

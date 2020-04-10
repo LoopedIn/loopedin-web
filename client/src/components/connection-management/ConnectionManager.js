@@ -170,7 +170,7 @@ const ConnectionManagerHome = props => {
             variant="outlined"
             size="small"
             onChange={e => setNewLoop(e.target.value)}
-            defaultValue={newLoop}
+            value={newLoop}
           />
         </div>
         <div className={classes.marginEle}>
