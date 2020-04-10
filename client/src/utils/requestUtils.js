@@ -3,9 +3,16 @@ import { connect } from "react-redux";
 import { myFirebase } from "../firebase/firebase";
 
 export const authenticatedRequest = async (route, postBodyParams) => {
-  const idToken = await myFirebase.auth().currentUser.getIdToken();
+  const loggedInUser = await currentLoggedInUser();
+  const idToken = await loggedInUser.getIdToken();
   return axios.post(route, constructPostBodyParams(idToken, postBodyParams));
 };
+
+function currentLoggedInUser(){
+  return new Promise(resolve => {
+    myFirebase.auth().onAuthStateChanged(firebaseUser => resolve(firebaseUser));
+  });
+}
 
 export const constructPostBodyParams = (idToken, postBodyParams) => {
   const csrfToken = getCookie("csrfToken");
