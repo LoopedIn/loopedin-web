@@ -1,4 +1,4 @@
-import React, { useEffect,Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -50,18 +50,18 @@ const handleExpandClick = () => {
 
 const Post = props => {
   const classes = useStyles();
-  const { message, firstName,lastName, timeStamp } = props;
+  const { message, firstName, lastName, timeStamp } = props;
   return (
     <Card>
       <Box pt={2} px={2} pb={4}>
         <Box display="flex" justifyContent="space-between">
           <CardHeader
             avatar={
-              <Avatar aria-label="recipe" className={classes.avatar}>
-                {firstName.charAt(0)+lastName.charAt(0)}
+              <Avatar aria-label="username" className={classes.avatar}>
+                {firstName.charAt(0) + lastName.charAt(0)}
               </Avatar>
             }
-            title={firstName+" "+lastName}
+            title={firstName + " " + lastName}
             subheader={timeStamp}
           />
         </Box>

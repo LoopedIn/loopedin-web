@@ -188,11 +188,7 @@ const ConnectionManagerHome = props => {
           ) : (
             <div></div>
           )}
-          {createLoopSuccessFulMsg ? (
-            <div>{createLoopSuccessFulMsg}</div>
-          ) : (
-            <div></div>
-          )}
+          {createLoopFailedMsg ? <div>{createLoopFailedMsg}</div> : <div></div>}
         </div>
         <div className={classes.scrollBar}>
           <Scrollbar>

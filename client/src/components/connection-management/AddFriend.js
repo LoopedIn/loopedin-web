@@ -133,7 +133,7 @@ const AddFriend = props => {
       ) : (
         <div></div>
       )}
-      <div style={{ width: 100, height: "65vh" }}>
+      <div style={{ width: "50%", height: "65vh" }}>
         <Scrollbar>
           <List>{userFriendsStateMock.map(val => renderFriendsList(val))}</List>
         </Scrollbar>

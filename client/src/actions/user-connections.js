@@ -15,8 +15,9 @@ export const createLoop = loopName => async dispatch => {
     dispatch(dispatches.loop.createLoopSuccess("Loop created!"));
   } catch (error) {
     console.log(error);
-    //const errorResp = error.response.data;
-    if (errorResp.includes("dup")) {
+    const errorResp = error.response.data;
+    const errorMsg = errorResp.errmsg;
+    if (errorMsg.includes("dup")) {
       dispatch(
         dispatches.loop.createLoopFailed(
           "A loop with this name already exists!"

@@ -121,7 +121,7 @@ const ChatList = props => {
                               </Typography>
                               <Typography
                                 component="span"
-                                variant="body3"
+                                variant="body2"
                                 className={classes.timeStamp}
                               >
                                 {value.timeStamp}

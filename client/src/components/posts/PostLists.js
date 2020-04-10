@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import PropTypes from "prop-types";
+import React, { Fragment, useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -11,6 +11,8 @@ import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import SendIcon from "@material-ui/icons/Send";
+import Scrollbar from "../../utils/Scrollbar";
+import { getUserLoopInfo } from "../../actions/user-connections";
 import { Button, Toolbar, Paper, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -23,14 +25,25 @@ const useStyles = makeStyles(theme => ({
   },
   paperRoot: {
     marginTop: "5px"
+  },
+  scrollbar: {
+    width: "100%",
+    height: "33vh"
+  },
+  avatar: {
+    backgroundColor: theme.palette.secondary.light
   }
 }));
 
 const PostLists = props => {
   const classes = useStyles();
+  const { loopsInfo, getUserLoopInfo } = props;
   const [checked, setChecked] = React.useState([1]);
-  const listArray = [0, 1, 2, 3];
-  const listArrayLen = listArray.length;
+  const [loopList, setLoopList] = useState(Object.keys(loopsInfo));
+
+  useEffect(() => {
+    getUserLoopInfo();
+  }, [loopList]);
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -43,6 +56,31 @@ const PostLists = props => {
     }
 
     setChecked(newChecked);
+  };
+
+  const renderLoopList = (value, index) => {
+    const labelId = `checkbox-list-secondary-label-${value}`;
+    return (
+      <div>
+        <ListItem key={index} button>
+          <ListItemAvatar>
+            <Avatar aria-label="loop-name" className={classes.avatar}>
+              {`${value[0]}`}
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText id={labelId} primary={`${value}`} />
+          <ListItemSecondaryAction>
+            <Checkbox
+              edge="end"
+              onChange={handleToggle(value)}
+              checked={checked.indexOf(value) !== -1}
+              inputProps={{ "aria-labelledby": labelId }}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <Divider variant="inset" component="li" />
+      </div>
+    );
   };
 
   return (
@@ -66,40 +104,15 @@ const PostLists = props => {
       <Paper className={classes.paperRoot}>
         <Box pt={2} px={2} pb={4}>
           <Box display="flex" justifyContent="space-between">
-            <List dense className={classes.root}>
-              {listArray.map((value, index) => {
-                const labelId = `checkbox-list-secondary-label-${value}`;
-                return (
-                  <div>
-                    <ListItem key={value} button>
-                      <ListItemAvatar>
-                        <Avatar
-                          alt={`Avatar n°${value + 1}`}
-                          src={`/static/images/avatar/${value + 1}.jpg`}
-                        />
-                      </ListItemAvatar>
-                      <ListItemText
-                        id={labelId}
-                        primary={`Loop Name ${value + 1}`}
-                      />
-                      <ListItemSecondaryAction>
-                        <Checkbox
-                          edge="end"
-                          onChange={handleToggle(value)}
-                          checked={checked.indexOf(value) !== -1}
-                          inputProps={{ "aria-labelledby": labelId }}
-                        />
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                    {index === listArrayLen - 1 ? (
-                      <div></div>
-                    ) : (
-                      <Divider variant="inset" component="li" />
-                    )}
-                  </div>
-                );
-              })}
-            </List>
+            <div className={classes.scrollbar}>
+              <Scrollbar>
+                <List dense className={classes.root}>
+                  {loopList.map((value, index) => {
+                    return renderLoopList(value, index);
+                  })}
+                </List>
+              </Scrollbar>
+            </div>
           </Box>
         </Box>
       </Paper>
@@ -107,6 +120,13 @@ const PostLists = props => {
   );
 };
 
-PostLists.propTypes = {};
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user,
+    loopsInfo: state.userConnections.userLoops
+  };
+};
 
-export default PostLists;
+export default connect(mapStateToProps, {
+  getUserLoopInfo
+})(PostLists);

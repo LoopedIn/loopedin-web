@@ -23,7 +23,7 @@ const PostChat = props => {
             rows="10"
             defaultValue=""
             variant="filled"
-            fullWidth="matchParent"
+            fullWidth
           />
         </Paper>
         <PostLists />
