@@ -36,10 +36,12 @@ const PostChat = props => {
             rows="10"
             defaultValue=""
             onChange={e => {
-              setPostText(e.target.value);
               e.target.value != "" && checkBoxSelected == true
                 ? setDisableButton(false)
                 : setDisableButton(true);
+            }}
+            onBlur={e => {
+              setPostText(e.target.value);
             }}
             variant="filled"
             fullWidth

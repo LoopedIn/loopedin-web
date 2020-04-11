@@ -22,6 +22,7 @@ export const CREATE_LOOP_SUCCESSFUL = "CREATE_LOOP_SUCCESSFUL";
 export const CREATE_LOOP_FAILED = "CREATE_LOOP_FAILED";
 
 export const USER_LOOPS_LOADED = "USER_LOOPS_LOADED";
+export const LOOPS_LIST_LOADED = "LOOPS_LIST_LOADED";
 
 export const dispatches = {
   auth: {
@@ -89,7 +90,7 @@ export const dispatches = {
         userFriends
       };
     },
-    userLoopsLoaded: (userLoops,friendsList) => {
+    userLoopsLoaded: (userLoops, friendsList) => {
       return {
         type: USER_LOOPS_LOADED,
         userLoops,
@@ -122,6 +123,13 @@ export const dispatches = {
       return {
         type: CREATE_LOOP_FAILED,
         msg
+      };
+    },
+
+    getLoopListsSuccess: loopLists => {
+      return {
+        type: LOOPS_LIST_LOADED,
+        loopLists
       };
     }
   }

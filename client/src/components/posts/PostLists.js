@@ -12,7 +12,7 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import SendIcon from "@material-ui/icons/Send";
 import Scrollbar from "../../utils/Scrollbar";
-import { getUserLoopInfo } from "../../actions/user-connections";
+import { getLoopLists, sendLoopMessage } from "../../actions/user-connections";
 import { Button, Toolbar, Paper, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -38,17 +38,17 @@ const useStyles = makeStyles(theme => ({
 const PostLists = props => {
   const classes = useStyles();
   const {
-    loopsInfo,
-    getUserLoopInfo,
+    loopsList,
+    getLoopLists,
     postText,
     parentCallback,
     disableButton
   } = props;
-  const [checked, setChecked] = React.useState([]);
-  const [loopList, setLoopList] = useState(Object.keys(loopsInfo));
+  const [checked, setChecked] = useState([]);
+  const [loopList, setLoopList] = useState([loopsList]);
 
   useEffect(() => {
-    getUserLoopInfo();
+    getLoopLists();
   }, [loopList]);
 
   const handleToggle = value => () => {
@@ -67,6 +67,7 @@ const PostLists = props => {
 
   const sendMessageToLoop = e => {
     e.preventDefault();
+    console.log(loopList);
   };
 
   const renderLoopList = (value, index) => {
@@ -76,10 +77,10 @@ const PostLists = props => {
         <ListItem button>
           <ListItemAvatar>
             <Avatar aria-label="loop-name" className={classes.avatar}>
-              {`${value[0]}`}
+              {`${value.loopName[0]}`}
             </Avatar>
           </ListItemAvatar>
-          <ListItemText id={labelId} primary={`${value}`} />
+          <ListItemText id={labelId} primary={`${value.loopName}`} />
           <ListItemSecondaryAction>
             <Checkbox
               edge="end"
@@ -139,10 +140,11 @@ const mapStateToProps = (state, ownProps) => {
     parentCallback: ownProps.parentCallback,
     disableButton: ownProps.disableButton,
     user: state.auth.user,
-    loopsInfo: state.userConnections.userLoops
+    loopsList: state.userConnections.loopLists
   };
 };
 
 export default connect(mapStateToProps, {
-  getUserLoopInfo
+  getLoopLists,
+  sendLoopMessage
 })(PostLists);
