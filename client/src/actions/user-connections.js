@@ -32,21 +32,29 @@ export const createLoop = loopName => async dispatch => {
 //Fetch all loops of user
 export const getUserLoopInfo = () => async dispatch => {
   const loopsList = (await serverRequests.getUsersLoopsApi()).data;
-  const userFriendsResp = (await serverRequests.getUserFriendsApi());
-  const friendsList = userFriendsResp.data.length === 0 ? [] : userFriendsResp.data[0].friendIds;
+  const userFriendsResp = await serverRequests.getUserFriendsApi();
+  const friendsList =
+    userFriendsResp.data.length === 0 ? [] : userFriendsResp.data[0].friendIds;
   const loopsWithAllContactInfo = {};
   loopsList.forEach(rec => {
     let friendNameVsIsSeleted = {};
     friendsList.forEach(friendRec => {
-      friendNameVsIsSeleted[friendRec.userName] = rec.receivingUsers.includes(friendRec._id);
+      friendNameVsIsSeleted[friendRec.userName] = rec.receivingUsers.includes(
+        friendRec._id
+      );
     });
     loopsWithAllContactInfo[rec.loopName] = friendNameVsIsSeleted;
   });
-  dispatch(dispatches.user.userLoopsLoaded(loopsWithAllContactInfo, friendsList)); //Persist user's loops info into state
+  dispatch(
+    dispatches.user.userLoopsLoaded(loopsWithAllContactInfo, friendsList)
+  ); //Persist user's loops info into state
 };
 
 //Update loop
-export const updateLoop = (loopVsSelectedFriendsConfig, friendsList) => async dispatch => {
+export const updateLoop = (
+  loopVsSelectedFriendsConfig,
+  friendsList
+) => async dispatch => {
   const loopsList = (await serverRequests.getUsersLoopsApi()).data;
   Object.keys(loopVsSelectedFriendsConfig).forEach(async loopName => {
     const loopId = loopsList.filter(rec => rec["loopName"] === loopName)[0][
@@ -57,7 +65,9 @@ export const updateLoop = (loopVsSelectedFriendsConfig, friendsList) => async di
     const reqParam = {};
     Object.keys(loopVsSelectedFriendsConfig[loopName]).forEach(friendName => {
       if (loopVsSelectedFriendsConfig[loopName][friendName]) {
-        let friendId = friendsList.filter(friend => friend.userName === friendName)[0]._id;
+        let friendId = friendsList.filter(
+          friend => friend.userName === friendName
+        )[0]._id;
         contacts.push(friendId);
       }
     });
@@ -98,4 +108,24 @@ export const addFriendToUser = (
       dispatch(dispatches.user.addUserFailed(constants.error500));
     }
   }
+};
+
+// export const sendLoopMessage = (loopMessage, loopList) => async dispatch => {
+//   const params = {
+//     postType: "text",
+//     postContent: loopMessage,
+//     receivingLoopIds: loopList
+//   };
+
+//   try {
+//   } catch (error) {}
+// };
+
+export const getLoopLists = () => async dispatch => {
+  const loopsList = (await serverRequests.getUsersLoopsApi()).data;
+  const loadedLoops = [];
+  loopsList.forEach(loop => {
+    loadedLoops.push({ loopName: loop.loopName, loopId: loop._id });
+  });
+  dispatch(dispatches.loop.getLoopListsSuccess(loadedLoops));
 };
