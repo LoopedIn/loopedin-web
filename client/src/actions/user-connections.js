@@ -123,10 +123,9 @@ export const addFriendToUser = (
 
 export const getLoopLists = () => async dispatch => {
   const loopsList = (await serverRequests.getUsersLoopsApi()).data;
-  const loadedLoops = {};
+  const loadedLoops = [];
   loopsList.forEach(loop => {
-    loadedLoops["loopName"] = loop.loopName;
-    loadedLoops["loopId"] = loop._id;
+    loadedLoops.push({ loopName: loop.loopName, loopId: loop._id });
   });
   dispatch(dispatches.loop.getLoopListsSuccess(loadedLoops));
 };

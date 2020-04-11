@@ -45,7 +45,7 @@ const PostLists = props => {
     disableButton
   } = props;
   const [checked, setChecked] = useState([]);
-  const [loopList, setLoopList] = useState([loopsList]);
+  const [loopList, setLoopList] = useState(loopsList);
 
   useEffect(() => {
     getLoopLists();
@@ -73,7 +73,7 @@ const PostLists = props => {
   const renderLoopList = (value, index) => {
     const labelId = `checkbox-list-secondary-label-${value[0]}`;
     return (
-      <div key={value}>
+      <div key={value.loopId}>
         <ListItem button>
           <ListItemAvatar>
             <Avatar aria-label="loop-name" className={classes.avatar}>
