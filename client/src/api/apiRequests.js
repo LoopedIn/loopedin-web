@@ -51,5 +51,13 @@ export const serverRequests = {
       friendID: _friendId
     };
     return authenticatedRequest(r("/users/get_chat_history"), postBodyParams);
+  },
+
+  createMessageApi:  async (receivingUserId, messageType, messageContent) => {
+    return authenticatedRequest(r("/users/create_message"), {
+      receivingUserId,
+      messageType,
+      messageContent
+    });
   }
 };

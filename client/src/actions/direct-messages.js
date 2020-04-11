@@ -8,8 +8,14 @@ export const getRecentChats = () => async dispatch => {
 };
 
 //Sends a message to user 
-export const createMessage = (recievingUser, messageContent) => async dispatch => {
- 
+export const createMessage = (recievingUserId, messageContent) => async dispatch => {
+    try{
+        console.log(`Sending message ${messageContent}`);
+        (await serverRequests.createMessageApi(recievingUserId, "text", messageContent));
+        dispatch(dispatches.directMessages.sentMessage(messageContent));
+    } catch(error){
+        console.log(error)
+    }
 };
 
 //Retrieves chat history for the selected user

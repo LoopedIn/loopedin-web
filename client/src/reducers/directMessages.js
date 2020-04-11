@@ -1,5 +1,6 @@
 import {
     CHAT_HISTORY_LOADED,
+    SENT_MESSAGE
 } from "../utils/dispatchUtils"
 
 const initialState = {
@@ -10,6 +11,8 @@ export default (state=initialState, action) => {
     switch(action.type){
         case CHAT_HISTORY_LOADED:
             return {...state, chatHistory: action.msg}
+        case SENT_MESSAGE:
+            return {...state, sentMessage: action.msg}
         default:
             return state;
     }

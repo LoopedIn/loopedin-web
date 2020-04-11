@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Input, makeStyles } from "@material-ui/core";
 import Send from "@material-ui/icons/Send";
 import { Fab } from "@material-ui/core";
+import {createMessage} from "../../actions/direct-messages"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,10 +29,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const handleSendMessage = () => {};
+
 
 const InputText = props => {
   const classes = useStyles();
+  const chosenUser = "5e90eed6b47068a3f2974526";
+  const [inputText, setInputText] = useState("");
+
+  const {
+    createMessage
+  } = props;
+
+  const handleSendMessage = () => {
+    createMessage(chosenUser, inputText);
+  };
 
   return (
     <div className={classes.root}>
@@ -63,7 +75,9 @@ const InputText = props => {
               multiline
               rowsMax="2"
               disableUnderline={true}
-              onChange={e => {}}
+              onChange={e => {
+                setInputText(e.target.value);
+              }}
               fullWidth={true}
               autoFocus
               autoComplete="off"
@@ -71,6 +85,7 @@ const InputText = props => {
               onKeyDown={e => {}}
               ref={field => {}}
               type="Text"
+              value={inputText}
             />
           </div>
         </div>
@@ -86,6 +101,10 @@ const InputText = props => {
   );
 };
 
-InputText.propTypes = {};
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user
+  };
+}
 
-export default InputText;
+export default connect(mapStateToProps, {createMessage})(InputText);

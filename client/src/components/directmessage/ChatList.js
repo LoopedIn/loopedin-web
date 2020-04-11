@@ -30,50 +30,14 @@ const ChatList = props => {
   const classes = useStyles();
   const chatList = [
     {
-      firstName: "Suhan",
-      lastName: "Test",
+      firstName: "FriendA",
+      lastName: "FriendA",
       messageList: [],
       timeStamp: "TimeStamp"
     },
     {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
+      firstName: "FriendB",
+      lastName: "FriendB",
       messageList: [],
       timeStamp: "TimeStamp"
     }

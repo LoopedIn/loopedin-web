@@ -25,6 +25,7 @@ export const USER_LOOPS_LOADED = "USER_LOOPS_LOADED";
 export const LOOPS_LIST_LOADED = "LOOPS_LIST_LOADED";
 
 export const CHAT_HISTORY_LOADED = "CHAT_HISTORY_LOADED";
+export const SENT_MESSAGE = "SENT_MESSAGE";
 
 export const dispatches = {
   auth: {
@@ -140,6 +141,12 @@ export const dispatches = {
     chatHistoryLoaded: msg => {
       return {
         type: CHAT_HISTORY_LOADED,
+        msg
+      }
+    },
+    sentMessage: msg => {
+      return {
+        type: SENT_MESSAGE,
         msg
       }
     }

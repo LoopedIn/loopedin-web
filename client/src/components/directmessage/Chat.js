@@ -132,17 +132,16 @@ const Chat = props => {
   const {
     getChatHistory,
 
+    sentMessage,
     chatHistory
   } = props;
 
   useEffect(() => {
     getChatHistory(chosenUser)
-  }, []);
+  }, [sentMessage]);
 
   const [chatHistoryState, setChatHistoryState] = useState(chatHistory);
   useEffect(() => {setChatHistoryState(chatHistory)}, [chatHistory])
-
-  console.log({chatHistoryState});
 
   return (
     <div
@@ -171,7 +170,8 @@ const Chat = props => {
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
-    chatHistory: state.directMessages.chatHistory
+    chatHistory: state.directMessages.chatHistory,
+    sentMessage:  state.directMessages.sentMessage
   };
 }
 
