@@ -51,6 +51,7 @@ const ConnectionManagerHome = props => {
     createLoopSuccessFulMsg,
     createLoopFailedMsg,
     loopsWithContactInfo,
+    friendsList,
 
     //Methods
     getUserLoopInfo,
@@ -65,23 +66,27 @@ const ConnectionManagerHome = props => {
   const [newLoop, setNewLoop] = useState("");
 
   const [selectedLoop, setSelectedLoop] = useState(
-    Object.keys(loopsWithContactInfo)[0]
+    loopsWithContactInfo.length === 0 ? "" : Object.keys(loopsWithContactInfo)[0]
   );
+  
   const [toggle, setToggle] = useState(false);
+
   const [loopVsFriendsConfig, setLoopVsFriendsConfig] = useState(
     loopsWithContactInfo
   );
-
+    
+ useEffect(() => {setLoopVsFriendsConfig(loopsWithContactInfo)}, [loopsWithContactInfo])
   const handleListItemClick = (event, selectedLoop) => {
     setSelectedLoop(selectedLoop);
   };
 
   const handleCreateLoopBtnSubmit = () => {
     createLoop(newLoop);
+    window.location.reload(true);
   };
 
   const handleSaveLoopConfigsBtnSubmit = () => {
-    updateLoop(loopVsFriendsConfig);
+    updateLoop(loopVsFriendsConfig, friendsList);
   };
 
   const renderLoopsListItem = (val, index) => {
@@ -200,9 +205,16 @@ const ConnectionManagerHome = props => {
           </Scrollbar>
         </div>
         <div className={classes.addFAB}>
-          <Fab color="secondary" onClick={() => {}}>
+        <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleSaveLoopConfigsBtnSubmit}
+            >
+            Save
+        </Button>
+          {/* <Fab color="secondary" onClick={() => {}}>
             <AddCircleIcon className="material-icons" />
-          </Fab>
+          </Fab> */}
         </div>
       </Box>
       <Box display="flex" flexDirection="column" flexGrow="2">
@@ -221,7 +233,8 @@ function mapStateToProps(state) {
     user: state.auth.user,
     loopsWithContactInfo: state.userConnections.userLoops,
     createLoopSuccessFulMsg: state.userConnections.createLoopSuccessFulMsg,
-    createLoopFailedMsg: state.userConnections.createLoopFailedMsg
+    createLoopFailedMsg: state.userConnections.createLoopFailedMsg,
+    friendsList: state.userConnections.friendsList
   };
 }
 
