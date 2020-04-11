@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Scrollbar from "../../utils/Scrollbar";
 import Chip from "@material-ui/core/Chip";
 import { Paper } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ChatMessage from "./ChatMessage";
+import {getChatHistory} from "../../actions/direct-messages";
 
 const useStyles = makeStyles(theme => ({
   scrollBar: {
@@ -124,10 +126,23 @@ const renderMessages = (messages, classes) => {
   );
 };
 
-const handleLoadMore = () => {};
-
 const Chat = props => {
   const classes = useStyles();
+  const chosenUser = "5e90eed6b47068a3f2974526";
+  const {
+    getChatHistory,
+
+    chatHistory
+  } = props;
+
+  useEffect(() => {
+    getChatHistory(chosenUser)
+  }, []);
+
+  const [chatHistoryState, setChatHistoryState] = useState(chatHistory);
+  useEffect(() => {setChatHistoryState(chatHistory)}, [chatHistory])
+
+  console.log({chatHistoryState});
 
   return (
     <div
@@ -145,14 +160,7 @@ const Chat = props => {
           }}
         >
           <div className={classes.root}>
-            <div className={classes.loadChipBubble}>
-              <Chip
-                label="Load more"
-                onClick={handleLoadMore}
-                className={classes.loadChip}
-              />
-            </div>
-            {renderMessages(messages, classes)}
+            {renderMessages(chatHistoryState, classes)}
           </div>
         </div>
       </Scrollbar>
@@ -160,4 +168,11 @@ const Chat = props => {
   );
 };
 
-export default Chat;
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user,
+    chatHistory: state.directMessages.chatHistory
+  };
+}
+
+export default connect(mapStateToProps, {getChatHistory})(Chat);

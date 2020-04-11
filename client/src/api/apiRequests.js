@@ -44,5 +44,12 @@ export const serverRequests = {
       loopName: loopName
     };
     return authenticatedRequest(r("/users/create_loop"), postBodyParams);
+  },
+
+  getChatHistoryApi: async _friendId => {
+    const postBodyParams = {
+      friendID: _friendId
+    };
+    return authenticatedRequest(r("/users/get_chat_history"), postBodyParams);
   }
 };

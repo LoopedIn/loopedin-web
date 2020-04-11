@@ -15,7 +15,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ChatMessage = props => {
-  const { messageContent } = props.values;
+  const { messageContent,
+  isSentByMe } = props.values;
 
   const classes = useStyles();
 

@@ -23,6 +23,8 @@ export const CREATE_LOOP_FAILED = "CREATE_LOOP_FAILED";
 
 export const USER_LOOPS_LOADED = "USER_LOOPS_LOADED";
 
+export const CHAT_HISTORY_LOADED = "CHAT_HISTORY_LOADED";
+
 export const dispatches = {
   auth: {
     requestLogin: () => {
@@ -123,6 +125,15 @@ export const dispatches = {
         type: CREATE_LOOP_FAILED,
         msg
       };
+    }
+  },
+
+  directMessages: {
+    chatHistoryLoaded: msg => {
+      return {
+        type: CHAT_HISTORY_LOADED,
+        msg
+      }
     }
   }
 };

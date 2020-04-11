@@ -262,22 +262,22 @@ router.route('/loops/:loop_id/get_contacts').post((req, res, next) => {
   });
 });
 
-// Stores a message send from one user to another
-router.route('/users/send_message').post((req, res, next) => {
-  // [TODO] Get user id from session
-  // const userID = '';
-  const { MessageObject } = req.body;
-  MessageObject.senderId = mongoose.Types.ObjectId(MessageObject.senderId);
-  Message.create(MessageObject, (error, data) => {
-    if (error) {
-      // console.log(error);
-      res.status(400).send(error);
-      return next(error);
-    }
-    // console.log(data);
-    res.json(data);
-  });
-});
+// // Stores a message send from one user to another
+// router.route('/users/send_message').post((req, res, next) => {
+//   // [TODO] Get user id from session
+//   // const userID = '';
+//   const { MessageObject } = req.body;
+//   MessageObject.senderId = mongoose.Types.ObjectId(MessageObject.senderId);
+//   Message.create(MessageObject, (error, data) => {
+//     if (error) {
+//       // console.log(error);
+//       res.status(400).send(error);
+//       return next(error);
+//     }
+//     // console.log(data);
+//     res.json(data);
+//   });
+// });
 
 router.route('/users/getcontacts').post((req, res, next) => {
   const userid = req.body.userID;
@@ -293,64 +293,64 @@ router.route('/users/getcontacts').post((req, res, next) => {
   });
 });
 
-// Get list of messages between two persons
-router.route('/users/show_messages_persons').post((req, res, next) => {
-  // [TODO] Get user id from session for validation
-  // const userID = '';
-  if (Object.keys(req.body).length === 0) {
-    const error = 'Data not present in POST request body';
-    res.status(400).send(error);
-    return next(error);
-  }
-  const senderId = mongoose.Types.ObjectId(req.body.senderId);
-  const receivingUserId = mongoose.Types.ObjectId(req.body.receivingUserId);
-  const { pageNumber } = req.body;
-  const { numberOfItems } = req.body;
-  // eslint-disable-next-line max-len
-  // Formula to paginate : skip(NUMBER_OF_ITEMS * (PAGE_NUMBER - 1)).limit(NUMBER_OF_ITEMS )
-  // Initial Value (Example) :  PAGE_NUMBER=1, NUMBER_OF_ITEMS=10
-  Message.find(
-    { senderId, receivingUserId },
-    null,
-    { skip: numberOfItems * (pageNumber - 1), limit: numberOfItems },
-    (error, data) => {
-      if (error) {
-        res.status(400).send(error);
-        return next(error);
-      }
-      res.json(data);
-    },
-  );
-});
+// // Get list of messages between two persons
+// router.route('/users/show_messages_persons').post((req, res, next) => {
+//   // [TODO] Get user id from session for validation
+//   // const userID = '';
+//   if (Object.keys(req.body).length === 0) {
+//     const error = 'Data not present in POST request body';
+//     res.status(400).send(error);
+//     return next(error);
+//   }
+//   const senderId = mongoose.Types.ObjectId(req.body.senderId);
+//   const receivingUserId = mongoose.Types.ObjectId(req.body.receivingUserId);
+//   const { pageNumber } = req.body;
+//   const { numberOfItems } = req.body;
+//   // eslint-disable-next-line max-len
+//   // Formula to paginate : skip(NUMBER_OF_ITEMS * (PAGE_NUMBER - 1)).limit(NUMBER_OF_ITEMS )
+//   // Initial Value (Example) :  PAGE_NUMBER=1, NUMBER_OF_ITEMS=10
+//   Message.find(
+//     { senderId, receivingUserId },
+//     null,
+//     { skip: numberOfItems * (pageNumber - 1), limit: numberOfItems },
+//     (error, data) => {
+//       if (error) {
+//         res.status(400).send(error);
+//         return next(error);
+//       }
+//       res.json(data);
+//     },
+//   );
+// });
 
-router.route('/users/show_messages').post((req, res, next) => {
-  // [TODO] Get user id from session for validation
-  // const userID = '123';
-  if (Object.keys(req.body).length === 0) {
-    const error = 'Data not present in POST request body';
-    return next(error);
-  }
-  const senderId = mongoose.Types.ObjectId(req.body.senderId);
-  const { pageNumber } = req.body;
-  const { numberOfItems } = req.body;
+// router.route('/users/show_messages').post((req, res, next) => {
+//   // [TODO] Get user id from session for validation
+//   // const userID = '123';
+//   if (Object.keys(req.body).length === 0) {
+//     const error = 'Data not present in POST request body';
+//     return next(error);
+//   }
+//   const senderId = mongoose.Types.ObjectId(req.body.senderId);
+//   const { pageNumber } = req.body;
+//   const { numberOfItems } = req.body;
 
-  // Formula to paginate :
-  // skip(NUMBER_OF_ITEMS * (PAGE_NUMBER - 1)).limit(NUMBER_OF_ITEMS )
-  // Initial Value (Example) :  PAGE_NUMBER=1, NUMBER_OF_ITEMS=10
-  Message.find(
-    { senderId },
-    null,
-    { skip: numberOfItems * (pageNumber - 1), limit: numberOfItems },
-    (error, response) => {
-      if (error) {
-        res.status(400).send(error);
-        return next(error);
-      }
+//   // Formula to paginate :
+//   // skip(NUMBER_OF_ITEMS * (PAGE_NUMBER - 1)).limit(NUMBER_OF_ITEMS )
+//   // Initial Value (Example) :  PAGE_NUMBER=1, NUMBER_OF_ITEMS=10
+//   Message.find(
+//     { senderId },
+//     null,
+//     { skip: numberOfItems * (pageNumber - 1), limit: numberOfItems },
+//     (error, response) => {
+//       if (error) {
+//         res.status(400).send(error);
+//         return next(error);
+//       }
 
-      res.json(response);
-    },
-  );
-});
+//       res.json(response);
+//     },
+//   );
+// });
 
 // Creates a post for the user
 router.route('/users/create_post').post((req, res, next) => {
