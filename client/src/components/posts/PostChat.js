@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import PostLists from "./PostLists";
 import PropTypes from "prop-types";
 import {
@@ -12,6 +12,19 @@ import {
 const useStyles = makeStyles(theme => ({}));
 
 const PostChat = props => {
+  const [postText, setPostText] = useState("");
+  const [disableButton, setDisableButton] = useState(true);
+  const [checkBoxSelected, setCheckBoxSelected] = useState(false);
+
+  const parentCallback = btnDisabled => {
+    btnDisabled == false
+      ? setCheckBoxSelected(true)
+      : setCheckBoxSelected(false);
+    btnDisabled == false && postText != ""
+      ? setDisableButton(false)
+      : setDisableButton(true);
+  };
+
   return (
     <Fragment>
       <Box>
@@ -22,11 +35,21 @@ const PostChat = props => {
             multiline
             rows="10"
             defaultValue=""
+            onChange={e => {
+              setPostText(e.target.value);
+              e.target.value != "" && checkBoxSelected == true
+                ? setDisableButton(false)
+                : setDisableButton(true);
+            }}
             variant="filled"
             fullWidth
           />
         </Paper>
-        <PostLists />
+        <PostLists
+          postText={postText}
+          parentCallback={parentCallback}
+          disableButton={disableButton}
+        />
       </Box>
     </Fragment>
   );

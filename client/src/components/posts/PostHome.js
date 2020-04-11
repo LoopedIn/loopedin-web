@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import Posts from "./Posts";
 import PostLists from "./PostLists";
@@ -14,11 +14,18 @@ const useStyles = makeStyles(theme => ({
 const PostHome = props => {
   const classes = useStyles();
 
+  const [textInput, setTextInput] = useState("adsad");
+
+  const textCallback = input => {
+    console.log(input);
+    setTextInput(input);
+  };
+
   return (
     <Fragment>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
-          <PostChat />
+          <PostChat parentCallback={textCallback} />
         </Grid>
         <Grid item xs={12} md={8}>
           <div className={classes.postsRoot}>

@@ -37,8 +37,14 @@ const useStyles = makeStyles(theme => ({
 
 const PostLists = props => {
   const classes = useStyles();
-  const { loopsInfo, getUserLoopInfo } = props;
-  const [checked, setChecked] = React.useState([1]);
+  const {
+    loopsInfo,
+    getUserLoopInfo,
+    postText,
+    parentCallback,
+    disableButton
+  } = props;
+  const [checked, setChecked] = React.useState([]);
   const [loopList, setLoopList] = useState(Object.keys(loopsInfo));
 
   useEffect(() => {
@@ -54,15 +60,20 @@ const PostLists = props => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
+    newChecked.length != 0 ? parentCallback(false) : parentCallback(true);
 
     setChecked(newChecked);
   };
 
+  const sendMessageToLoop = e => {
+    e.preventDefault();
+  };
+
   const renderLoopList = (value, index) => {
-    const labelId = `checkbox-list-secondary-label-${value}`;
+    const labelId = `checkbox-list-secondary-label-${value[0]}`;
     return (
-      <div>
-        <ListItem key={index} button>
+      <div key={value}>
+        <ListItem button>
           <ListItemAvatar>
             <Avatar aria-label="loop-name" className={classes.avatar}>
               {`${value[0]}`}
@@ -95,6 +106,8 @@ const PostLists = props => {
             variant="contained"
             color="primary"
             className={classes.button}
+            onClick={sendMessageToLoop}
+            disabled={disableButton}
             endIcon={<SendIcon>send</SendIcon>}
           >
             Send
@@ -120,8 +133,11 @@ const PostLists = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   return {
+    postText: ownProps.postText,
+    parentCallback: ownProps.parentCallback,
+    disableButton: ownProps.disableButton,
     user: state.auth.user,
     loopsInfo: state.userConnections.userLoops
   };
