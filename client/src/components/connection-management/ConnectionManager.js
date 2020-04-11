@@ -66,19 +66,23 @@ const ConnectionManagerHome = props => {
   const [newLoop, setNewLoop] = useState("");
 
   const [selectedLoop, setSelectedLoop] = useState(
-    Object.keys(loopsWithContactInfo)[0]
+    loopsWithContactInfo.length === 0 ? "" : Object.keys(loopsWithContactInfo)[0]
   );
+  
   const [toggle, setToggle] = useState(false);
+
   const [loopVsFriendsConfig, setLoopVsFriendsConfig] = useState(
     loopsWithContactInfo
   );
-
+    
+ useEffect(() => {setLoopVsFriendsConfig(loopsWithContactInfo)}, [loopsWithContactInfo])
   const handleListItemClick = (event, selectedLoop) => {
     setSelectedLoop(selectedLoop);
   };
 
   const handleCreateLoopBtnSubmit = () => {
     createLoop(newLoop);
+    window.location.reload(true);
   };
 
   const handleSaveLoopConfigsBtnSubmit = () => {
