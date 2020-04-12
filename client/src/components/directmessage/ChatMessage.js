@@ -33,7 +33,7 @@ const ChatMessage = props => {
                 color="textPrimary"
                 className={classes.timeStamp}
               >
-                Ali Connors
+                {isSentByMe && "Sent by me"}
               </Typography>
             </React.Fragment>
           }
