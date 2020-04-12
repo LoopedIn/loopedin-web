@@ -67,16 +67,17 @@ router.route('/users/add_friend').post(async (req, res, next) => {
     // console.log("No user found with name " + newUsername)
     res.status(400).send('User does not exist');
   } else {
-    const records = await UserConnection.find({ userId: userId });
-    const currentFriends = records.length > 0 ? records[0].friendIds : [];
-    if (currentFriends.includes(newFriendUsername)) {
+    const records = await UserConnection.find({ userId: userId }).populate({ path: 'friendIds', select: ['firstName','lastName','_id','userName'] });
+    const currentFriendIds = records.length > 0 ? records[0].friendIds.map(obj => obj._id) : [];
+    const currentFriendNames = records.length > 0 ? records[0].friendIds.map(obj => obj.userName) : [];
+    if (currentFriendNames.includes(newFriendUsername)) {
       res.status(400).send('User is already a friend');
     } else {
       const friend = usersWithNewFriendUsername[0];
       UserConnection.updateOne(
         { userId: userId },
         {
-          $set: { friendIds: [...currentFriends, friend._id] },
+          $set: { friendIds: [...currentFriendIds, friend._id] },
         },
         { upsert: true },
         (error, response) => {
