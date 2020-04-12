@@ -25,7 +25,7 @@ export const dispatchUserSelected = selectedFriendId => async dispatch => {
 //Retrieves chat history for the selected user
 export const getChatHistory = (chosenFriendId) => async dispatch => {
     const chatHistoryResp = (await serverRequests.getChatHistoryApi(chosenFriendId));
-    const messagesList = chatHistoryResp.data;
+    const messagesList = chatHistoryResp.data.reverse();
     messagesList.forEach(message => {
         message["isSentByMe"] = message.senderId != chosenFriendId
     })
