@@ -36,9 +36,10 @@ const receiveLogin = (user, firebaseUser) => {
   };
 };
 
-const loginError = () => {
+const loginError = (msg) => {
   return {
-    type: LOGIN_FAILURE
+    type: LOGIN_FAILURE,
+    msg
   };
 };
 
@@ -96,8 +97,7 @@ export const loginUser = (email, password) => dispatch => {
       dispatch(receiveLogin(user, firebaseUser));
     })
     .catch(error => {
-      console.log(error)
-      dispatch(loginError());
+      dispatch(loginError(error.message));
     });
 };
 
@@ -149,10 +149,13 @@ export const registerUser = (
       dispatch(registerSuccess(response));
     })
     .catch(error => {
-      console.log(error);
       dispatch(registerFailure(error));
     });
 };
 export const removeRegisterToastMessage = () => async dispatch => {
   dispatch(dispatches.auth.removeRegisterToastMessage());
+}
+
+export const removeLoginToastMessage = () => async dispatch => {
+  dispatch(dispatches.auth.removeLoginToastMessage());
 }

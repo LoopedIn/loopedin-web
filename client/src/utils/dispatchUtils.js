@@ -32,6 +32,7 @@ export const RECENT_CHATS_LOADED = "RECENT_CHATS_LOADED";
 
 export const REMOVE_USER_CONNECTION_TOASTS = "REMOVE_USER_CONNECTION_TOASTS";
 export const REMOVE_REGISTER_TOAST = "REMOVE_REGISTER_TOAST";
+export const REMOVE_LOGIN_TOAST = "REMOVE_LOGIN_TOAST";
 
 export const dispatches = {
   auth: {
@@ -92,6 +93,11 @@ export const dispatches = {
     removeRegisterToastMessage: () => {
       return{
         type: REMOVE_REGISTER_TOAST
+      }
+    },
+    removeLoginToastMessage :() =>{
+      return{
+        type: REMOVE_LOGIN_TOAST
       }
     }
   },
