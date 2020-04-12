@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import Posts from "./Posts";
-import PostLists from "./PostLists";
+import MyPosts from "./MyPosts";
 import PostChat from "./PostChat";
 import { Grid, makeStyles } from "@material-ui/core";
 
@@ -24,10 +24,11 @@ const PostHome = props => {
   return (
     <Fragment>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={5}>
           <PostChat parentCallback={textCallback} />
+          <MyPosts />
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={7}>
           <div className={classes.postsRoot}>
             <Posts />
           </div>

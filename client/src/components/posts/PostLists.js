@@ -107,7 +107,7 @@ const PostLists = props => {
     <Fragment>
       <Paper>
         <Toolbar className={classes.toolbar}>
-          <Typography variant="h4" className="header-message">
+          <Typography variant="h5" className="header-message">
             Loops
           </Typography>
 
