@@ -34,7 +34,6 @@ const renderMessages = (messages, classes) => {
     return <div />;
   }
 
-  console.log({messages})
   return (
     <List className={classes.root}>
       {messages.map((values, index) => {

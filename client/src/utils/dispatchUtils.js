@@ -23,6 +23,7 @@ export const CREATE_LOOP_FAILED = "CREATE_LOOP_FAILED";
 
 export const USER_LOOPS_LOADED = "USER_LOOPS_LOADED";
 export const LOOPS_LIST_LOADED = "LOOPS_LIST_LOADED";
+export const LOOP_CONFIG_UPDATED = "LOOP_CONFIG_UPDATED";
 
 export const CHAT_HISTORY_LOADED = "CHAT_HISTORY_LOADED";
 export const SENT_MESSAGE = "SENT_MESSAGE";
@@ -30,6 +31,7 @@ export const FRIEND_SELECTED = "FRIEND_SELECTED";
 export const RECENT_CHATS_LOADED = "RECENT_CHATS_LOADED";
 
 export const REMOVE_USER_CONNECTION_TOASTS = "REMOVE_USER_CONNECTION_TOASTS";
+export const REMOVE_REGISTER_TOAST = "REMOVE_REGISTER_TOAST";
 
 export const dispatches = {
   auth: {
@@ -86,6 +88,11 @@ export const dispatches = {
         type: REGISTER_FAILURE,
         error
       };
+    },
+    removeRegisterToastMessage: () => {
+      return{
+        type: REMOVE_REGISTER_TOAST
+      }
     }
   },
 
@@ -143,6 +150,12 @@ export const dispatches = {
         type: LOOPS_LIST_LOADED,
         loopLists
       };
+    },
+    loopConfigurationsSaved: msg => {
+      return{
+        type: LOOP_CONFIG_UPDATED,
+        msg
+      }
     }
   },
 

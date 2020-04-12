@@ -29,6 +29,9 @@ const ConnectionsHome = props => {
   console.log({toastMessagesState})
   useEffect(() => {
     setToastMessageState(toastMessages.reverse())
+    if(toastMessages.length > 0){
+      setOpen(true);
+    }
   }, [toastMessages])
 
   const toast = (message, severity) => 
@@ -42,7 +45,7 @@ const ConnectionsHome = props => {
 
   const severity = (message) => {
     if(message.includes("already a friend") || message.includes("error") || message.includes("does not exist")){
-      return "warning"
+      return "info"
     } else{
       return "success"
     }

@@ -6,7 +6,8 @@ import {
   CREATE_LOOP_SUCCESSFUL,
   CREATE_LOOP_FAILED,
   LOOPS_LIST_LOADED,
-  REMOVE_USER_CONNECTION_TOASTS
+  REMOVE_USER_CONNECTION_TOASTS,
+  LOOP_CONFIG_UPDATED
 } from "../utils/dispatchUtils";
 
 const initialState = {
@@ -20,9 +21,6 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  console.log("in reducer");
-  console.log(action.type)
-  console.log({state})
   switch (action.type) {
     case USER_FRIENDS_LOADED:
       return { ...state, userFriends: action.userFriends };
@@ -37,8 +35,11 @@ export default (state = initialState, action) => {
     case ADD_USER_FAILED:
       return { ...state, toastMessages: updatedToastMessages(state, action.errorMsg) };
     case CREATE_LOOP_SUCCESSFUL:
+      console.log("here");
       return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
     case CREATE_LOOP_FAILED:
+      return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
+    case LOOP_CONFIG_UPDATED:
       return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
     case LOOPS_LIST_LOADED:
       return { ...state, loopLists: action.loopLists };
@@ -51,7 +52,6 @@ export default (state = initialState, action) => {
 };
 
 const updatedToastMessages = (state, newMessage) => {
-  console.log("here");
   const newToastMessages = [...state.toastMessages, newMessage]
   return newToastMessages
 }

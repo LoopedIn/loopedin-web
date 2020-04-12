@@ -345,65 +345,66 @@ describe('application', async () => {
       //   );
       // }).timeout(10000);
 
-      // it('Get this users timeline', async () => {
-      //   const myUserInput = getRandomCreateUserInput();
-      //   resultToUser(await registerAndCreateUser(myUserInput));
-      //   const myUsersFriendInput = getRandomCreateUserInput();
-      //   const myUsersFriend = resultToUser(
-      //     await registerAndCreateUser(myUsersFriendInput),
-      //   );
-      //   await addAsFriend(myUserInput, myUsersFriend.id);
-      //   const createLoopResponseData = await createLoop(
-      //     myUserInput,
-      //     undefined,
-      //     myUsersFriend.id,
-      //   );
-      //   await createPosts(
-      //     myUserInput,
-      //     myUsersFriend.id,
-      //     createLoopResponseData._id,
-      //   );
-      //   await createPosts(
-      //     myUserInput,
-      //     myUsersFriend.id,
-      //     createLoopResponseData._id,
-      //   );
-      //   const getPostsResponse = await getPosts(myUsersFriendInput);
-      //   assert.equal(getPostsResponse[0].receivingUserIds[0], myUsersFriend.id);
-      //   assert.equal(getPostsResponse[1].receivingUserIds[0], myUsersFriend.id);
-      //   // // console.log(getPostsResponse);
-      // }).timeout(10000);
-
-      it('Get this users messages ', async () => {
+      it('Get this users timeline', async () => {
         const myUserInput = getRandomCreateUserInput();
-        const myUser = resultToUser(await registerAndCreateUser(myUserInput));
+        console.log(myUserInput)
+        resultToUser(await registerAndCreateUser(myUserInput));
         const myUsersFriendInput = getRandomCreateUserInput();
         const myUsersFriend = resultToUser(
           await registerAndCreateUser(myUsersFriendInput),
         );
-
-        const myUsersFriendInput2 = getRandomCreateUserInput();
-        const myUsersFriend2 = resultToUser(
-          await registerAndCreateUser(myUsersFriendInput2),
+        await addAsFriend(myUserInput, myUsersFriend.id);
+        const createLoopResponseData = await createLoop(
+          myUserInput,
+          undefined,
+          myUsersFriend.id,
         );
+        await createPosts(
+          myUserInput,
+          undefined,
+          createLoopResponseData._id,
+        );
+        await createPosts(
+          myUserInput,
+          undefined,
+          createLoopResponseData._id,
+        );
+        const getPostsResponse = await getPosts(myUsersFriendInput);
+        assert.equal(getPostsResponse[0].receivingUsers[0], myUsersFriend.id);
+        assert.equal(getPostsResponse[1].receivingUsers[0], myUsersFriend.id);
+        console.log("response" , getPostsResponse);
+      }).timeout(10000);  
 
-        await addAsFriend(myUserInput, myUsersFriendInput.userId);
-        await addAsFriend(myUserInput, myUsersFriendInput2.userId);
+      // it('Get this users messages ', async () => {
+      //   const myUserInput = getRandomCreateUserInput();
+      //   const myUser = resultToUser(await registerAndCreateUser(myUserInput));
+      //   const myUsersFriendInput = getRandomCreateUserInput();
+      //   const myUsersFriend = resultToUser(
+      //     await registerAndCreateUser(myUsersFriendInput),
+      //   );
 
-        const message1 = await createMessage(myUserInput, myUsersFriend.id);
-        const message2 = await createMessage(myUsersFriendInput, myUser.id);
-        const message3 = await createMessage(myUserInput, myUsersFriend.id);
+      //   const myUsersFriendInput2 = getRandomCreateUserInput();
+      //   const myUsersFriend2 = resultToUser(
+      //     await registerAndCreateUser(myUsersFriendInput2),
+      //   );
 
-        //await createMessage(myUserInput, myUsersFriend2.id);
-        //await createMessage(myUsersFriendInput2, myUser.id);
+      //   await addAsFriend(myUserInput, myUsersFriendInput.userId);
+      //   await addAsFriend(myUserInput, myUsersFriendInput2.userId);
 
-        const getMessages = await getRecentChats(myUserInput);
+      //   const message1 = await createMessage(myUserInput, myUsersFriend.id);
+      //   const message2 = await createMessage(myUsersFriendInput, myUser.id);
+      //   const message3 = await createMessage(myUserInput, myUsersFriend.id);
 
-        console.log("message",getMessages);
-        assert(message1.messageContent);
-        assert(message2.messageContent);
-        assert(message3.messageContent);
-      }).timeout(10000);
+      //   //await createMessage(myUserInput, myUsersFriend2.id);
+      //   //await createMessage(myUsersFriendInput2, myUser.id);
+
+      //   const getMessages = await getRecentChats(myUserInput);
+
+      //   console.log("message",getMessages);
+      //   assert(message1.messageContent);
+      //   assert(message2.messageContent);
+      //   assert(message3.messageContent);
+      // }).timeout(10000);
 
       // it('Get this users messages with friend', async () => {
       //   const myUserInput = getRandomCreateUserInput();
