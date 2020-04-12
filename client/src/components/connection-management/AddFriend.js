@@ -61,12 +61,14 @@ const AddFriend = props => {
 
   const [userFriendsState, setUserFriendsState] = useState([]);
 
+  console.log({usersFriends})
   useEffect(() => {
     setUserFriendsState(usersFriends== undefined? undefined : usersFriends["friendIds"]);
   }, [usersFriends])
 
   const handleBtnSubmit = () => {
-    addFriendToUser(newUser, userFriendsState, setUserFriendsState);
+    addFriendToUser(newUser, userFriendsState);
+    getUserFriends();
   };
 
   const renderFriendsList = friend => {
