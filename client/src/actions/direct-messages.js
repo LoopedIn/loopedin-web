@@ -4,13 +4,19 @@ import { constants } from "../utils/constants";
 
 //Fetches all recent chats with other users
 export const getRecentChats = () => async dispatch => {
-
+    try{
+        console.log("Getting recent chats")
+        const recentChatsResp = (await serverRequests.getRecentChatsApi()).data
+        console.log({recentChatsResp})
+        dispatch(dispatches.directMessages.recentChatsLoaded(recentChatsResp))
+    } catch(error){
+        console.log(error)
+    }
 };
 
 //Sends a message to user 
 export const createMessage = (recievingUserId, messageContent) => async dispatch => {
     try{
-        console.log(`Sending message ${messageContent}`);
         (await serverRequests.createMessageApi(recievingUserId, "text", messageContent));
         dispatch(dispatches.directMessages.sentMessage(messageContent));
     } catch(error){

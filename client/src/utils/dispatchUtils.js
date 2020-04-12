@@ -27,6 +27,7 @@ export const LOOPS_LIST_LOADED = "LOOPS_LIST_LOADED";
 export const CHAT_HISTORY_LOADED = "CHAT_HISTORY_LOADED";
 export const SENT_MESSAGE = "SENT_MESSAGE";
 export const FRIEND_SELECTED = "FRIEND_SELECTED";
+export const RECENT_CHATS_LOADED = "RECENT_CHATS_LOADED";
 
 export const dispatches = {
   auth: {
@@ -154,6 +155,12 @@ export const dispatches = {
     friendSelected : msg => {
       return{
         type: FRIEND_SELECTED,
+        msg
+      }
+    },
+    recentChatsLoaded : msg => {
+      return{
+        type: RECENT_CHATS_LOADED,
         msg
       }
     }
