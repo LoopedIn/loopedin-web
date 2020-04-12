@@ -461,40 +461,28 @@ router.route('/users/get_recent_chats').post(async(req, res, next) => {
   const records = await UserConnection.find({ userId: userID },{friendIds:1});
   const currentFriends = records.length > 0 ? records[0].friendIds : [];
   var messages=[];
-  const emptymessage = {
-    _id: '',
-    receivingUserId: '',
-    messageType: '',
-    messageContent: '',
-    senderId: {
-      _id: '',
-      userName: '',
-      firstName: '',
-      lastName: ''
-    },
-    created: '2020-04-12T04:20:48.738Z',
-  }
+  
   for(const friendID  of currentFriends) {
     
-    const data = await Message.findOne({ $or: [{ $and: [{ receivingUserId: userID }, { senderId: friendID }]},
+    let data = await Message.findOne({ $or: [{ $and: [{ receivingUserId: userID }, { senderId: friendID }]},
       { $and: [{ receivingUserId: friendID }, { senderId: userID }] }] })
     .sort({ created: -1 })
-    .populate({ path: 'senderId', select: ['firstName','lastName','_id','userName'] })
-    
-    if (!data){
-    friend = await User.find({ _id: friendID })
-    //console.log(friend[0])
-    emptymessage.senderId._id= friend[0]._id
-    emptymessage.senderId.userName= friend[0].userName
-    emptymessage.senderId.firstName= friend[0].firstName
-    emptymessage.senderId.lastName= friend[0].lastName
-    //console.log(emptymessage);
-    messages.push(emptymessage)
+    const friend = (await (User.find({ _id: friendID })))[0]
+    const resp = {
+      _id: data ? data._id : '',
+      receivingUserId: data ? data.receivingUserId : '',
+      messageType: data ? data.messageType : '',
+      messageContent: data ? data.messageContent : '',
+      created: data ? data.created : '2020-04-12T04:20:48.738Z',
+    };
+    resp["sender"] = {
+      _id :  friend._id,
+      userName : friend.userName,
+      firstName : friend.firstName, 
+      lastName : friend.lastName
     }
-    else{
-      //console.log(data)
-      messages.push(data)
-    }
+      //console.log(emptymessage);
+    messages.push(resp)
   }
   //console.log(messages);
   var sortedMessages= messages.sort((function (a, b) { 
