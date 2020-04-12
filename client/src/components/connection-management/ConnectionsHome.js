@@ -28,7 +28,7 @@ const ConnectionsHome = props => {
 
   console.log({toastMessagesState})
   useEffect(() => {
-    setToastMessageState(toastMessages.reverse())
+    setToastMessageState(toastMessages? toastMessages.reverse() : [])
     if(toastMessages.length > 0){
       setOpen(true);
     }
