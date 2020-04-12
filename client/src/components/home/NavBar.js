@@ -2,6 +2,8 @@ import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import { connect } from "react-redux";
+import compose from "recompose/compose";
 import {
   AppBar,
   Toolbar,
@@ -122,7 +124,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NavBar = props => {
-  const { selectedTab, width, logoutUser } = props;
+  const { selectedTab, width, logoutUser, user } = props;
 
   let links = [];
 
@@ -244,7 +246,7 @@ const NavBar = props => {
                 <ListItemText
                   className={classes.username}
                   primary={
-                    <Typography color="textPrimary">Username</Typography>
+                    <Typography color="textPrimary">{user.userName}</Typography>
                   }
                 />
               )}
@@ -308,4 +310,10 @@ const NavBar = props => {
   );
 };
 
-export default withWidth()(NavBar);
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user
+  };
+};
+
+export default compose(withWidth(), connect(mapStateToProps))(NavBar);
