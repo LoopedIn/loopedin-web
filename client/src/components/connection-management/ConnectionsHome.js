@@ -24,11 +24,11 @@ const ConnectionsHome = props => {
     setOpen(false);
     removeToastMessages();
   };
-  const [toastMessagesState, setToastMessageState] = useState(toastMessages.reverse());
+  const [toastMessagesState, setToastMessageState] = useState(toastMessages? toastMessages.reverse() : []);
 
   console.log({toastMessagesState})
   useEffect(() => {
-    setToastMessageState(toastMessages.reverse())
+    setToastMessageState(toastMessages? toastMessages.reverse() : [])
     if(toastMessages.length > 0){
       setOpen(true);
     }

@@ -25,7 +25,8 @@ const initialState = {
   registerError: false,
   registerSuccess: false,
   user: {},
-  registerToast: ""
+  registerToast: "",
+  loginToast: "",
 }
 
 export default (
@@ -52,7 +53,8 @@ export default (
         ...state,
         isLoggingIn: false,
         isAuthenticated: false,
-        loginError: true
+        loginError: true,
+        loginToast: action.msg
       };
     case LOGOUT_REQUEST:
       return {
