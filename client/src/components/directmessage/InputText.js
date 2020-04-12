@@ -33,15 +33,21 @@ const useStyles = makeStyles(theme => ({
 
 const InputText = props => {
   const classes = useStyles();
-  const chosenUser = "5e90eed6b47068a3f2974526";
+  
   const [inputText, setInputText] = useState("");
 
   const {
-    createMessage
+    createMessage,
+    selectedFriend
   } = props;
+
+
+  const [chosenUser, setChosenUser] = useState(selectedFriend);
+  useEffect(() => {setChosenUser(selectedFriend)}, [selectedFriend])
 
   const handleSendMessage = () => {
     createMessage(chosenUser, inputText);
+    setInputText("");
   };
 
   return (
@@ -103,7 +109,8 @@ const InputText = props => {
 
 function mapStateToProps(state) {
   return {
-    user: state.auth.user
+    user: state.auth.user,
+    selectedFriend: state.directMessages.selectedFriend
   };
 }
 

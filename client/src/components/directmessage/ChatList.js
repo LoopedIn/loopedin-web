@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, {  useState, useEffect,Fragment } from "react";
+import { connect } from "react-redux";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -11,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Scrollbar from "../../utils/Scrollbar";
 import PropTypes from "prop-types";
+import { dispatchUserSelected } from "../../actions/direct-messages";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,23 +30,38 @@ const useStyles = makeStyles(theme => ({
 
 const ChatList = props => {
   const classes = useStyles();
+
+  const {
+    dispatchUserSelected
+  } = props;
+
   const chatList = [
     {
       firstName: "FriendA",
       lastName: "FriendA",
       messageList: [],
-      timeStamp: "TimeStamp"
+      timeStamp: "TimeStamp",
+      friendId:"5e90eed6b47068a3f2974526"
     },
     {
       firstName: "FriendB",
       lastName: "FriendB",
       messageList: [],
+      friendId:"5e90eee7b47068a3f2974527",
       timeStamp: "TimeStamp"
     }
   ];
 
   const getLatestMessage = value => {
     return " — I'll be in your neighborhood doing errands this…sdasdasdasdasdasdasda sdadsdasdasdas sdasdasdasd asdasdasd";
+  };
+
+  const [selectedFriendState, setSelectedFriendState] = useState(chatList[0].friendId);
+
+  useEffect(() => {dispatchUserSelected(selectedFriendState)}, [selectedFriendState])
+
+  const handleFriendSelection = (selectedFriendState) => {
+    setSelectedFriendState(selectedFriendState);
   };
 
   const listArrayLen = chatList.length;
@@ -64,7 +81,11 @@ const ChatList = props => {
                 {chatList.map((value, index) => {
                   return (
                     <div>
-                      <ListItem alignItems="flex-start">
+                      <ListItem alignItems="flex-start" 
+                        button
+                        selected={selectedFriendState === value.friendId}
+                        onClick={event => handleFriendSelection(value.friendId)}
+                      >
                         <ListItemAvatar>
                           <Avatar
                             alt={value.firstName}
@@ -111,6 +132,10 @@ const ChatList = props => {
   );
 };
 
-ChatList.propTypes = {};
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user,
+  };
+}
 
-export default ChatList;
+export default connect(mapStateToProps, {dispatchUserSelected})(ChatList);

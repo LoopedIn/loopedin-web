@@ -18,6 +18,10 @@ export const createMessage = (recievingUserId, messageContent) => async dispatch
     }
 };
 
+export const dispatchUserSelected = selectedFriendId => async dispatch => {
+    dispatch(dispatches.directMessages.friendSelected(selectedFriendId))
+}
+
 //Retrieves chat history for the selected user
 export const getChatHistory = (chosenFriendId) => async dispatch => {
     const chatHistoryResp = (await serverRequests.getChatHistoryApi(chosenFriendId));

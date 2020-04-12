@@ -29,89 +29,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const messages = [
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  }
-];
-
 const renderMessages = (messages, classes) => {
   if (messages.length == 0) {
     return <div />;
@@ -128,18 +45,20 @@ const renderMessages = (messages, classes) => {
 
 const Chat = props => {
   const classes = useStyles();
-  const chosenUser = "5e90eed6b47068a3f2974526";
+  
   const {
     getChatHistory,
 
     sentMessage,
+    selectedFriend,
     chatHistory
   } = props;
 
   useEffect(() => {
     getChatHistory(chosenUser)
-  }, [sentMessage]);
+  }, [sentMessage, selectedFriend]);
 
+  const chosenUser = selectedFriend;
   const [chatHistoryState, setChatHistoryState] = useState(chatHistory);
   useEffect(() => {setChatHistoryState(chatHistory)}, [chatHistory])
 
@@ -171,7 +90,8 @@ function mapStateToProps(state) {
   return {
     user: state.auth.user,
     chatHistory: state.directMessages.chatHistory,
-    sentMessage:  state.directMessages.sentMessage
+    sentMessage:  state.directMessages.sentMessage,
+    selectedFriend: state.directMessages.selectedFriend
   };
 }
 
