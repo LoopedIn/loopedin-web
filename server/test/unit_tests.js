@@ -394,8 +394,8 @@ describe('application', async () => {
         const message2 = await createMessage(myUsersFriendInput, myUser.id);
         const message3 = await createMessage(myUserInput, myUsersFriend.id);
 
-        await createMessage(myUserInput, myUsersFriend2.id);
-        await createMessage(myUsersFriendInput2, myUser.id);
+        //await createMessage(myUserInput, myUsersFriend2.id);
+        //await createMessage(myUsersFriendInput2, myUser.id);
 
         const getMessages = await getRecentChats(myUserInput);
 
