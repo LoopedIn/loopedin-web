@@ -528,7 +528,7 @@ function getLoopsContainingUser(userID) {
       if (error) {
         reject(error);
       } else {
-        console.log('Loops: ' + data);
+        //console.log('Loops: ' + data);
         resolve(data);
       }
     });
@@ -546,10 +546,11 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
       data.forEach((loop) => {
         loopIDS.push(loop._id);
       });
-      console.log('LOOPSIDS ' + JSON.stringify(loopIDS));
-      // eslint-disable-next-line max-len
+      //console.log('LOOPSIDS ' + JSON.stringify(loopIDS));
+      
       Post.find({
-        $or: [{ receivingUserIds: userID }, { receivingLoopIds: loopIDS }],
+        $or: [{ receivingUserIds: userID }, 
+          { receivingLoopIds: loopIDS }],
       })
         .sort({ created: -1 })
         .exec((error, data) => {
@@ -564,14 +565,14 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
           data.forEach((post) => {
             senderIds.push(mongoose.Types.ObjectId(post.senderId));
           });
-          console.log('SENDERIDS ' + senderIds);
+          //console.log('SENDERIDS ' + senderIds);
           // eslint-disable-next-line max-len
           User.find({ _id: { $in: senderIds } }, (error, response) => {
             if (error) {
               res.status(400).send(error);
               return next();
             }
-            console.log('User details  ' + response);
+            //console.log('User details  ' + response);
             var finalPostsData = [];
             var resultObject = {};
             // form a map of the form : userId:{firstName,lastName}
@@ -585,11 +586,13 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
             // lastName,postContents, timestamp
             data.forEach((post) => {
               var postObject = {};
-              postObject['message'] = post.postContent;
-              postObject['timestamp'] = post.created;
+              postObject['postType'] = post.postType;
+              postObject['postContent'] = post.postContent;
+              postObject['created'] = post.created;
               postObject['firstName'] =
                 resultObject[post.senderId]['firstName'];
-              postObject['lastName'] = resultObject[post.senderId]['lastName'];
+              postObject['lastName'] = 
+              resultObject[post.senderId]['lastName'];
               finalPostsData.push(postObject);
             });
             console.log(finalPostsData);

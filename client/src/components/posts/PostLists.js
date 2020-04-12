@@ -70,7 +70,7 @@ const PostLists = props => {
 
   const sendMessageToLoop = e => {
     e.preventDefault();
-    console.log(loopList);
+    //console.log(loopList);
   };
 
   const renderLoopList = (value, index) => {
