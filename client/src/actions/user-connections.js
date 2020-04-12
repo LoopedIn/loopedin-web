@@ -121,4 +121,4 @@ export const getLoopLists = () => async dispatch => {
 
 export const removeToastMessages = () => async dispatch => {
   dispatch(dispatches.user.removeToastMessages());
-}
+};

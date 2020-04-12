@@ -12,7 +12,8 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import SendIcon from "@material-ui/icons/Send";
 import Scrollbar from "../../utils/Scrollbar";
-import { getLoopLists, sendLoopMessage } from "../../actions/user-connections";
+import { getLoopLists } from "../../actions/user-connections";
+import { serverRequests } from "../../api/apiRequests";
 import { Button, Toolbar, Paper, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -52,7 +53,7 @@ const PostLists = props => {
     getLoopLists();
   }, [getLoopLists]);
 
-  useEffect(()=> setloopsListState(loopsList), [loopsList])
+  useEffect(() => setloopsListState(loopsList), [loopsList]);
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -70,7 +71,11 @@ const PostLists = props => {
 
   const sendMessageToLoop = e => {
     e.preventDefault();
-    console.log(loopList);
+    let loopIdsSelected = [];
+    checked.forEach(checkedEle => {
+      loopIdsSelected.push(checkedEle.loopId);
+    });
+    serverRequests.sendLoopMessage(postText, loopIdsSelected);
   };
 
   const renderLoopList = (value, index) => {
@@ -152,6 +157,5 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export default connect(mapStateToProps, {
-  getLoopLists,
-  sendLoopMessage
+  getLoopLists
 })(PostLists);
