@@ -12,5 +12,8 @@
   "bugs": {
     "url": "https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1/issues"
   },
-  "homepage": "https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1#readme"
+  "homepage": "https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1#readme",
+  "dependencies": {
+    "recompose": "^0.30.0"
+  }
 }
