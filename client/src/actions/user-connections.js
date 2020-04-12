@@ -82,8 +82,7 @@ export const updateLoop = (
 //Add another user as a friend
 export const addFriendToUser = (
   userName,
-  userFriendsState,
-  setUserFriendsState
+  userFriendsState
 ) => async dispatch => {
   const params = {
     friendIds: [userName]
@@ -91,7 +90,6 @@ export const addFriendToUser = (
   try {
     await serverRequests.addFriendToUserApi(params);
     dispatch(dispatches.user.addUserSuccess(`${userName} is now your friend!`));
-    setUserFriendsState([...userFriendsState, userName]);
   } catch (error) {
     const errorResp = error.response.data;
     if (errorResp.includes("does not exist")) {
