@@ -461,17 +461,47 @@ router.route('/users/get_recent_chats').post(async(req, res, next) => {
   const records = await UserConnection.find({ userId: userID },{friendIds:1});
   const currentFriends = records.length > 0 ? records[0].friendIds : [];
   var messages=[];
+  const emptymessage = {
+    _id: '',
+    receivingUserId: '',
+    messageType: '',
+    messageContent: '',
+    senderId: {
+      _id: '',
+      userName: '',
+      firstName: '',
+      lastName: ''
+    },
+    created: '2020-04-12T04:20:48.738Z',
+  }
   for(const friendID  of currentFriends) {
     
     const data = await Message.findOne({ $or: [{ $and: [{ receivingUserId: userID }, { senderId: friendID }]},
       { $and: [{ receivingUserId: friendID }, { senderId: userID }] }] })
     .sort({ created: -1 })
     .populate({ path: 'senderId', select: ['firstName','lastName','_id','userName'] })
-    //console.log(data)
-    messages.push(data)
+    
+    if (!data){
+    friend = await User.find({ _id: friendID })
+    //console.log(friend[0])
+    emptymessage.senderId._id= friend[0]._id
+    emptymessage.senderId.userName= friend[0].userName
+    emptymessage.senderId.firstName= friend[0].firstName
+    emptymessage.senderId.lastName= friend[0].lastName
+    //console.log(emptymessage);
+    messages.push(emptymessage)
+    }
+    else{
+      //console.log(data)
+      messages.push(data)
+    }
   }
   //console.log(messages);
-  res.send(messages);
+  var sortedMessages= messages.sort((function (a, b) { 
+    return new Date(b.created) - new Date(a.created) 
+  }));
+  //console.log(sortedMessages);
+  res.send(sortedMessages);
   return next();
 });
 
