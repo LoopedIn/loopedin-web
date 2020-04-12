@@ -8,8 +8,12 @@ import {
   VERIFY_REQUEST,
   VERIFY_SUCCESS,
   REGISTER_FAILURE,
-  REGISTER_SUCCESS
+  REGISTER_SUCCESS,
 } from "../actions/";
+
+import {
+  REMOVE_REGISTER_TOAST
+} from "../utils/dispatchUtils"
 
 const initialState = {
   isLoggingIn: false,
@@ -21,7 +25,7 @@ const initialState = {
   registerError: false,
   registerSuccess: false,
   user: {},
-  registerErrorMsg: ""
+  registerToast: ""
 }
 
 export default (
@@ -86,6 +90,7 @@ export default (
         registerSuccess: true,
         registerError: false,
         isAuthenticated: true,
+        registerToast: "Succesfully registered",
         user: action.user
       };
     case REGISTER_FAILURE:
@@ -93,8 +98,14 @@ export default (
         ...state,
         registerSuccess: false,
         registerError: true,
-        registerErrorMsg: action.error
+        registerToast: action.error.message
       };
+    case REMOVE_REGISTER_TOAST:{
+      return {
+        ...state,
+        registerToast: ""
+      }
+    }
     default:
       return state;
   }

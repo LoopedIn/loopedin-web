@@ -45,7 +45,7 @@ const ConnectionsHome = props => {
 
   const severity = (message) => {
     if(message.includes("already a friend") || message.includes("error") || message.includes("does not exist")){
-      return "warning"
+      return "info"
     } else{
       return "success"
     }

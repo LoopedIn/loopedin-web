@@ -6,7 +6,8 @@ import {
   CREATE_LOOP_SUCCESSFUL,
   CREATE_LOOP_FAILED,
   LOOPS_LIST_LOADED,
-  REMOVE_USER_CONNECTION_TOASTS
+  REMOVE_USER_CONNECTION_TOASTS,
+  LOOP_CONFIG_UPDATED
 } from "../utils/dispatchUtils";
 
 const initialState = {
@@ -34,8 +35,11 @@ export default (state = initialState, action) => {
     case ADD_USER_FAILED:
       return { ...state, toastMessages: updatedToastMessages(state, action.errorMsg) };
     case CREATE_LOOP_SUCCESSFUL:
+      console.log("here");
       return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
     case CREATE_LOOP_FAILED:
+      return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
+    case LOOP_CONFIG_UPDATED:
       return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
     case LOOPS_LIST_LOADED:
       return { ...state, loopLists: action.loopLists };

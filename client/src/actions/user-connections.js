@@ -76,6 +76,7 @@ export const updateLoop = (
     vals["contacts"] = contacts;
     reqParam["loop"] = vals;
     await serverRequests.updateLoopApi(loopId, reqParam);
+    dispatch(dispatches.loop.loopConfigurationsSaved("Configurations updated"));
   });
 };
 
