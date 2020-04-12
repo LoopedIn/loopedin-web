@@ -20,9 +20,6 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  console.log("in reducer");
-  console.log(action.type)
-  console.log({state})
   switch (action.type) {
     case USER_FRIENDS_LOADED:
       return { ...state, userFriends: action.userFriends };
@@ -51,7 +48,6 @@ export default (state = initialState, action) => {
 };
 
 const updatedToastMessages = (state, newMessage) => {
-  console.log("here");
   const newToastMessages = [...state.toastMessages, newMessage]
   return newToastMessages
 }

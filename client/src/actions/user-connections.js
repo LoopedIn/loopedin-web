@@ -90,6 +90,8 @@ export const addFriendToUser = (
   try {
     await serverRequests.addFriendToUserApi(params);
     dispatch(dispatches.user.addUserSuccess(`${userName} is now your friend!`));
+    const friendsList = (await serverRequests.getUserFriendsApi()).data;
+    dispatch(dispatches.user.userFriendsLoaded(friendsList[0]));
   } catch (error) {
     const errorResp = error.response.data;
     if (errorResp.includes("does not exist")) {
