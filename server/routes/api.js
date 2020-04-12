@@ -470,7 +470,7 @@ router.route('/users/get_recent_chats').post(async(req, res, next) => {
     //console.log(data)
     messages.push(data)
   }
-  console.log(messages);
+  //console.log(messages);
   res.send(messages);
   return next();
 });
