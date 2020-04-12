@@ -59,13 +59,12 @@ const AddFriend = props => {
 
   const [newUser, setNewUser] = useState("");
 
-  const [userFriendsState, setUserFriendsState] = useState(
-    usersFriends !== undefined
-      ? usersFriends["friendIds"] !== undefined
-        ? usersFriends["friendIds"]
-        : []
-      : []
-  );
+  const [userFriendsState, setUserFriendsState] = useState([]);
+
+  useEffect(() => {
+    setUserFriendsState(usersFriends== undefined? undefined : usersFriends["friendIds"]);
+    console.log({userFriendsState});
+  }, [usersFriends])
 
   const handleBtnSubmit = () => {
     addFriendToUser(newUser, userFriendsState, setUserFriendsState);
@@ -111,7 +110,7 @@ const AddFriend = props => {
       )}
       <div style={{ width: "50%", height: "65vh" }}>
         <Scrollbar>
-          <List>{userFriendsState.map(val => renderFriendsList(val))}</List>
+          <List>{userFriendsState != undefined ? userFriendsState.map(val => renderFriendsList(val)) : <div></div>}</List>
         </Scrollbar>
       </div>
       <div className={classes.addFAB}>

@@ -44,12 +44,15 @@ const PostLists = props => {
     parentCallback,
     disableButton
   } = props;
+
   const [checked, setChecked] = useState([]);
-  const [loopList, setLoopList] = useState(loopsList);
+  const [loopsListState, setloopsListState] = useState(loopsList);
 
   useEffect(() => {
     getLoopLists();
-  }, [loopList]);
+  }, [getLoopLists]);
+
+  useEffect(()=> setloopsListState(loopsList), [loopsList])
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -121,9 +124,13 @@ const PostLists = props => {
             <div className={classes.scrollbar}>
               <Scrollbar>
                 <List dense className={classes.root}>
-                  {loopList.map((value, index) => {
-                    return renderLoopList(value, index);
-                  })}
+                  {loopsListState !== undefined ? (
+                    loopsListState.map((value, index) => {
+                      return renderLoopList(value, index);
+                    })
+                  ) : (
+                    <div></div>
+                  )}
                 </List>
               </Scrollbar>
             </div>
