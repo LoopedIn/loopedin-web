@@ -43,6 +43,12 @@ router.route('/users/create/').post((req, res, next) => {
 //Registering authenticated middleware
 router.use(serverAuth.firebaseTokenAuthenticator);
 
+const validateFields = (req, res, next) => {
+  console.log(req.data)
+}
+
+//router.use(validateFields);
+
 router.route('/users/logged_in_user_info').post((req, res, next) => {
   res.json(req.body.user).send();
   next();
@@ -381,29 +387,15 @@ router.route('/users/create_post').post((req, res, next) => {
 
 // /users/user_posts
 router.route('/users/user_posts').post((req, res, next) => {
-  // [TODO] Get user id from session for validation
-  // const userID = '123';
-
-  if (Object.keys(req.body).length === 0) {
-    res.status(400).send('Post data not present');
-    return next('Post data not present');
-  }
-
-  // senderId is the _id of the user object
-  const senderId = mongoose.Types.ObjectId(req.body.senderId);
-  const { pageNumber } = req.body;
-  const { numberOfItems } = req.body;
-  Post.find(
-    { senderId },
-    null,
-    { skip: numberOfItems * (pageNumber - 1), limit: numberOfItems },
+  validateBody(req);
+  const userID = req.body.userID;
+  Post.find({senderId:userID},
     (error, data) => {
       if (error) {
-        // console.log(`Error ${error}`);
+         console.log(`Error ${error}`);
         res.status(400).send(error);
         return next(error);
       }
-
       res.status(200).json(data);
     },
   );
