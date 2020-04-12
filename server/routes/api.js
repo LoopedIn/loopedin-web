@@ -452,26 +452,27 @@ function validateBody(req, res, next) {
 }
 
 //Get_recent_chats
-router.route('/users/get_recent_chats').post((req, res, next) => {
+router.route('/users/get_recent_chats').post(async(req, res, next) => {
   validateBody(req);
-  // console.log( req.body.userID)
+  
   const userID = req.body.userID; // TODO: change
-  const page = req.body.page ? req.body.page : 1;
-  Message.find({ $or: [{ receivingUserId: userID }, { senderId: userID }] })
-    .sort({ created: -1 })
-    .skip((page - 1) * limit)
-    .populate('senderId')
-    .exec((error, data) => {
-      if (error) {
-        // console.log(error);
-        res.status(400);
-        next(error);
-      }
+  
 
-      // console.log(data);
-      res.status(200).json(data);
-      return next();
-    });
+  const records = await UserConnection.find({ userId: userID },{friendIds:1});
+  const currentFriends = records.length > 0 ? records[0].friendIds : [];
+  var messages=[];
+  for(const friendID  of currentFriends) {
+    
+    const data = await Message.findOne({ $or: [{ $and: [{ receivingUserId: userID }, { senderId: friendID }]},
+      { $and: [{ receivingUserId: friendID }, { senderId: userID }] }] })
+    .sort({ created: -1 })
+    .populate({ path: 'senderId', select: ['firstName','lastName','_id','userName'] })
+    //console.log(data)
+    messages.push(data)
+  }
+  console.log(messages);
+  res.send(messages);
+  return next();
 });
 
 //get_chat_history
@@ -482,14 +483,12 @@ router.route('/users/get_chat_history').post((req, res, next) => {
   const friendID = req.body.friendID;
   // console.log("userid",userID)
   // console.log("friendID",friendID)
-  const page = req.body.page ? req.body.page : 1;
   Message.find()
     .or([
       { $and: [{ receivingUserId: userID }, { senderId: friendID }] },
       { $and: [{ receivingUserId: friendID }, { senderId: userID }] },
     ])
     .sort({ created: -1 })
-    .skip((page - 1) * limit)
     .exec((error, data) => {
       if (error) {
         // console.log(error);
