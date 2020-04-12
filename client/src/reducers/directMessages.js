@@ -6,7 +6,7 @@ import {
 } from "../utils/dispatchUtils"
 
 const initialState = {
-    chatHistory: {}
+    chatHistory: []
 }
 
 export default (state=initialState, action) => {

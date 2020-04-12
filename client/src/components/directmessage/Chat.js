@@ -30,10 +30,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const renderMessages = (messages, classes) => {
-  if (messages.length == 0) {
+  if (messages == undefined || messages.length == 0) {
     return <div />;
   }
 
+  console.log({messages})
   return (
     <List className={classes.root}>
       {messages.map((values, index) => {
