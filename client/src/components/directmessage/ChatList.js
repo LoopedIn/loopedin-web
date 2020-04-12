@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Scrollbar from "../../utils/Scrollbar";
 import PropTypes from "prop-types";
-import { dispatchUserSelected } from "../../actions/direct-messages";
+import { dispatchUserSelected, getRecentChats } from "../../actions/direct-messages";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,31 +32,19 @@ const ChatList = props => {
   const classes = useStyles();
 
   const {
+    recentChats,
+
+    getRecentChats,
     dispatchUserSelected
   } = props;
 
-  const chatList = [
-    {
-      firstName: "FriendA",
-      lastName: "FriendA",
-      messageList: [],
-      timeStamp: "TimeStamp",
-      friendId:"5e90eed6b47068a3f2974526"
-    },
-    {
-      firstName: "FriendB",
-      lastName: "FriendB",
-      messageList: [],
-      friendId:"5e90eee7b47068a3f2974527",
-      timeStamp: "TimeStamp"
-    }
-  ];
+  useEffect(() => {getRecentChats();}, [getRecentChats])
 
-  const getLatestMessage = value => {
-    return " — I'll be in your neighborhood doing errands this…sdasdasdasdasdasdasda sdadsdasdasdas sdasdasdasd asdasdasd";
-  };
+  const [recentChatsState, setRecentChatsState] =  useState([])
 
-  const [selectedFriendState, setSelectedFriendState] = useState(chatList[0].friendId);
+  useEffect(() => setRecentChatsState(recentChats === undefined? [] : recentChats), [recentChats])
+
+  const [selectedFriendState, setSelectedFriendState] = useState("");
 
   useEffect(() => {dispatchUserSelected(selectedFriendState)}, [selectedFriendState])
 
@@ -64,7 +52,7 @@ const ChatList = props => {
     setSelectedFriendState(selectedFriendState);
   };
 
-  const listArrayLen = chatList.length;
+  const listArrayLen = recentChatsState ? recentChatsState.length : 0;
 
   return (
     <div
@@ -78,22 +66,24 @@ const ChatList = props => {
           <Box>
             <Box display="flex" justifyContent="space-between">
               <List className={classes.root}>
-                {chatList.map((value, index) => {
+                {recentChatsState.map((record, index) => {
+                  const {_id, firstName, lastName} = record.sender;
+                  const {messageContent, created} = record;
                   return (
                     <div>
                       <ListItem alignItems="flex-start" 
                         button
-                        selected={selectedFriendState === value.friendId}
-                        onClick={event => handleFriendSelection(value.friendId)}
+                        selected={selectedFriendState === _id}
+                        onClick={event => handleFriendSelection(_id)}
                       >
                         <ListItemAvatar>
                           <Avatar
-                            alt={value.firstName}
+                            alt={firstName}
                             src="/static/images/avatar/"
                           />
                         </ListItemAvatar>
                         <ListItemText
-                          primary={`${value.firstName} ${value.lastName}`}
+                          primary={`${firstName} ${lastName}`}
                           secondary={
                             <React.Fragment>
                               <Typography
@@ -102,14 +92,14 @@ const ChatList = props => {
                                 className={classes.inline}
                                 color="textPrimary"
                               >
-                                {getLatestMessage(value)}
+                                {messageContent}
                               </Typography>
                               <Typography
                                 component="span"
                                 variant="body2"
                                 className={classes.timeStamp}
                               >
-                                {value.timeStamp}
+                                {created}
                               </Typography>
                             </React.Fragment>
                           }
@@ -135,7 +125,11 @@ const ChatList = props => {
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
+    recentChats: state.directMessages.recentChats
   };
 }
 
-export default connect(mapStateToProps, {dispatchUserSelected})(ChatList);
+export default connect(mapStateToProps, {
+  dispatchUserSelected,
+  getRecentChats
+})(ChatList);

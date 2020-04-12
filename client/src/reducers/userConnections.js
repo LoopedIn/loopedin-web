@@ -5,19 +5,24 @@ import {
   USER_LOOPS_LOADED,
   CREATE_LOOP_SUCCESSFUL,
   CREATE_LOOP_FAILED,
-  LOOPS_LIST_LOADED
+  LOOPS_LIST_LOADED,
+  REMOVE_USER_CONNECTION_TOASTS
 } from "../utils/dispatchUtils";
 
 const initialState = {
   userLoops: [],
   userFriends: [],
   loopLists: [],
+  toastMessages: [], 
   addFriendToUserActionMsg: "",
   createLoopFailedMsg: "",
   createLoopSuccessFulMsg: ""
 };
 
 export default (state = initialState, action) => {
+  console.log("in reducer");
+  console.log(action.type)
+  console.log({state})
   switch (action.type) {
     case USER_FRIENDS_LOADED:
       return { ...state, userFriends: action.userFriends };
@@ -28,16 +33,25 @@ export default (state = initialState, action) => {
         friendsList: action.friendsList
       };
     case ADD_USER_SUCESS:
-      return { ...state, addFriendToUserActionMsg: action.msg };
+      return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
     case ADD_USER_FAILED:
-      return { ...state, addFriendToUserActionMsg: action.errorMsg };
+      return { ...state, toastMessages: updatedToastMessages(state, action.errorMsg) };
     case CREATE_LOOP_SUCCESSFUL:
-      return { ...state, createLoopSuccessFulMsg: action.msg };
+      return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
     case CREATE_LOOP_FAILED:
-      return { ...state, createLoopFailedMsg: action.msg };
+      return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
     case LOOPS_LIST_LOADED:
       return { ...state, loopLists: action.loopLists };
+    case REMOVE_USER_CONNECTION_TOASTS:
+      const empty = []
+      return {...state, toastMessages: empty}
     default:
       return state;
   }
 };
+
+const updatedToastMessages = (state, newMessage) => {
+  console.log("here");
+  const newToastMessages = [...state.toastMessages, newMessage]
+  return newToastMessages
+}

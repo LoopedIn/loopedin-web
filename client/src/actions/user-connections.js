@@ -110,17 +110,6 @@ export const addFriendToUser = (
   }
 };
 
-// export const sendLoopMessage = (loopMessage, loopList) => async dispatch => {
-//   const params = {
-//     postType: "text",
-//     postContent: loopMessage,
-//     receivingLoopIds: loopList
-//   };
-
-//   try {
-//   } catch (error) {}
-// };
-
 export const getLoopLists = () => async dispatch => {
   const loopsList = (await serverRequests.getUsersLoopsApi()).data;
   const loadedLoops = [];
@@ -129,3 +118,7 @@ export const getLoopLists = () => async dispatch => {
   });
   dispatch(dispatches.loop.getLoopListsSuccess(loadedLoops));
 };
+
+export const removeToastMessages = () => async dispatch => {
+  dispatch(dispatches.user.removeToastMessages());
+}

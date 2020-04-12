@@ -53,6 +53,8 @@ export const serverRequests = {
     return authenticatedRequest(r("/users/get_chat_history"), postBodyParams);
   },
 
+  getRecentChatsApi:  async () => authenticatedRequest(r("/users/get_recent_chats"),{}),
+
   createMessageApi:  async (receivingUserId, messageType, messageContent) => {
     return authenticatedRequest(r("/users/create_message"), {
       receivingUserId,
