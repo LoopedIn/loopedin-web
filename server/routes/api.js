@@ -86,14 +86,31 @@ router.route('/users/add_friend').post(async (req, res, next) => {
           $set: { friendIds: [...currentFriendIds, friend._id] },
         },
         { upsert: true },
-        (error, response) => {
+        async (error, response) => {
           if (error) {
             // console.log(`Error ${error}`);
             res.status(400).send(error);
             return next(error);
           }
-          res.status(200).send(response);
-        },
+
+          const records = await UserConnection.find({ userId: friend._id }).populate({ path: 'friendIds', select: ['firstName','lastName','_id','userName'] });
+          const friendsFriendsIds = records.length > 0 ? records[0].friendIds.map(obj => obj._id) : [];
+          await UserConnection.updateOne(
+              { userId: friend._id },
+              {
+                $set: { friendIds: [...friendsFriendsIds, userId ] },
+              },
+              { upsert: true },
+              (error, response) => {
+                if (error) {
+                  // console.log(`Error ${error}`);
+                  res.status(400).send(error);
+                  return next(error);
+                }
+                res.status(200).send(response);
+              }
+            );
+          }
       );
     }
   }
