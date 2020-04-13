@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Scrollbar from "../../utils/Scrollbar";
@@ -64,14 +64,22 @@ const Chat = props => {
     chatHistory
   } = props;
 
+  let scrollComponent = useRef();
+
   useEffect(() => {
     getChatHistory(chosenUser);
+    if (scrollComponent.current) {
+      scrollComponent.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [sentMessage, selectedFriend]);
 
   const chosenUser = selectedFriend;
   const [chatHistoryState, setChatHistoryState] = useState(chatHistory);
   useEffect(() => {
     setChatHistoryState(chatHistory);
+    if (scrollComponent.current) {
+      scrollComponent.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [chatHistory]);
 
   return (
@@ -90,9 +98,14 @@ const Chat = props => {
           }}
         >
           <div className={classes.root}>
-            {chosenUser === undefined ? <div></div> : renderMessages(chatHistoryState, classes)}
+            {chosenUser === undefined ? (
+              <div></div>
+            ) : (
+              renderMessages(chatHistoryState, classes)
+            )}
           </div>
         </div>
+        <div ref={scrollComponent}></div>
       </Scrollbar>
     </div>
   );
