@@ -2,13 +2,18 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { myFirebase } from "../firebase/firebase";
 
-export const authenticatedRequest = async (route, postBodyParams) => {
+export const authenticatedRequest = async (route, postBodyParams, isDelete) => {
   const loggedInUser = await currentLoggedInUser();
   const idToken = await loggedInUser.getIdToken();
+  if (isDelete) {
+    return axios.delete(route, {
+      data: constructPostBodyParams(idToken, postBodyParams)
+    });
+  }
   return axios.post(route, constructPostBodyParams(idToken, postBodyParams));
 };
 
-function currentLoggedInUser(){
+function currentLoggedInUser() {
   return new Promise(resolve => {
     myFirebase.auth().onAuthStateChanged(firebaseUser => resolve(firebaseUser));
   });

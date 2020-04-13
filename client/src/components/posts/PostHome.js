@@ -26,7 +26,6 @@ const PostHome = props => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={5}>
           <PostChat parentCallback={textCallback} />
-          <MyPosts />
         </Grid>
         <Grid item xs={12} md={7}>
           <div className={classes.postsRoot}>

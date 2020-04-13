@@ -43,7 +43,8 @@ const PostLists = props => {
     getLoopLists,
     postText,
     parentCallback,
-    disableButton
+    disableButton,
+    parentCallbackForPosts
   } = props;
 
   const [checked, setChecked] = useState([]);
@@ -69,13 +70,21 @@ const PostLists = props => {
     setChecked(newChecked);
   };
 
-  const sendMessageToLoop = e => {
+  const sendMessageToLoop = async e => {
     e.preventDefault();
     let loopIdsSelected = [];
     checked.forEach(checkedEle => {
       loopIdsSelected.push(checkedEle.loopId);
     });
-    serverRequests.sendLoopMessage(postText, loopIdsSelected);
+    try {
+      const response = await serverRequests.sendLoopMessage(
+        postText,
+        loopIdsSelected
+      );
+      parentCallbackForPosts(Date.now());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const renderLoopList = (value, index) => {
@@ -150,6 +159,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     postText: ownProps.postText,
     parentCallback: ownProps.parentCallback,
+    parentCallbackForPosts: ownProps.parentCallbackForPosts,
     disableButton: ownProps.disableButton,
     user: state.auth.user,
     loopsList: state.userConnections.loopLists

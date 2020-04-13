@@ -128,3 +128,7 @@ export const getMyLoopsMessages = () => async dispatch => {
   const postLists = (await serverRequests.getMyPostsList()).data;
   dispatch(dispatches.loop.getMyLoopMessageSuccess(postLists));
 };
+
+export const deleteLoopPost = loopId => async dispatch => {
+  const deleteSuccess = (await serverRequests.deletePostMessage(loopId)).data;
+};

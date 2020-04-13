@@ -16,7 +16,10 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Divider from "@material-ui/core/Divider";
 import Scrollbar from "../../utils/Scrollbar";
-import { getMyLoopsMessages } from "../../actions/user-connections";
+import {
+  getMyLoopsMessages,
+  deleteLoopPost
+} from "../../actions/user-connections";
 
 const useStyle = makeStyles(theme => ({
   scrollbar: {
@@ -26,19 +29,36 @@ const useStyle = makeStyles(theme => ({
 }));
 
 const MyPosts = props => {
-  const { getMyLoopsMessages, myPostList } = props;
+  const {
+    getMyLoopsMessages,
+    myPostList,
+    deleteLoopPost,
+    loopSentTime
+  } = props;
 
   const classes = useStyle();
 
   const [myPostMessageList, setMyPostMessageList] = useState(myPostList);
+  const [loopDeleted, setLoopDeleted] = useState("");
 
   useEffect(() => {
     getMyLoopsMessages();
-  }, [getMyLoopsMessages]);
+  }, [getMyLoopsMessages, loopSentTime, loopDeleted]);
 
   useEffect(() => {
     setMyPostMessageList(myPostList);
   }, [myPostList]);
+
+  const onDeletePost = async (post, e) => {
+    e.preventDefault();
+    const postId = post._id;
+    try {
+      const response = await deleteLoopPost(postId);
+      setLoopDeleted(Date.now());
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const renderMyPost = (value, index) => {
     return (
@@ -46,7 +66,11 @@ const MyPosts = props => {
         <ListItem key={value}>
           <ListItemText primary={value.postContent} />
           <ListItemSecondaryAction>
-            <IconButton edge="end" aria-label="delete">
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={e => onDeletePost(value, e)}
+            >
               <DeleteIcon />
             </IconButton>
           </ListItemSecondaryAction>
@@ -85,10 +109,13 @@ const MyPosts = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    myPostList: state.userConnections.postsLists
+    myPostList: state.userConnections.postsLists,
+    loopSentTime: ownProps.loopSentTime
   };
 };
 
-export default connect(mapStateToProps, { getMyLoopsMessages })(MyPosts);
+export default connect(mapStateToProps, { getMyLoopsMessages, deleteLoopPost })(
+  MyPosts
+);

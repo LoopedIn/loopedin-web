@@ -80,5 +80,10 @@ export const serverRequests = {
 
   getMyPostsList: async () => {
     return authenticatedRequest(r("/users/user_posts"), {});
+  },
+
+  deletePostMessage: async postId => {
+    const route = `posts/${postId}/delete`;
+    return authenticatedRequest(r(route), {}, true);
   }
 };

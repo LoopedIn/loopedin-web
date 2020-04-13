@@ -15,21 +15,24 @@ async function tokenIdToDbUser(tokenUid) {
 }
 
 const firebaseTokenAuthenticator = async (req, res, next) => {
-  const apiTestingLoggedInUser = req.body.loggedInUser
-  if(apiTestingLoggedInUser){
-    const user = await User.findOne({ userName: apiTestingLoggedInUser })
-    req.body.userID = user._id
-    req.body.user = user
-    next()
-  } else{
+  const apiTestingLoggedInUser = req.body.loggedInUser;
+  if (apiTestingLoggedInUser) {
+    const user = await User.findOne({ userName: apiTestingLoggedInUser });
+    req.body.userID = user._id;
+    req.body.user = user;
+    next();
+  } else {
     if (req.body.idToken) {
-      admin.auth().verifyIdToken(req.body.idToken)
+      admin
+        .auth()
+        .verifyIdToken(req.body.idToken)
         .then(async (decodedToken) => {
           const user = await tokenIdToDbUser(decodedToken.uid);
-          req.body.userID = user._id
-          req.body.user = user
-          next()
-        }).catch(() => {
+          req.body.userID = user._id;
+          req.body.user = user;
+          next();
+        })
+        .catch(() => {
           res.status(403);
         });
     } else {

@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import PostLists from "./PostLists";
+import MyPosts from "./MyPosts";
 import PropTypes from "prop-types";
 import {
   Paper,
@@ -15,6 +16,7 @@ const PostChat = props => {
   const [postText, setPostText] = useState("");
   const [disableButton, setDisableButton] = useState(true);
   const [checkBoxSelected, setCheckBoxSelected] = useState(false);
+  const [loopSentTime, setloopSentTime] = useState("");
 
   const parentCallback = btnDisabled => {
     btnDisabled == false
@@ -23,6 +25,10 @@ const PostChat = props => {
     btnDisabled == false && postText != ""
       ? setDisableButton(false)
       : setDisableButton(true);
+  };
+
+  const parentCallbackForPosts = loopSentTime => {
+    setloopSentTime(loopSentTime);
   };
 
   return (
@@ -50,8 +56,10 @@ const PostChat = props => {
         <PostLists
           postText={postText}
           parentCallback={parentCallback}
+          parentCallbackForPosts={parentCallbackForPosts}
           disableButton={disableButton}
         />
+        <MyPosts loopSentTime={loopSentTime} />
       </Box>
     </Fragment>
   );
