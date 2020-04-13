@@ -388,8 +388,8 @@ router.route('/users/create_post').post((req, res, next) => {
 // /users/user_posts
 router.route('/users/user_posts').post((req, res, next) => {
   validateBody(req);
-  const userID = req.body.userID;
-  Post.find({senderId:userID},
+  const userid = req.body.userID;
+  Post.find({senderId:userid},
     (error, data) => {
       if (error) {
          console.log(`Error ${error}`);
@@ -403,7 +403,8 @@ router.route('/users/user_posts').post((req, res, next) => {
 
 // /posts/:post_id/delete
 router.route('/posts/:post_id/delete').delete((req, res, next) => {
-  Post.findOneAndDelete({ _id: req.params.post_id }, (error, data) => {
+  const userid = req.body.userID;
+  Post.findOneAndDelete({ _id: req.params.post_id , senderId: userid }, (error, data) => {
     if (error) {
       return next(error);
     }
