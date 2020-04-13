@@ -15,6 +15,7 @@
   "homepage": "https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1#readme",
   "dependencies": {
     "moment": "^2.24.0",
+    "react-linkify": "^1.0.0-alpha",
     "recompose": "^0.30.0"
   }
 }
