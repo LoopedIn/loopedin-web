@@ -42,6 +42,24 @@ const useStyles = makeStyles(theme => ({
     margin: "auto",
     whiteSpace: "pre-wrap",
     overflowWrap: "break-word"
+  },
+  typographyMain: {
+    display: "flex",
+    margin: 5,
+    padding: 0,
+    flexOrientation: "row",
+    justifyContent: "space-between",
+    width: "fit-content"
+  },
+  chatBubbleMain: {
+    display: "flex",
+    width: "100%"
+  },
+  chatBubbleMainLeft: {
+    justifyContent: "flex-end"
+  },
+  chatBubbleMainRight: {
+    justifyContent: "flex-start"
   }
 }));
 
@@ -62,11 +80,12 @@ const ChatMessage = props => {
           </div>
         )}
         <div
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: isSentByMe ? "flex-end" : "flex-start"
-          }}
+          className={classNames(
+            isSentByMe
+              ? classes.chatBubbleMainRight
+              : classes.chatBubbleMainLeft,
+            classes.chatBubbleMain
+          )}
         >
           <div
             className={classNames(
@@ -74,16 +93,7 @@ const ChatMessage = props => {
               classes.chatBubble
             )}
           >
-            <div
-              style={{
-                display: "flex",
-                margin: 5,
-                padding: 0,
-                flexOrientation: "row",
-                justifyContent: "space-between",
-                width: "fit-content"
-              }}
-            >
+            <div className={classes.typographyMain}>
               <Typography
                 variant="body1"
                 color="inherit"
