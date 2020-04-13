@@ -1,7 +1,7 @@
 import React from "react";
 import Register from "../register/register";
 import LoginSide from "../login/login";
-import ProtectedRoute from "../protected-route/ProtectedRoute";
+import ProtectedRoute from "../protected-route/protectedRoute";
 import Home from "../home/home";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
 import Pace from "../../utils/Pace";
