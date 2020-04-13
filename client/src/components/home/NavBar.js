@@ -124,9 +124,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NavBar = props => {
-  const { selectedTab, width, logoutUser, user } = props;
+  const { width, logoutUser, user } = props;
 
   let links = [];
+
+  const [selectedTab, setSelectedTab] = useState("");
 
   const openAccountSetting = () => {};
 
@@ -136,7 +138,9 @@ const NavBar = props => {
     {
       link: "/posts",
       name: "Posts",
-      onClick: () => {},
+      onClick: () => {
+        setSelectedTab("Posts");
+      },
       icon: {
         desktop: (
           <TollRoundedIcon
@@ -152,7 +156,9 @@ const NavBar = props => {
     {
       link: "/directmessage",
       name: "Direct Message",
-      onClick: () => {},
+      onClick: () => {
+        setSelectedTab("Direct Message");
+      },
       icon: {
         desktop: (
           <EmailRoundedIcon
@@ -170,7 +176,9 @@ const NavBar = props => {
     {
       link: "/manageconnection",
       name: "Manage Connections",
-      onClick: () => {},
+      onClick: () => {
+        setSelectedTab("Manage Connection");
+      },
       icon: {
         desktop: (
           <SettingsInputCompositeIcon
