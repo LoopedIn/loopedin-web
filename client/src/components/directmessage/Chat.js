@@ -6,7 +6,8 @@ import Chip from "@material-ui/core/Chip";
 import { Paper } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ChatMessage from "./ChatMessage";
-import {getChatHistory} from "../../actions/direct-messages";
+import moment from "moment";
+import { getChatHistory } from "../../actions/direct-messages";
 
 const useStyles = makeStyles(theme => ({
   scrollBar: {
@@ -33,11 +34,20 @@ const renderMessages = (messages, classes) => {
   if (messages == undefined || messages.length == 0) {
     return <div />;
   }
-
+  let currentDate = "";
   return (
     <List className={classes.root}>
       {messages.map((values, index) => {
-        return <ChatMessage values={values} />;
+        let dateChanged = false;
+        console.log(Math.abs(moment(values.created).diff(moment(), "days")));
+        if (
+          Math.abs(moment(values.created).diff(moment(), "days")) !== 0 &&
+          currentDate != values.created
+        ) {
+          dateChanged = true;
+          currentDate = values.created;
+        }
+        return <ChatMessage dateChanged={dateChanged} values={values} />;
       })}
     </List>
   );
@@ -45,7 +55,7 @@ const renderMessages = (messages, classes) => {
 
 const Chat = props => {
   const classes = useStyles();
-  
+
   const {
     getChatHistory,
 
@@ -55,12 +65,14 @@ const Chat = props => {
   } = props;
 
   useEffect(() => {
-    getChatHistory(chosenUser)
+    getChatHistory(chosenUser);
   }, [sentMessage, selectedFriend]);
 
   const chosenUser = selectedFriend;
   const [chatHistoryState, setChatHistoryState] = useState(chatHistory);
-  useEffect(() => {setChatHistoryState(chatHistory)}, [chatHistory])
+  useEffect(() => {
+    setChatHistoryState(chatHistory);
+  }, [chatHistory]);
 
   return (
     <div
@@ -90,9 +102,9 @@ function mapStateToProps(state) {
   return {
     user: state.auth.user,
     chatHistory: state.directMessages.chatHistory,
-    sentMessage:  state.directMessages.sentMessage,
+    sentMessage: state.directMessages.sentMessage,
     selectedFriend: state.directMessages.selectedFriend
   };
 }
 
-export default connect(mapStateToProps, {getChatHistory})(Chat);
+export default connect(mapStateToProps, { getChatHistory })(Chat);
