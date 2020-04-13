@@ -10,6 +10,7 @@ import Chip from "@material-ui/core/Chip";
 import Typography from "@material-ui/core/Typography";
 import classNames from "classnames";
 import moment from "moment";
+import Linkify from "react-linkify";
 
 const useStyles = makeStyles(theme => ({
   timeStamp: {
@@ -55,10 +56,10 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     width: "100%"
   },
-  chatBubbleMainLeft: {
+  chatBubbleMainRight: {
     justifyContent: "flex-end"
   },
-  chatBubbleMainRight: {
+  chatBubbleMainLeft: {
     justifyContent: "flex-start"
   }
 }));
@@ -70,6 +71,12 @@ const ChatMessage = props => {
   const classes = useStyles();
 
   const days = moment(created).diff(moment(), "days");
+
+  const componentDecorator = (href, text, key) => (
+    <a href={href} key={key} target="_blank" rel="noopener noreferrer">
+      {text}
+    </a>
+  );
 
   return (
     <div>
@@ -99,7 +106,9 @@ const ChatMessage = props => {
                 color="inherit"
                 className={classes.chatBubbleInner}
               >
-                <Typography variant="body1">{messageContent}</Typography>
+                <Linkify componentDecorator={componentDecorator}>
+                  <Typography variant="body1">{messageContent}</Typography>
+                </Linkify>
               </Typography>
               <div
                 style={{
