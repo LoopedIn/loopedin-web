@@ -5,7 +5,8 @@ import {
   ExpansionPanelSummary,
   Typography,
   Box,
-  IconButton
+  IconButton,
+  makeStyles
 } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -14,10 +15,20 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Divider from "@material-ui/core/Divider";
+import Scrollbar from "../../utils/Scrollbar";
 import { getMyLoopsMessages } from "../../actions/user-connections";
+
+const useStyle = makeStyles(theme => ({
+  scrollbar: {
+    widht: "100%",
+    height: "40vh"
+  }
+}));
 
 const MyPosts = props => {
   const { getMyLoopsMessages, myPostList } = props;
+
+  const classes = useStyle();
 
   const [myPostMessageList, setMyPostMessageList] = useState(myPostList);
 
@@ -54,16 +65,20 @@ const MyPosts = props => {
         </ExpansionPanelSummary>
 
         <Box width="100%">
-          <List>
-            {" "}
-            {myPostMessageList !== undefined ? (
-              myPostMessageList.map((value, index) => {
-                return renderMyPost(value, index);
-              })
-            ) : (
-              <div></div>
-            )}
-          </List>
+          <div className={classes.scrollbar}>
+            <Scrollbar>
+              <List>
+                {" "}
+                {myPostMessageList !== undefined ? (
+                  myPostMessageList.map((value, index) => {
+                    return renderMyPost(value, index);
+                  })
+                ) : (
+                  <div></div>
+                )}
+              </List>
+            </Scrollbar>
+          </div>
         </Box>
       </ExpansionPanel>
     </Fragment>
