@@ -90,7 +90,7 @@ const Chat = props => {
           }}
         >
           <div className={classes.root}>
-            {renderMessages(chatHistoryState, classes)}
+            {chosenUser === undefined ? <div></div> : renderMessages(chatHistoryState, classes)}
           </div>
         </div>
       </Scrollbar>

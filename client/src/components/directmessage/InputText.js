@@ -52,13 +52,14 @@ const InputText = props => {
 
   return (
     <div className={classes.root}>
+      {chosenUser ===undefined? <div></div> : 
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center"
         }}
-      >
+      > 
         <div className={classes.inputBox}>
           <div
             style={{
@@ -103,6 +104,7 @@ const InputText = props => {
           <Send />
         </Fab>
       </div>
+    }
     </div>
   );
 };

@@ -35,6 +35,7 @@ const ChatList = props => {
     recentChats,
 
     getRecentChats,
+    selectedFriend,
     dispatchUserSelected
   } = props;
 
@@ -44,7 +45,7 @@ const ChatList = props => {
 
   useEffect(() => setRecentChatsState(recentChats === undefined? [] : recentChats), [recentChats])
 
-  const [selectedFriendState, setSelectedFriendState] = useState("");
+  const [selectedFriendState, setSelectedFriendState] = useState(selectedFriend);
 
   useEffect(() => {dispatchUserSelected(selectedFriendState)}, [selectedFriendState])
 
@@ -125,7 +126,8 @@ const ChatList = props => {
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
-    recentChats: state.directMessages.recentChats
+    recentChats: state.directMessages.recentChats,
+    selectedFriend: state.directMessages.selectedFriend
   };
 }
 
