@@ -1,4 +1,4 @@
-import React, {  useState, useEffect,Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,7 +12,11 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Scrollbar from "../../utils/Scrollbar";
 import PropTypes from "prop-types";
-import { dispatchUserSelected, getRecentChats } from "../../actions/direct-messages";
+import {
+  dispatchUserSelected,
+  getRecentChats
+} from "../../actions/direct-messages";
+import moment from "moment";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,17 +43,26 @@ const ChatList = props => {
     dispatchUserSelected
   } = props;
 
-  useEffect(() => {getRecentChats();}, [getRecentChats])
+  useEffect(() => {
+    getRecentChats();
+  }, [getRecentChats]);
 
-  const [recentChatsState, setRecentChatsState] =  useState([])
+  const [recentChatsState, setRecentChatsState] = useState([]);
 
-  useEffect(() => setRecentChatsState(recentChats === undefined? [] : recentChats), [recentChats])
+  useEffect(
+    () => setRecentChatsState(recentChats === undefined ? [] : recentChats),
+    [recentChats]
+  );
 
-  const [selectedFriendState, setSelectedFriendState] = useState(selectedFriend);
+  const [selectedFriendState, setSelectedFriendState] = useState(
+    selectedFriend
+  );
 
-  useEffect(() => {dispatchUserSelected(selectedFriendState)}, [selectedFriendState])
+  useEffect(() => {
+    dispatchUserSelected(selectedFriendState);
+  }, [selectedFriendState]);
 
-  const handleFriendSelection = (selectedFriendState) => {
+  const handleFriendSelection = selectedFriendState => {
     setSelectedFriendState(selectedFriendState);
   };
 
@@ -68,11 +81,12 @@ const ChatList = props => {
             <Box display="flex" justifyContent="space-between">
               <List className={classes.root}>
                 {recentChatsState.map((record, index) => {
-                  const {_id, firstName, lastName} = record.sender;
-                  const {messageContent, created} = record;
+                  const { _id, firstName, lastName } = record.sender;
+                  const { messageContent, created } = record;
                   return (
                     <div>
-                      <ListItem alignItems="flex-start" 
+                      <ListItem
+                        alignItems="flex-start"
                         button
                         selected={selectedFriendState === _id}
                         onClick={event => handleFriendSelection(_id)}
@@ -100,7 +114,7 @@ const ChatList = props => {
                                 variant="body2"
                                 className={classes.timeStamp}
                               >
-                                {created}
+                                {`${moment(created).format("h:mm a")}`}
                               </Typography>
                             </React.Fragment>
                           }
