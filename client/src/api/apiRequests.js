@@ -76,5 +76,9 @@ export const serverRequests = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  getMyPostsList: async () => {
+    return authenticatedRequest(r("/users/user_posts"), {});
   }
 };

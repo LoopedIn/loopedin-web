@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+import { connect } from "react-redux";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -8,26 +9,31 @@ import {
 } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Divider from "@material-ui/core/Divider";
+import { getMyLoopsMessages } from "../../actions/user-connections";
 
-const MyPosts = () => {
-  const loops = [1, 2, 3, 4, 5];
+const MyPosts = props => {
+  const { getMyLoopsMessages, myPostList } = props;
+
+  const [myPostMessageList, setMyPostMessageList] = useState(myPostList);
+
+  useEffect(() => {
+    getMyLoopsMessages();
+  }, [getMyLoopsMessages]);
+
+  useEffect(() => {
+    setMyPostMessageList(myPostList);
+  }, [myPostList]);
+
   const renderMyPost = (value, index) => {
     return (
-      <div key={value}>
-        {" "}
-        <ListItem>
-          <ListItemText
-            primary="Single-line item"
-            secondary={"Secondary text"}
-          />
+      <div key={value._id}>
+        <ListItem key={value}>
+          <ListItemText primary={value.postContent} />
           <ListItemSecondaryAction>
             <IconButton edge="end" aria-label="delete">
               <DeleteIcon />
@@ -50,8 +56,8 @@ const MyPosts = () => {
         <Box width="100%">
           <List>
             {" "}
-            {loops !== undefined ? (
-              loops.map((value, index) => {
+            {myPostMessageList !== undefined ? (
+              myPostMessageList.map((value, index) => {
                 return renderMyPost(value, index);
               })
             ) : (
@@ -64,4 +70,10 @@ const MyPosts = () => {
   );
 };
 
-export default MyPosts;
+const mapStateToProps = state => {
+  return {
+    myPostList: state.userConnections.postsLists
+  };
+};
+
+export default connect(mapStateToProps, { getMyLoopsMessages })(MyPosts);

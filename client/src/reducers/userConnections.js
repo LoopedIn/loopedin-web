@@ -7,17 +7,19 @@ import {
   CREATE_LOOP_FAILED,
   LOOPS_LIST_LOADED,
   REMOVE_USER_CONNECTION_TOASTS,
-  LOOP_CONFIG_UPDATED
+  LOOP_CONFIG_UPDATED,
+  MY_POSTS_LOADED
 } from "../utils/dispatchUtils";
 
 const initialState = {
   userLoops: [],
   userFriends: [],
   loopLists: [],
-  toastMessages: [], 
+  toastMessages: [],
   addFriendToUserActionMsg: "",
   createLoopFailedMsg: "",
-  createLoopSuccessFulMsg: ""
+  createLoopSuccessFulMsg: "",
+  postsLists: []
 };
 
 export default (state = initialState, action) => {
@@ -31,27 +33,44 @@ export default (state = initialState, action) => {
         friendsList: action.friendsList
       };
     case ADD_USER_SUCESS:
-      return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
+      return {
+        ...state,
+        toastMessages: updatedToastMessages(state, action.msg)
+      };
     case ADD_USER_FAILED:
-      return { ...state, toastMessages: updatedToastMessages(state, action.errorMsg) };
+      return {
+        ...state,
+        toastMessages: updatedToastMessages(state, action.errorMsg)
+      };
     case CREATE_LOOP_SUCCESSFUL:
       console.log("here");
-      return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
+      return {
+        ...state,
+        toastMessages: updatedToastMessages(state, action.msg)
+      };
     case CREATE_LOOP_FAILED:
-      return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
+      return {
+        ...state,
+        toastMessages: updatedToastMessages(state, action.msg)
+      };
     case LOOP_CONFIG_UPDATED:
-      return { ...state, toastMessages: updatedToastMessages(state, action.msg) };
+      return {
+        ...state,
+        toastMessages: updatedToastMessages(state, action.msg)
+      };
     case LOOPS_LIST_LOADED:
       return { ...state, loopLists: action.loopLists };
+    case MY_POSTS_LOADED:
+      return { ...state, postsLists: action.postsLists };
     case REMOVE_USER_CONNECTION_TOASTS:
-      const empty = []
-      return {...state, toastMessages: empty}
+      const empty = [];
+      return { ...state, toastMessages: empty };
     default:
       return state;
   }
 };
 
 const updatedToastMessages = (state, newMessage) => {
-  const newToastMessages = [...state.toastMessages, newMessage]
-  return newToastMessages
-}
+  const newToastMessages = [...state.toastMessages, newMessage];
+  return newToastMessages;
+};

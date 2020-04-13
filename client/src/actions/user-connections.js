@@ -123,3 +123,8 @@ export const getLoopLists = () => async dispatch => {
 export const removeToastMessages = () => async dispatch => {
   dispatch(dispatches.user.removeToastMessages());
 };
+
+export const getMyLoopsMessages = () => async dispatch => {
+  const postLists = (await serverRequests.getMyPostsList()).data;
+  dispatch(dispatches.loop.getMyLoopMessageSuccess(postLists));
+};

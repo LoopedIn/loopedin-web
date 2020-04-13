@@ -13,7 +13,7 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAILURE = "REGISTER_FAILURE";
 
 export const USER_FRIENDS_LOADED = "USER_FRIENDS_LOADED";
-export const USER_POSTS_LOADED = "USER_POSTS_LOADED";
+export const MY_POSTS_LOADED = "MY_POSTS_LOADED";
 
 export const ADD_USER_SUCESS = "ADD_USER_SUCESS";
 export const ADD_USER_FAILED = "ADD_USER_FAILED";
@@ -91,14 +91,14 @@ export const dispatches = {
       };
     },
     removeRegisterToastMessage: () => {
-      return{
+      return {
         type: REMOVE_REGISTER_TOAST
-      }
+      };
     },
-    removeLoginToastMessage :() =>{
-      return{
+    removeLoginToastMessage: () => {
+      return {
         type: REMOVE_LOGIN_TOAST
-      }
+      };
     }
   },
 
@@ -129,10 +129,10 @@ export const dispatches = {
         errorMsg
       };
     },
-    removeToastMessages:  () => {
+    removeToastMessages: () => {
       return {
         type: REMOVE_USER_CONNECTION_TOASTS
-      }
+      };
     }
   },
 
@@ -158,10 +158,16 @@ export const dispatches = {
       };
     },
     loopConfigurationsSaved: msg => {
-      return{
+      return {
         type: LOOP_CONFIG_UPDATED,
         msg
-      }
+      };
+    },
+    getMyLoopMessageSuccess: postsLists => {
+      return {
+        type: MY_POSTS_LOADED,
+        postsLists
+      };
     }
   },
 
@@ -170,25 +176,25 @@ export const dispatches = {
       return {
         type: CHAT_HISTORY_LOADED,
         msg
-      }
+      };
     },
     sentMessage: msg => {
       return {
         type: SENT_MESSAGE,
         msg
-      }
+      };
     },
-    friendSelected : msg => {
-      return{
+    friendSelected: msg => {
+      return {
         type: FRIEND_SELECTED,
         msg
-      }
+      };
     },
-    recentChatsLoaded : msg => {
-      return{
+    recentChatsLoaded: msg => {
+      return {
         type: RECENT_CHATS_LOADED,
         msg
-      }
+      };
     }
   }
 };
