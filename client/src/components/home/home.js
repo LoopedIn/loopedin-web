@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment, useState } from "react";
 import { connect } from "react-redux";
 import classNames from "classnames";
-import { logoutUser, getUserFriends, getUserLoops } from "../../actions";
+import { logoutUser, getUserFriends } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import NavBar from "../home/NavBar";
 import Routing from "./Routing";
@@ -27,29 +27,14 @@ const Home = props => {
     logoutUser,
     user,
     loops,
-    friends,
-
-    //Actions to run on page load
-    getUserFriends,
-    getUserLoops
+    friends
   } = props;
 
   const classes = useStyles();
 
-  //Runs getUserFriends and getUserloops when component is loaded
-  useEffect(() => {
-    getUserFriends();
-  }, [getUserFriends]);
-
-  useEffect(() => {
-    getUserLoops();
-  }, [getUserLoops]);
-
-  const [selectedTab, setSelectedTab] = useState(null);
-
   return (
     <Fragment>
-      <NavBar selectedTab={selectedTab} logoutUser={logoutUser} />
+      <NavBar logoutUser={logoutUser} />
       <main className={classNames(classes.main)}>
         <Routing />
       </main>
@@ -69,6 +54,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   logoutUser,
-  getUserFriends,
-  getUserLoops
+  getUserFriends
 })(Home);

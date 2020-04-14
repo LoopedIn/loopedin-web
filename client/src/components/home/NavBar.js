@@ -2,6 +2,8 @@ import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import { connect } from "react-redux";
+import compose from "recompose/compose";
 import {
   AppBar,
   Toolbar,
@@ -24,6 +26,7 @@ import TollRoundedIcon from "@material-ui/icons/TollRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import MenuIcon from "@material-ui/icons/Menu";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+import SettingsInputCompositeIcon from "@material-ui/icons/SettingsInputComposite";
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -121,9 +124,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NavBar = props => {
-  const { selectedTab, width, logoutUser } = props;
+  const { width, logoutUser, user } = props;
 
   let links = [];
+
+  const [selectedTab, setSelectedTab] = useState("");
 
   const openAccountSetting = () => {};
 
@@ -133,7 +138,9 @@ const NavBar = props => {
     {
       link: "/posts",
       name: "Posts",
-      onClick: () => {},
+      onClick: () => {
+        setSelectedTab("Posts");
+      },
       icon: {
         desktop: (
           <TollRoundedIcon
@@ -149,7 +156,9 @@ const NavBar = props => {
     {
       link: "/directmessage",
       name: "Direct Message",
-      onClick: () => {},
+      onClick: () => {
+        setSelectedTab("Direct Message");
+      },
       icon: {
         desktop: (
           <EmailRoundedIcon
@@ -162,6 +171,26 @@ const NavBar = props => {
           />
         ),
         mobile: <EmailRoundedIcon className="text-white" />
+      }
+    },
+    {
+      link: "/manageconnection",
+      name: "Manage Connections",
+      onClick: () => {
+        setSelectedTab("Manage Connection");
+      },
+      icon: {
+        desktop: (
+          <SettingsInputCompositeIcon
+            className={
+              selectedTab === "Manage Connection"
+                ? classes.textPrimary
+                : "text-white"
+            }
+            fontSize="small"
+          />
+        ),
+        mobile: <SettingsInputCompositeIcon className="text-white" />
       }
     },
     {
@@ -225,7 +254,7 @@ const NavBar = props => {
                 <ListItemText
                   className={classes.username}
                   primary={
-                    <Typography color="textPrimary">Username</Typography>
+                    <Typography color="textPrimary">{user.userName}</Typography>
                   }
                 />
               )}
@@ -289,4 +318,10 @@ const NavBar = props => {
   );
 };
 
-export default withWidth()(NavBar);
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user
+  };
+};
+
+export default compose(withWidth(), connect(mapStateToProps))(NavBar);

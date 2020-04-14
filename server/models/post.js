@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
   const post = mongoose.Schema({
     senderId: { type: mongoose.Types.ObjectId, required: true},
-    receivingUserIds: [ String ] ,
+    receivingUserIds: [ String ],
     receivingLoopIds: [ String ],
     postType: {type: String, required: true, enum: ['text', 'image', 'video']},
     postContent: {type: String, required: true },
@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
   });
 
   const message = mongoose.Schema({
-    senderId: { type: mongoose.Types.ObjectId, required: true},
+    senderId: { type: mongoose.Types.ObjectId, required: true, ref:'user'},
     receivingUserId: {type:  String , required: true},
     messageType: {type: String, required: true, enum: ['text', 'yo', 'reply']},
     messageContent: {type: String, required: true },
