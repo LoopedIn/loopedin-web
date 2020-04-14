@@ -3,11 +3,9 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const serverAuth = require('../auth_modules/server_auth.js');
 const mongoose = require('mongoose');
-const { check ,validationResult } = require('express-validator');
-const { sanitizeBody } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 
 const router = express.Router();
-const limit = 10;
 
 const { Post, Message } = require('../models/post.js');
 
@@ -18,14 +16,12 @@ const { Loop, UserConnection } = require('../models/loop.js');
 router.use(cors());
 router.use(cookieParser());
 
-
 router.route('/').get((req, res) => {
   res.send('Works');
 });
 
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
-
   if (Object.keys(req.body).length === 0) {
     res.status(400);
     const error = 'The data to create user is not present';
@@ -65,14 +61,21 @@ router.route('/users/add_friend').post(async (req, res, next) => {
   // data.userId = userId;
   // Get userID from the _id field of the request.
   const newFriendUsername = data.friendIds[0];
-  const usersWithNewFriendUsername = await User.find({ userName: newFriendUsername }).exec();
+  const usersWithNewFriendUsername = await User.find({
+    userName: newFriendUsername,
+  }).exec();
   if (usersWithNewFriendUsername.length === 0) {
     // console.log("No user found with name " + newUsername)
     res.status(400).send('User does not exist');
   } else {
-    const records = await UserConnection.find({ userId: userId }).populate({ path: 'friendIds', select: ['firstName','lastName','_id','userName'] });
-    const currentFriendIds = records.length > 0 ? records[0].friendIds.map(obj => obj._id) : [];
-    const currentFriendNames = records.length > 0 ? records[0].friendIds.map(obj => obj.userName) : [];
+    const records = await UserConnection.find({ userId: userId }).populate({
+      path: 'friendIds',
+      select: ['firstName', 'lastName', '_id', 'userName'],
+    });
+    const currentFriendIds =
+      records.length > 0 ? records[0].friendIds.map((obj) => obj._id) : [];
+    const currentFriendNames =
+      records.length > 0 ? records[0].friendIds.map((obj) => obj.userName) : [];
     if (currentFriendNames.includes(newFriendUsername)) {
       res.status(400).send('User is already a friend');
     } else {
@@ -83,36 +86,43 @@ router.route('/users/add_friend').post(async (req, res, next) => {
           $set: { friendIds: [...currentFriendIds, friend._id] },
         },
         { upsert: true },
-        async (error, response) => {
+        async (error) => {
           if (error) {
             // console.log(`Error ${error}`);
             res.status(400).send(error);
             return next(error);
           }
 
-          const records = await UserConnection.find({ userId: friend._id }).populate({ path: 'friendIds', select: ['firstName','lastName','_id','userName'] });
-          const friendsFriendsIds = records.length > 0 ? records[0].friendIds.map(obj => obj._id) : [];
+          const records = await UserConnection.find({
+            userId: friend._id,
+          }).populate({
+            path: 'friendIds',
+            select: ['firstName', 'lastName', '_id', 'userName'],
+          });
+          const friendsFriendsIds =
+            records.length > 0
+              ? records[0].friendIds.map((obj) => obj._id)
+              : [];
           await UserConnection.updateOne(
-              { userId: friend._id },
-              {
-                $set: { friendIds: [...friendsFriendsIds, userId ] },
-              },
-              { upsert: true },
-              (error, response) => {
-                if (error) {
-                  // console.log(`Error ${error}`);
-                  res.status(400).send(error);
-                  return next(error);
-                }
-                res.status(200).send(response);
+            { userId: friend._id },
+            {
+              $set: { friendIds: [...friendsFriendsIds, userId] },
+            },
+            { upsert: true },
+            (error, response) => {
+              if (error) {
+                // console.log(`Error ${error}`);
+                res.status(400).send(error);
+                return next(error);
               }
-            );
-          }
+              res.status(200).send(response);
+            },
+          );
+        },
       );
     }
   }
 });
-
 
 router.route('/update-post/:id').post((req, res, next) => {
   // [TODO] Get user id from session
@@ -169,36 +179,40 @@ router.route('/post/updatepost').post((req, res, next) => {
 });
 
 // Create a loop for a user
-router.route('/users/create_loop')
-  .post (createValidationFor('loop'),
-    checkValidationResult,(req, res, next) => {
-  const { body } = req;
-  // [TODO] : get user id from session for validation
+router
+  .route('/users/create_loop')
+  .post(
+    createValidationFor('loop'),
+    checkValidationResult,
+    (req, res, next) => {
+      const { body } = req;
+      // [TODO] : get user id from session for validation
 
-  if (Object.keys(body).length === 0) {
-    const error = 'The loop object to create loop is not present';
-    res.status(400).send(error);
-    return next(error);
-  }
-
-  const loopObject = req.body;
-  loopObject.userId = req.body.userID;
-
-  Loop.create(loopObject, (error, data) => {
-    if (error) {
-      if (error.name === 'ValidationError') {
+      if (Object.keys(body).length === 0) {
+        const error = 'The loop object to create loop is not present';
         res.status(400).send(error);
         return next(error);
-        // res.send("ValidationError")
       }
-      // console.log(error);
-      res.status(400).send(error);
-      return next(error);
-    }
-    // // console.log(data)
-    res.status(200).send(data);
-  });
-});
+
+      const loopObject = req.body;
+      loopObject.userId = req.body.userID;
+
+      Loop.create(loopObject, (error, data) => {
+        if (error) {
+          if (error.name === 'ValidationError') {
+            res.status(400).send(error);
+            return next(error);
+            // res.send("ValidationError")
+          }
+          // console.log(error);
+          res.status(400).send(error);
+          return next(error);
+        }
+        // // console.log(data)
+        res.status(200).send(data);
+      });
+    },
+  );
 
 // Get the loops the user has created
 router.route('/loops').post((req, res, next) => {
@@ -283,15 +297,18 @@ router.route('/loops/:loop_id/get_contacts').post((req, res, next) => {
 router.route('/users/getcontacts').post((req, res, next) => {
   const userid = req.body.userID;
   UserConnection.find({ userId: userid }, { friendIds: 1 })
-  .populate({ path: 'friendIds', select: ['firstName','lastName','_id','userName'] })
-  .exec ((err, data) => {
-    if (err) {
-      res.status(400).send(err);
-      return next(err);
-    }
-    // console.log("SERVER "+data)
-    res.status(200).send(data);
-  });
+    .populate({
+      path: 'friendIds',
+      select: ['firstName', 'lastName', '_id', 'userName'],
+    })
+    .exec((err, data) => {
+      if (err) {
+        res.status(400).send(err);
+        return next(err);
+      }
+      // console.log("SERVER "+data)
+      res.status(200).send(data);
+    });
 });
 
 // // Get list of messages between two persons
@@ -308,8 +325,10 @@ router.route('/users/getcontacts').post((req, res, next) => {
 //   const { pageNumber } = req.body;
 //   const { numberOfItems } = req.body;
 //   // eslint-disable-next-line max-len
-//   // Formula to paginate : skip(NUMBER_OF_ITEMS * (PAGE_NUMBER - 1)).limit(NUMBER_OF_ITEMS )
-//   // Initial Value (Example) :  PAGE_NUMBER=1, NUMBER_OF_ITEMS=10
+//   // Formula to paginate : 
+//  skip(NUMBER_OF_ITEMS * (PAGE_NUMBER - 1)).limit(NUMBER_OF_ITEMS )
+//   // Initial Value (Example) :  
+// PAGE_NUMBER=1, NUMBER_OF_ITEMS=10
 //   Message.find(
 //     { senderId, receivingUserId },
 //     null,
@@ -355,112 +374,128 @@ router.route('/users/getcontacts').post((req, res, next) => {
 function checkValidationResult(req, res, next) {
   const result = validationResult(req);
   if (result.isEmpty()) {
-      return next();
+    return next();
   }
   res.status(400).send(result.array());
 }
 function createValidationFor(route) {
   switch (route) {
-      case 'post':
-          return [
-            check('postContent','Post content cannot be empty').trim().isLength({ min: 1 }).escape(),
-          ];
-      case 'message':
-        return [
-          check('messageContent','Message content cannot be empty').trim().isLength({ min: 1 }).escape(),
-        ];
-      case 'loop':
-        return [
-          check('loopName','Loop name cannot be empty').trim().isLength({ min: 1 }).escape(),
-        ];
+    case 'post':
+      return [
+        check('postContent', 'Post content cannot be empty')
+          .trim()
+          .isLength({ min: 1 })
+          .escape(),
+      ];
+    case 'message':
+      return [
+        check('messageContent', 'Message content cannot be empty')
+          .trim()
+          .isLength({ min: 1 })
+          .escape(),
+      ];
+    case 'loop':
+      return [
+        check('loopName', 'Loop name cannot be empty')
+          .trim()
+          .isLength({ min: 1 })
+          .escape(),
+      ];
 
-      default:
-          return [];
+    default:
+      return [];
   }
 }
 // Creates a post for the user
-router.route('/users/create_post')
-  .post (createValidationFor('post'),
+router
+  .route('/users/create_post')
+  .post(
+    createValidationFor('post'),
     checkValidationResult,
     (req, res, next) => {
-  // [TODO] Get user id from session for validation
-  // const userID = '';
+      // [TODO] Get user id from session for validation
+      // const userID = '';
 
-  const { body } = req;
-  if (Object.keys(body).length === 0) {
-    res.status(400).send('Post data not present');
-    return next('Post data not present');
-  }
+      const { body } = req;
+      if (Object.keys(body).length === 0) {
+        res.status(400).send('Post data not present');
+        return next('Post data not present');
+      }
 
-  req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
+      req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
 
-  // body.post has senderId field which is the _id of the user object
-  Post.create(req.body, (error, data) => {
-    if (error) {
-      res.status(400).send('ValidationError');
-      // console.log(error);
-      //res.status(400).send(error);
-      console.log(error);
-      return next(error);
-    }
-    // console.log(data);
-    res.status(200).send(data);
-  });
-});
+      // body.post has senderId field which is the _id of the user object
+      Post.create(req.body, (error, data) => {
+        if (error) {
+          res.status(400).send('ValidationError');
+          // console.log(error);
+          //res.status(400).send(error);
+          console.log(error);
+          return next(error);
+        }
+        // console.log(data);
+        res.status(200).send(data);
+      });
+    },
+  );
 
 // /users/user_posts
 router.route('/users/user_posts').post((req, res, next) => {
   validateBody(req);
   const userid = req.body.userID;
-  Post.find({senderId:userid},
-    (error, data) => {
-      if (error) {
-         console.log(`Error ${error}`);
-        res.status(400).send(error);
-        return next(error);
-      }
-      res.status(200).json(data);
-    },
-  );
+  Post.find({ senderId: userid }, (error, data) => {
+    if (error) {
+      console.log(`Error ${error}`);
+      res.status(400).send(error);
+      return next(error);
+    }
+    res.status(200).json(data);
+  });
 });
 
 // /posts/:post_id/delete
 router.route('/posts/:post_id/delete').delete((req, res, next) => {
   const userid = req.body.userID;
-  Post.findOneAndDelete({ _id: req.params.post_id , senderId: userid }, (error, data) => {
-    if (error) {
-      return next(error);
-    }
-    res.status(200).json({
-      msg: data,
-    });
-  });
+  Post.findOneAndDelete(
+    { _id: req.params.post_id, senderId: userid },
+    (error, data) => {
+      if (error) {
+        return next(error);
+      }
+      res.status(200).json({
+        msg: data,
+      });
+    },
+  );
 });
 
-router.route('/users/create_message').post(
-  createValidationFor('message'),
+router
+  .route('/users/create_message')
+  .post(
+    createValidationFor('message'),
     checkValidationResult,
     (req, res, next) => {
-  const { body } = req;
-  if (Object.keys(body).length === 0) {
-    res.status(400).send('Post data not present');
-    return next('Post data not present');
-  }
-  // console.log (req.body)
-  req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
+      const { body } = req;
+      if (Object.keys(body).length === 0) {
+        res.status(400).send('Post data not present');
+        return next('Post data not present');
+      }
+      // console.log (req.body)
+      req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
 
-  // body.post has senderId field which is the _id of the user object
-  Message.create(req.body, (error, data) => {
-    if (error) {
-      //res.status(400).send('ValidationError');
-      // console.log(error);
-      res.status(400).send(error);
-      return next(error);
-    }
-    // console.log(data);
-    res.status(200).json(data);
-  });
-});
+      // body.post has senderId field which is the _id of the user object
+      Message.create(req.body, (error, data) => {
+        if (error) {
+          //res.status(400).send('ValidationError');
+          // console.log(error);
+          res.status(400).send(error);
+          return next(error);
+        }
+        // console.log(data);
+        res.status(200).json(data);
+      });
+    },
+  );
 
 function validateBody(req, res, next) {
   if (req.body.length === 0) {
@@ -472,22 +507,26 @@ function validateBody(req, res, next) {
 }
 
 //Get_recent_chats
-router.route('/users/get_recent_chats').post(async(req, res, next) => {
+router.route('/users/get_recent_chats').post(async (req, res, next) => {
   validateBody(req);
-  
-  const userID = req.body.userID; // TODO: change
-  
 
-  const records = await UserConnection.find({ userId: userID },{friendIds:1});
+  const userID = req.body.userID; // TODO: change
+
+  const records = await UserConnection.find(
+    { userId: userID },
+    { friendIds: 1 },
+  );
   const currentFriends = records.length > 0 ? records[0].friendIds : [];
-  var messages=[];
-  
-  for(const friendID  of currentFriends) {
-    
-    let data = await Message.findOne({ $or: [{ $and: [{ receivingUserId: userID }, { senderId: friendID }]},
-      { $and: [{ receivingUserId: friendID }, { senderId: userID }] }] })
-    .sort({ created: -1 })
-    const friend = (await (User.find({ _id: friendID })))[0]
+  var messages = [];
+
+  for (const friendID of currentFriends) {
+    let data = await Message.findOne({
+      $or: [
+        { $and: [{ receivingUserId: userID }, { senderId: friendID }] },
+        { $and: [{ receivingUserId: friendID }, { senderId: userID }] },
+      ],
+    }).sort({ created: -1 });
+    const friend = (await User.find({ _id: friendID }))[0];
     const resp = {
       _id: data ? data._id : '',
       receivingUserId: data ? data.receivingUserId : '',
@@ -495,19 +534,19 @@ router.route('/users/get_recent_chats').post(async(req, res, next) => {
       messageContent: data ? data.messageContent : '',
       created: data ? data.created : '2020-04-12T04:20:48.738Z',
     };
-    resp["sender"] = {
-      _id :  friend._id,
-      userName : friend.userName,
-      firstName : friend.firstName, 
-      lastName : friend.lastName
-    }
-      //console.log(emptymessage);
-    messages.push(resp)
+    resp['sender'] = {
+      _id: friend._id,
+      userName: friend.userName,
+      firstName: friend.firstName,
+      lastName: friend.lastName,
+    };
+    //console.log(emptymessage);
+    messages.push(resp);
   }
   //console.log(messages);
-  var sortedMessages= messages.sort((function (a, b) { 
-    return new Date(b.created) - new Date(a.created) 
-  }));
+  var sortedMessages = messages.sort(function(a, b) {
+    return new Date(b.created) - new Date(a.created);
+  });
   //console.log(sortedMessages);
   res.send(sortedMessages);
   return next();
@@ -566,10 +605,12 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
         loopIDS.push(loop._id);
       });
       //console.log('LOOPSIDS ' + JSON.stringify(loopIDS));
-      
+
       Post.find({
-        $or: [{ receivingUserIds: userID }, 
-          { receivingLoopIds: {$in:loopIDS} }],
+        $or: [
+          { receivingUserIds: userID },
+          { receivingLoopIds: { $in: loopIDS } },
+        ],
       })
         .sort({ created: -1 })
         .exec((error, data) => {
@@ -610,8 +651,7 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
               postObject['created'] = post.created;
               postObject['firstName'] =
                 resultObject[post.senderId]['firstName'];
-              postObject['lastName'] = 
-              resultObject[post.senderId]['lastName'];
+              postObject['lastName'] = resultObject[post.senderId]['lastName'];
               finalPostsData.push(postObject);
             });
             //console.log(finalPostsData);
