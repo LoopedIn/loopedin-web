@@ -188,6 +188,7 @@ router.route('/users/create_loop')
     if (error) {
       if (error.name === 'ValidationError') {
         res.status(400).send(error);
+        return next(error);
         // res.send("ValidationError")
       }
       // console.log(error);
@@ -546,7 +547,7 @@ function getLoopsContainingUser(userID) {
       if (error) {
         reject(error);
       } else {
-        //console.log('Loops: ' + data);
+        console.log('Loops: ' + data);
         resolve(data);
       }
     });
@@ -564,11 +565,11 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
       data.forEach((loop) => {
         loopIDS.push(loop._id);
       });
-      //console.log('LOOPSIDS ' + JSON.stringify(loopIDS));
+      console.log('LOOPSIDS ' + JSON.stringify(loopIDS));
       
       Post.find({
         $or: [{ receivingUserIds: userID }, 
-          { receivingLoopIds: loopIDS }],
+          { receivingLoopIds: {$in:loopIDS} }],
       })
         .sort({ created: -1 })
         .exec((error, data) => {
@@ -583,14 +584,14 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
           data.forEach((post) => {
             senderIds.push(mongoose.Types.ObjectId(post.senderId));
           });
-          //console.log('SENDERIDS ' + senderIds);
+          console.log('SENDERIDS ' + senderIds);
           // eslint-disable-next-line max-len
           User.find({ _id: { $in: senderIds } }, (error, response) => {
             if (error) {
               res.status(400).send(error);
               return next();
             }
-            //console.log('User details  ' + response);
+            console.log('User details  ' + response);
             var finalPostsData = [];
             var resultObject = {};
             // form a map of the form : userId:{firstName,lastName}
