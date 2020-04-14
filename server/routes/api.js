@@ -3,6 +3,9 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const serverAuth = require('../auth_modules/server_auth.js');
 const mongoose = require('mongoose');
+const { check ,validationResult } = require('express-validator');
+const { sanitizeBody } = require('express-validator');
+
 const router = express.Router();
 const limit = 10;
 
@@ -15,12 +18,14 @@ const { Loop, UserConnection } = require('../models/loop.js');
 router.use(cors());
 router.use(cookieParser());
 
+
 router.route('/').get((req, res) => {
   res.send('Works');
 });
 
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
+
   if (Object.keys(req.body).length === 0) {
     res.status(400);
     const error = 'The data to create user is not present';
@@ -43,12 +48,6 @@ router.route('/users/create/').post((req, res, next) => {
 //Registering authenticated middleware
 router.use(serverAuth.firebaseTokenAuthenticator);
 
-const validateFields = (req, res, next) => {
-  console.log(req.data)
-}
-
-//router.use(validateFields);
-
 router.route('/users/logged_in_user_info').post((req, res, next) => {
   res.json(req.body.user).send();
   next();
@@ -65,10 +64,8 @@ router.route('/users/add_friend').post(async (req, res, next) => {
   const userId = req.body.userID;
   // data.userId = userId;
   // Get userID from the _id field of the request.
-
   const newFriendUsername = data.friendIds[0];
   const usersWithNewFriendUsername = await User.find({ userName: newFriendUsername }).exec();
-
   if (usersWithNewFriendUsername.length === 0) {
     // console.log("No user found with name " + newUsername)
     res.status(400).send('User does not exist');
@@ -116,29 +113,6 @@ router.route('/users/add_friend').post(async (req, res, next) => {
   }
 });
 
-router.route('/create-post').post((req, res, next) => {
-  // [TODO] Get user id from session
-  if (Object.keys(req.body).length === 0) {
-    const error = 'Data not present in POST request body';
-    return next(error);
-  }
-
-  const postObject = req.body;
-  //postObject.senderId = userID;
-  Post.create(postObject, (error, data) => {
-    if (error) {
-      if (error.name === 'ValidationError') {
-        console.log(error);
-        res.status(400);
-        res.send('ValidationError');
-      }
-      // // console.log(error)
-      return next(error);
-    }
-    // // console.log(data)
-    res.json(data);
-  });
-});
 
 router.route('/update-post/:id').post((req, res, next) => {
   // [TODO] Get user id from session
@@ -195,7 +169,9 @@ router.route('/post/updatepost').post((req, res, next) => {
 });
 
 // Create a loop for a user
-router.route('/users/create_loop').post((req, res, next) => {
+router.route('/users/create_loop')
+  .post (createValidationFor('loop'),
+    checkValidationResult,(req, res, next) => {
   const { body } = req;
   // [TODO] : get user id from session for validation
 
@@ -375,9 +351,37 @@ router.route('/users/getcontacts').post((req, res, next) => {
 //     },
 //   );
 // });
+function checkValidationResult(req, res, next) {
+  const result = validationResult(req);
+  if (result.isEmpty()) {
+      return next();
+  }
+  res.status(422).json({ errors: result.array() });
+}
+function createValidationFor(route) {
+  switch (route) {
+      case 'post':
+          return [
+            check('postContent','Post content cannot be empty').trim().isLength({ min: 1 }).escape(),
+          ];
+      case 'message':
+        return [
+          check('messageContent','Message content cannot be empty').trim().isLength({ min: 1 }).escape(),
+        ];
+      case 'loop':
+        return [
+          check('loopName','Loop name cannot be empty').trim().isLength({ min: 1 }).escape(),
+        ];
 
+      default:
+          return [];
+  }
+}
 // Creates a post for the user
-router.route('/users/create_post').post((req, res, next) => {
+router.route('/users/create_post')
+  .post (createValidationFor('post'),
+    checkValidationResult,
+    (req, res, next) => {
   // [TODO] Get user id from session for validation
   // const userID = '';
 
@@ -386,6 +390,7 @@ router.route('/users/create_post').post((req, res, next) => {
     res.status(400).send('Post data not present');
     return next('Post data not present');
   }
+
   req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
 
   // body.post has senderId field which is the _id of the user object
@@ -431,7 +436,10 @@ router.route('/posts/:post_id/delete').delete((req, res, next) => {
   });
 });
 
-router.route('/users/create_message').post((req, res, next) => {
+router.route('/users/create_message').post(
+  createValidationFor('message'),
+    checkValidationResult,
+    (req, res, next) => {
   const { body } = req;
   if (Object.keys(body).length === 0) {
     res.status(400).send('Post data not present');
@@ -532,7 +540,7 @@ router.route('/users/get_chat_history').post((req, res, next) => {
 
 //get_recent_posts
 function getLoopsContainingUser(userID) {
-  console.log(userID);
+  //console.log(userID);
   return new Promise((resolve, reject) => {
     Loop.find({ receivingUsers: userID }, (error, data) => {
       if (error) {
@@ -569,7 +577,7 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
             res.status(400).send(error);
             return next();
           }
-          console.log(data);
+          //console.log(data);
           var senderIds = [];
           // create an array of senderIds to query mongodb
           data.forEach((post) => {
@@ -605,7 +613,7 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
               resultObject[post.senderId]['lastName'];
               finalPostsData.push(postObject);
             });
-            console.log(finalPostsData);
+            //console.log(finalPostsData);
             res.status(200).send({ posts: finalPostsData });
             return next();
           });
