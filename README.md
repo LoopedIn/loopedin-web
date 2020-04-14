@@ -80,9 +80,9 @@ By this checkpoint we will add UI functionalities for the API end points we crea
 
 **New functionalities that will be supported via UI:-**
 -   [x] View news feed
--   [] Reply to a post in the news feed
--   [] Chat will use socket for instant messaging
--   [] Deploying apps via GCP
+-   [ ] Reply to a post in the news feed
+-   [ ] Chat will use socket for instant messaging
+-   [ ] Deploying apps via GCP
 -   [X] ~~Using Cloud-Native Functions~~ (We are using google firebase for authentication, don't forsee any features that will require cloud native functions)
     
 
