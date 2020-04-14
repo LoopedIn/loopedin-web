@@ -233,7 +233,7 @@ router.route('/loops/:loop_id/update_loop').post((req, res, next) => {
   const { contacts, loopName } = req.body.loop;
   loopID = mongoose.Types.ObjectId(loopID);
   // Update the members of the loop of a user
-  Loop.update(
+  Loop.updateOne(
     { _id: loopID, userId: userID },
     { $set: { receivingUsers: contacts, loopName: loopName } },
     (error, response) => {
@@ -357,7 +357,7 @@ function checkValidationResult(req, res, next) {
   if (result.isEmpty()) {
       return next();
   }
-  res.status(422).json({ errors: result.array() });
+  res.status(400).send(result.array());
 }
 function createValidationFor(route) {
   switch (route) {
@@ -547,7 +547,7 @@ function getLoopsContainingUser(userID) {
       if (error) {
         reject(error);
       } else {
-        console.log('Loops: ' + data);
+        //console.log('Loops: ' + data);
         resolve(data);
       }
     });
@@ -565,7 +565,7 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
       data.forEach((loop) => {
         loopIDS.push(loop._id);
       });
-      console.log('LOOPSIDS ' + JSON.stringify(loopIDS));
+      //console.log('LOOPSIDS ' + JSON.stringify(loopIDS));
       
       Post.find({
         $or: [{ receivingUserIds: userID }, 
@@ -584,14 +584,14 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
           data.forEach((post) => {
             senderIds.push(mongoose.Types.ObjectId(post.senderId));
           });
-          console.log('SENDERIDS ' + senderIds);
+          //console.log('SENDERIDS ' + senderIds);
           // eslint-disable-next-line max-len
           User.find({ _id: { $in: senderIds } }, (error, response) => {
             if (error) {
               res.status(400).send(error);
               return next();
             }
-            console.log('User details  ' + response);
+            //console.log('User details  ' + response);
             var finalPostsData = [];
             var resultObject = {};
             // form a map of the form : userId:{firstName,lastName}
