@@ -22,7 +22,7 @@ const PostChat = props => {
     btnDisabled == false
       ? setCheckBoxSelected(true)
       : setCheckBoxSelected(false);
-    btnDisabled == false && postText != ""
+    btnDisabled == false && postText != "" && postText.trim().length !== 0
       ? setDisableButton(false)
       : setDisableButton(true);
   };
@@ -42,7 +42,9 @@ const PostChat = props => {
             rows="10"
             defaultValue=""
             onChange={e => {
-              e.target.value != "" && checkBoxSelected == true
+              e.target.value != "" &&
+              e.target.value.trim().length !== 0 &&
+              checkBoxSelected == true
                 ? setDisableButton(false)
                 : setDisableButton(true);
             }}
