@@ -68,22 +68,22 @@ By this checkpoint we will add UI functionalities for the API end points we crea
 **Since all of the API functionality and associated tests are finished in checkpoint 3, we will most likely not be adding additional tests. If we run into bugs/corner cases as part our UI devlopment, we will consider corresponding regression tests as our only testcases deliverables**
 
 **New functionalities that will be supported via UI:-**
- - Create/Read and Update a loop
- - Create a post
- - Send a message from one user to another (no socket/notification)
- - Delete a post shared by the user.
- - Messages accept plain text, with urls automatically converted into links (No other HTML is accepted in messages).
- - Manage user's friends and loops
+ - [x] Create/Read and Update a loop
+ - [x] Create a post
+ - [x] Send a message from one user to another (no socket/notification)
+ - [x] Delete a post shared by the user.
+ - [x] Messages accept plain text, with urls automatically converted into links (No other HTML is accepted in messages).
+ - [x] Manage user's friends and loops
 
 
 ## Deliverables for final project
 
 **New functionalities that will be supported via UI:-**
--   View news feed
--   Reply to a post in the news feed
--   Chat will use socket for instant messaging
--   Deploying apps using DevOps and Testing
--   Using Cloud-Native Functions
+-   [x] View news feed
+-   [] Reply to a post in the news feed
+-   [] Chat will use socket for instant messaging
+-   [] Deploying apps via GCP
+-   [X] ~~Using Cloud-Native Functions~~ (We are using google firebase for authentication, don't forsee any features that will require cloud native functions)
     
 
 ## Specialization deliverables
