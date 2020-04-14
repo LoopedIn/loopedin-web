@@ -122,6 +122,7 @@ After setting up the firebase credentials, and installing docker.
 docker-compose build
 docker-compose up
 ```
+The app should run on http://0.0.0.0:8080/
 
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
