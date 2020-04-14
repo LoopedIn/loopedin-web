@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -11,7 +11,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as RouterLink } from "react-router-dom";
 import { connect } from "react-redux";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { registerUser } from "../../actions";
+import { removeRegisterToastMessage } from "../../actions/auth"
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function Copyright() {
   return (
@@ -51,13 +58,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const register = ({
-  registerSuccess,
-  registerError,
-  registerErrorMsg,
-  registerUser
-}) => {
+const register = (props) => {
   const classes = useStyles();
+
+  const {
+    registerToast,
+    removeRegisterToastMessage,
+    registerUser
+  } =  props;
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -66,8 +74,46 @@ const register = ({
   const [password, setPassword] = useState("");
 
   const handleSubmit = () => {
+    console.log("Clicked register!!")
     registerUser(firstName, lastName, userName ,email, password);
   };
+
+  const [open, setOpen] = React.useState(true);
+
+  const handleClose = (event, reason) => {  
+    setOpen(false);
+    removeRegisterToastMessage();
+  };
+
+  const [toastMessagesState, setToastMessageState] = useState(registerToast);
+
+  useEffect(() => {
+    setToastMessageState(registerToast)
+    if(registerToast != undefined){
+      setOpen(true);
+    }
+  }, [registerToast])
+
+  const toast = (message, severity) => 
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity={severity}>
+        {message}
+      </Alert>
+    </Snackbar>
+
+
+  const severity = (message) => {
+    if(message.includes("already in use")){
+      return "info"
+    } else{
+      return "success"
+    }
+  }
+
+  const toastToShow = () => 
+    toastMessagesState ?
+    toast(toastMessagesState, severity(toastMessagesState))
+       : <div></div>
 
   return (
     <Container component="main" maxWidth="xs">
@@ -155,16 +201,6 @@ const register = ({
         >
           Sign Up
         </Button>
-        {registerSuccess && (
-          <Typography component="p" className={classes.errorText}>
-            You have succesfully created the account!
-          </Typography>
-        )}
-        {registerError && (
-          <Typography component="p" className={classes.errorText}>
-            {`${registerErrorMsg}`}
-          </Typography>
-        )}
         <Grid container justify="flex-end">
           <Grid item>
             <Link component={RouterLink} to="/login" variant="body2">
@@ -176,16 +212,17 @@ const register = ({
       <Box mt={5}>
         <Copyright />
       </Box>
+      <Box>
+      {toastToShow()}
+      </Box>
     </Container>
   );
 };
 
 function mapStateToProps(state) {
   return {
-    registerSuccess: state.auth.registerSuccess,
-    registerError: state.auth.registerError,
-    registerErrorMsg: state.auth.registerErrorMsg
+    registerToast: state.auth.registerToast
   };
 }
 
-export default connect(mapStateToProps, { registerUser })(register);
+export default connect(mapStateToProps, { registerUser, removeRegisterToastMessage })(register);

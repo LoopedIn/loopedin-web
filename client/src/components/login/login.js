@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -13,6 +13,13 @@ import { Link as RouterLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { loginUser } from "../../actions";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { removeLoginToastMessage } from "../../actions/auth"
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function Copyright() {
   return (
@@ -84,18 +91,55 @@ export const loginSide = props => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = () => {
-    const { dispatch } = props;
+  const { loginError, isAuthenticated, loginUser } = props;
 
-    dispatch(loginUser(email, password));
+  const handleSubmit = () => {
+    loginUser(email, password);
   };
 
-  const { loginError, isAuthenticated } = props;
+  const {
+    loginToast,
+    removeLoginToastMessage
+  } =  props;
+
+  const [open, setOpen] = React.useState(true);
+
+  const handleClose = (event, reason) => {  
+    setOpen(false);
+    removeLoginToastMessage();
+  };
+
+  const [toastMessagesState, setToastMessageState] = useState(loginToast);
+
+  useEffect(() => {
+    setToastMessageState(loginToast)
+    if(loginToast != undefined){
+      setOpen(true);
+    }
+  }, [loginToast])
+
+  const toast = (message, severity) => 
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity={severity}>
+        {message}
+      </Alert>
+    </Snackbar>
+
+
+  const severity = (message) => {
+    return "info"
+  }
+
+  const toastToShow = () => 
+    toastMessagesState ?
+    toast(toastMessagesState, severity(toastMessagesState))
+       : <div></div>
 
   if (isAuthenticated) {
     return <Redirect to="/" />;
   } else {
     return (
+      <Fragment>
       <Grid container component="main" className={classes.root}>
         <Grid item xs={false} sm={4} md={7} className={classes.image} />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -171,6 +215,8 @@ export const loginSide = props => {
           </div>
         </Grid>
       </Grid>
+            <Box>{toastToShow()}</Box>
+      </Fragment>
     );
   }
 };
@@ -178,8 +224,8 @@ export const loginSide = props => {
 function mapStateToProps(state) {
   return {
     isLoggingIn: state.auth.isLoggingIn,
-    loginError: state.auth.loginError,
+    loginToast: state.auth.loginToast,
     isAuthenticated: state.auth.isAuthenticated
   };
 }
-export default connect(mapStateToProps)(loginSide);
+export default connect(mapStateToProps, {removeLoginToastMessage, loginUser})(loginSide);

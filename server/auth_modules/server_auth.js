@@ -15,26 +15,30 @@ async function tokenIdToDbUser(tokenUid) {
 }
 
 const firebaseTokenAuthenticator = async (req, res, next) => {
-  const user = await User.findOne({
-    authToken: 'RmxDKbdPqtafoFPqxljZCJfMAAn1',
-  });
-  req.body.userID = user._id;
-  req.body.userId = user._id;
-  req.body.user = user;
-  next();
-  // if (req.body.idToken) {
-  //    admin.auth().verifyIdToken(req.body.idToken)
-  //     .then(async (decodedToken) => {
-  //       const user = await tokenIdToDbUser(decodedToken.uid);
-  //       req.body.userID = user._id
-  //       req.body.user = user
-  //       next()
-  //     }).catch(() => {
-  //       res.status(403);
-  //     });
-  // } else {
-  //   res.status(403).send();
-  // }
+  const apiTestingLoggedInUser = req.body.loggedInUser;
+  if (apiTestingLoggedInUser) {
+    const user = await User.findOne({ userName: apiTestingLoggedInUser });
+    req.body.userID = user._id;
+    req.body.user = user;
+    next();
+  } else {
+    if (req.body.idToken) {
+      admin
+        .auth()
+        .verifyIdToken(req.body.idToken)
+        .then(async (decodedToken) => {
+          const user = await tokenIdToDbUser(decodedToken.uid);
+          req.body.userID = user._id;
+          req.body.user = user;
+          next();
+        })
+        .catch(() => {
+          res.status(403);
+        });
+    } else {
+      res.status(403).send();
+    }
+  }
 };
 
 module.exports = { firebaseTokenAuthenticator };

@@ -7,8 +7,14 @@ const userConnection = mongoose.Schema({
     required: true, 
     unique: true 
   },
-  friendIds: [String],
-  listOfLoops: [String],
+  friendIds: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
+  }],
+  listOfLoops: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'loop'
+  }],
 });
 
 // List of people in a loop created by the user

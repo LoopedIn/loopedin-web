@@ -2,11 +2,22 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { myFirebase } from "../firebase/firebase";
 
-export const authenticatedRequest = async (route, postBodyParams) => {
-  const idToken = "dummy";
-  // const idToken = await myFirebase.auth().currentUser.getIdToken();
+export const authenticatedRequest = async (route, postBodyParams, isDelete) => {
+  const loggedInUser = await currentLoggedInUser();
+  const idToken = await loggedInUser.getIdToken();
+  if (isDelete) {
+    return axios.delete(route, {
+      data: constructPostBodyParams(idToken, postBodyParams)
+    });
+  }
   return axios.post(route, constructPostBodyParams(idToken, postBodyParams));
 };
+
+function currentLoggedInUser() {
+  return new Promise(resolve => {
+    myFirebase.auth().onAuthStateChanged(firebaseUser => resolve(firebaseUser));
+  });
+}
 
 export const constructPostBodyParams = (idToken, postBodyParams) => {
   const csrfToken = getCookie("csrfToken");

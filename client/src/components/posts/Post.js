@@ -1,4 +1,4 @@
-import React, { useEffect,Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,6 +16,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ReplyIcon from "@material-ui/icons/Reply";
+import Linkify from "react-linkify";
 import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
@@ -50,29 +51,38 @@ const handleExpandClick = () => {
 
 const Post = props => {
   const classes = useStyles();
-  const { message, firstName,lastName, timeStamp } = props;
+  const { message, firstName, lastName, timeStamp } = props;
+
+  const componentDecorator = (href, text, key) => (
+    <a href={href} key={key} target="_blank" rel="noopener noreferrer">
+      {text}
+    </a>
+  );
+
   return (
     <Card>
       <Box pt={2} px={2} pb={4}>
         <Box display="flex" justifyContent="space-between">
           <CardHeader
             avatar={
-              <Avatar aria-label="recipe" className={classes.avatar}>
-                {firstName.charAt(0)+lastName.charAt(0)}
+              <Avatar aria-label="username" className={classes.avatar}>
+                {firstName.charAt(0) + lastName.charAt(0)}
               </Avatar>
             }
-            title={firstName+" "+lastName}
+            title={firstName + " " + lastName}
             subheader={timeStamp}
           />
         </Box>
       </Box>
+
       <CardContent>
         <Box className={classes.cardContentInner} height="50px">
           <Typography variant="body2" color="textSecondary" component="p">
-            {message}
+            <Linkify componentDecorator={componentDecorator}>{message}</Linkify>
           </Typography>
         </Box>
       </CardContent>
+
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />

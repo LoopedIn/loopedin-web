@@ -1,8 +1,8 @@
 import React from "react";
-import Register from "../register/Register";
-import LoginSide from "../login/Login";
-import ProtectedRoute from "../protected-route/ProtectedRoute";
-import Home from "../home/Home";
+import Register from "../register/register";
+import LoginSide from "../login/login";
+import ProtectedRoute from "../protected-route/protectedRoute";
+import Home from "../home/home";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
 import Pace from "../../utils/Pace";
 import GlobalStyles from "./GlobalStyles";

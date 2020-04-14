@@ -37,5 +37,53 @@ export const serverRequests = {
     authenticatedRequest(r(`/loops/${loopId}/update_loop`), params),
 
   addFriendToUserApi: async params =>
-    authenticatedRequest(r("/users/add_friend"), params)
+    authenticatedRequest(r("/users/add_friend"), params),
+
+  createLoopApi: async loopName => {
+    const postBodyParams = {
+      loopName: loopName
+    };
+    return authenticatedRequest(r("/users/create_loop"), postBodyParams);
+  },
+
+  getChatHistoryApi: async _friendId => {
+    const postBodyParams = {
+      friendID: _friendId
+    };
+    return authenticatedRequest(r("/users/get_chat_history"), postBodyParams);
+  },
+
+  getRecentChatsApi: async () =>
+    authenticatedRequest(r("/users/get_recent_chats"), {}),
+
+  createMessageApi: async (receivingUserId, messageType, messageContent) => {
+    return authenticatedRequest(r("/users/create_message"), {
+      receivingUserId,
+      messageType,
+      messageContent
+    });
+  },
+
+  sendLoopMessage: async (loopMessage, loopList) => {
+    const params = {
+      postType: "text",
+      postContent: loopMessage,
+      receivingLoopIds: loopList
+    };
+
+    try {
+      return authenticatedRequest(r("/users/create_post"), params);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getMyPostsList: async () => {
+    return authenticatedRequest(r("/users/user_posts"), {});
+  },
+
+  deletePostMessage: async postId => {
+    const route = `posts/${postId}/delete`;
+    return authenticatedRequest(r(route), {}, true);
+  }
 };

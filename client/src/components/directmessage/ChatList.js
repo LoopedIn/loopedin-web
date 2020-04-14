@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
+import { connect } from "react-redux";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -11,6 +12,11 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Scrollbar from "../../utils/Scrollbar";
 import PropTypes from "prop-types";
+import {
+  dispatchUserSelected,
+  getRecentChats
+} from "../../actions/direct-messages";
+import moment from "moment";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,62 +34,39 @@ const useStyles = makeStyles(theme => ({
 
 const ChatList = props => {
   const classes = useStyles();
-  const chatList = [
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    },
-    {
-      firstName: "Suhan",
-      lastName: "Test",
-      messageList: [],
-      timeStamp: "TimeStamp"
-    }
-  ];
 
-  const getLatestMessage = value => {
-    return " — I'll be in your neighborhood doing errands this…sdasdasdasdasdasdasda sdadsdasdasdas sdasdasdasd asdasdasd";
+  const {
+    recentChats,
+
+    getRecentChats,
+    selectedFriend,
+    dispatchUserSelected
+  } = props;
+
+  useEffect(() => {
+    getRecentChats();
+  }, [getRecentChats]);
+
+  const [recentChatsState, setRecentChatsState] = useState([]);
+
+  useEffect(
+    () => setRecentChatsState(recentChats === undefined ? [] : recentChats),
+    [recentChats]
+  );
+
+  const [selectedFriendState, setSelectedFriendState] = useState(
+    selectedFriend
+  );
+
+  useEffect(() => {
+    dispatchUserSelected(selectedFriendState);
+  }, [selectedFriendState]);
+
+  const handleFriendSelection = selectedFriendState => {
+    setSelectedFriendState(selectedFriendState);
   };
 
-  const listArrayLen = chatList.length;
+  const listArrayLen = recentChatsState ? recentChatsState.length : 0;
 
   return (
     <div
@@ -97,18 +80,25 @@ const ChatList = props => {
           <Box>
             <Box display="flex" justifyContent="space-between">
               <List className={classes.root}>
-                {chatList.map((value, index) => {
+                {recentChatsState.map((record, index) => {
+                  const { _id, firstName, lastName } = record.sender;
+                  const { messageContent, created } = record;
                   return (
                     <div>
-                      <ListItem alignItems="flex-start">
+                      <ListItem
+                        alignItems="flex-start"
+                        button
+                        selected={selectedFriendState === _id}
+                        onClick={event => handleFriendSelection(_id)}
+                      >
                         <ListItemAvatar>
                           <Avatar
-                            alt={value.firstName}
+                            alt={firstName}
                             src="/static/images/avatar/"
                           />
                         </ListItemAvatar>
                         <ListItemText
-                          primary={`${value.firstName} ${value.lastName}`}
+                          primary={`${firstName} ${lastName}`}
                           secondary={
                             <React.Fragment>
                               <Typography
@@ -117,14 +107,14 @@ const ChatList = props => {
                                 className={classes.inline}
                                 color="textPrimary"
                               >
-                                {getLatestMessage(value)}
+                                {messageContent}
                               </Typography>
                               <Typography
                                 component="span"
-                                variant="body3"
+                                variant="body2"
                                 className={classes.timeStamp}
                               >
-                                {value.timeStamp}
+                                {`${moment(created).format("h:mm a")}`}
                               </Typography>
                             </React.Fragment>
                           }
@@ -147,6 +137,15 @@ const ChatList = props => {
   );
 };
 
-ChatList.propTypes = {};
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user,
+    recentChats: state.directMessages.recentChats,
+    selectedFriend: state.directMessages.selectedFriend
+  };
+}
 
-export default ChatList;
+export default connect(mapStateToProps, {
+  dispatchUserSelected,
+  getRecentChats
+})(ChatList);

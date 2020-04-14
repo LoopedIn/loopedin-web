@@ -32,20 +32,9 @@ const Home = props => {
 
   const classes = useStyles();
 
-  //Runs getUserFriends and getUserloops when component is loaded
-  // useEffect(() => {
-  //   getUserFriends();
-  // }, [getUserFriends]);
-
-  // useEffect(() => {
-  //   getUserLoops();
-  // }, [getUserLoops]);
-
-  const [selectedTab, setSelectedTab] = useState(null);
-
   return (
     <Fragment>
-      <NavBar selectedTab={selectedTab} logoutUser={logoutUser} />
+      <NavBar logoutUser={logoutUser} />
       <main className={classNames(classes.main)}>
         <Routing />
       </main>

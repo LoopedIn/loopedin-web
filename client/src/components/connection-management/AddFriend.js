@@ -59,47 +59,23 @@ const AddFriend = props => {
 
   const [newUser, setNewUser] = useState("");
 
-  const [userFriendsState, setUserFriendsState] = useState(
-    usersFriends !== undefined
-      ? usersFriends["friendIds"] !== undefined
-        ? usersFriends["friendIds"]
-        : []
-      : []
-  );
+  const [userFriendsState, setUserFriendsState] = useState([]);
 
-  //Mock Data
-  const userFriendsStateMock = [
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" },
-    { firstName: "Alan", lastName: "Smith" }
-  ];
+  console.log({usersFriends})
+  useEffect(() => {
+    setUserFriendsState(usersFriends== undefined? undefined : usersFriends["friendIds"]);
+  }, [usersFriends])
 
   const handleBtnSubmit = () => {
-    addFriendToUser(newUser, userFriendsState, setUserFriendsState);
+    addFriendToUser(newUser, userFriendsState);
+    getUserFriends();
   };
 
   const renderFriendsList = friend => {
     return (
       <Paper style={{ marginTop: "10px" }}>
         <ListItem id={friend}>
-          <ListItemText id={friend} primary={`${friend.firstName}`} />
+          <ListItemText id={friend} primary={`${friend.firstName} ${friend.lastName}`} />
         </ListItem>
       </Paper>
     );
@@ -133,9 +109,9 @@ const AddFriend = props => {
       ) : (
         <div></div>
       )}
-      <div style={{ width: 100, height: "65vh" }}>
+      <div style={{ width: "50%", height: "65vh" }}>
         <Scrollbar>
-          <List>{userFriendsStateMock.map(val => renderFriendsList(val))}</List>
+          <List>{userFriendsState != undefined ? userFriendsState.map(val => renderFriendsList(val)) : <div></div>}</List>
         </Scrollbar>
       </div>
       <div className={classes.addFAB}>

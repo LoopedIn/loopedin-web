@@ -84,7 +84,6 @@ describe('application', async () => {
   }
 
   async function createMessage(myUserInput, receivingUsers) {
-
     const createMessageInput = {
       receivingUserId: receivingUsers,
       messageType: 'text',
@@ -98,7 +97,20 @@ describe('application', async () => {
     );
     return response.data;
   }
+  async function createUnfilteredMessage(myUserInput, receivingUsers) {
+    const createMessageInput = {
+      receivingUserId: receivingUsers,
+      messageType: 'text',
+      messageContent: '<script>Hello</script>',
+    };
 
+    const response = await sendAuthenticatedRequest(
+      myUserInput,
+      '/users/create_message',
+      createMessageInput,
+    );
+    return response.data;
+  }
   async function createPosts(myUserInput, receivingUsers, receivingLoopIds) {
     // console.log(myUserInput);
     // console.log(receivingUsers);
@@ -109,15 +121,35 @@ describe('application', async () => {
       postType: 'text',
       postContent: randomString(10),
     };
-    // console.log(myUserInput, createPostInput);
+    //console.log(createPostInput);
     const response = await sendAuthenticatedRequest(
       myUserInput,
       '/users/create_post',
       createPostInput,
     );
+    //console.log(response.data)
     return response.data;
   }
-
+  async function createUnfilteredPost(
+    myUserInput,
+    receivingUsers,
+    receivingLoopIds,
+  ) {
+    const createPostInput = {
+      receivingUserIds: [receivingUsers],
+      receivingLoopIds: [receivingLoopIds],
+      postType: 'text',
+      postContent: '<script>Hello</script>',
+    };
+    //console.log(createPostInput);
+    const response = await sendAuthenticatedRequest(
+      myUserInput,
+      '/users/create_post',
+      createPostInput,
+    );
+    //console.log(response.data)
+    return response.data;
+  }
   async function getPosts(receivingUser) {
     const getPostInput = {};
     const response = await sendAuthenticatedRequest(
@@ -176,9 +208,9 @@ describe('application', async () => {
     return sendUnAuthenticatedRequest('/users/create', input);
   }
 
-  async function addAsFriend(myUserInput, user2Id) {
+  async function addAsFriend(myUserInput, user2name) {
     const addFriendInput = {
-      friendIds: [user2Id],
+      friendIds: [user2name],
       listOfLoops: [],
     };
     const response = await sendAuthenticatedRequest(
@@ -209,9 +241,16 @@ describe('application', async () => {
   }
 
   async function registerAndCreateUser(userInput) {
+    var loginError;
     const response = await myFirebase
       .auth()
-      .createUserWithEmailAndPassword(userInput.email, userInput.password);
+      .createUserWithEmailAndPassword(userInput.email, userInput.password)
+      .catch((error) => {
+        loginError = error;
+      });
+    if (loginError) {
+      return loginError;
+    }
     const createUserResponse = await createUserApi(
       response.user.uid,
       userInput.userId,
@@ -244,7 +283,6 @@ describe('application', async () => {
       });
   }
 
-
   describe('authenticated state', async () => {
     describe('Managing friends and loops', async () => {
       it('Create a user', async () => {
@@ -259,10 +297,11 @@ describe('application', async () => {
         const myUserInput = getRandomCreateUserInput();
         resultToUser(await registerAndCreateUser(myUserInput));
         const myUsersFriendInput = getRandomCreateUserInput();
-        const myUsersFriend = resultToUser(
+        resultToUser(
           await registerAndCreateUser(myUsersFriendInput),
         );
-        const resp = await addAsFriend(myUserInput, myUsersFriend.id);
+        const resp = await addAsFriend(myUserInput, myUsersFriendInput.userId);
+
         assert.strictEqual(resp.status, 200);
         // fetch users friends and assert users friend is present in the list
         const response = await sendAuthenticatedRequest(
@@ -270,19 +309,17 @@ describe('application', async () => {
           '/users/getcontacts',
           {},
         );
-        // // console.log("response "+)
+
         assert.strictEqual(response.status, 200);
         const friends = response.data[0].friendIds;
         let isFound = false;
         for (let i = 0; i < friends.length; i++) {
-          const element = friends[i];
-          // console.log(`response ${element}`);
-          if (element === myUsersFriend.id) {
+          const element = friends[i].userName;
+          if (element === myUsersFriendInput.userId) {
             isFound = true;
             break;
           }
         }
-
         assert.strictEqual(isFound, true);
       }).timeout(10000);
 
@@ -309,8 +346,8 @@ describe('application', async () => {
           await registerAndCreateUser(myUsersFriendInput),
         );
         const message = await createMessage(myUserInput, myUsersFriend.id);
-        // console.log(message);
-        // TODO: fetch users friend and assert 
+        //console.log(message);
+        // TODO: fetch users friend and assert
         // users friend is present in the list
         assert.strictEqual(message.receivingUserId, myUsersFriend.id);
       }).timeout(10000);
@@ -347,6 +384,7 @@ describe('application', async () => {
 
       it('Get this users timeline', async () => {
         const myUserInput = getRandomCreateUserInput();
+
         resultToUser(await registerAndCreateUser(myUserInput));
         const myUsersFriendInput = getRandomCreateUserInput();
         const myUsersFriend = resultToUser(
@@ -358,20 +396,11 @@ describe('application', async () => {
           undefined,
           myUsersFriend.id,
         );
-        await createPosts(
-          myUserInput,
-          myUsersFriend.id,
-          createLoopResponseData._id,
-        );
-        await createPosts(
-          myUserInput,
-          myUsersFriend.id,
-          createLoopResponseData._id,
-        );
+        await createPosts(myUserInput, undefined, createLoopResponseData._id);
+        await createPosts(myUserInput, undefined, createLoopResponseData._id);
         const getPostsResponse = await getPosts(myUsersFriendInput);
-        assert.equal(getPostsResponse[0].receivingUserIds[0], myUsersFriend.id);
-        assert.equal(getPostsResponse[1].receivingUserIds[0], myUsersFriend.id);
-        // // console.log(getPostsResponse);
+
+        assert.equal(getPostsResponse.posts.length, 2);
       }).timeout(10000);
 
       it('Get this users messages ', async () => {
@@ -381,12 +410,25 @@ describe('application', async () => {
         const myUsersFriend = resultToUser(
           await registerAndCreateUser(myUsersFriendInput),
         );
+
+        const myUsersFriendInput2 = getRandomCreateUserInput();
+        resultToUser(
+          await registerAndCreateUser(myUsersFriendInput2),
+        );
+
+        await addAsFriend(myUserInput, myUsersFriendInput.userId);
+        await addAsFriend(myUserInput, myUsersFriendInput2.userId);
+
         const message1 = await createMessage(myUserInput, myUsersFriend.id);
         const message2 = await createMessage(myUsersFriendInput, myUser.id);
         const message3 = await createMessage(myUserInput, myUsersFriend.id);
+
+        //await createMessage(myUserInput, myUsersFriend2.id);
+        //await createMessage(myUsersFriendInput2, myUser.id);
+
         await getRecentChats(myUserInput);
 
-        // console.log(getMessages);
+        //console.log("message",getMessages);
         assert(message1.messageContent);
         assert(message2.messageContent);
         assert(message3.messageContent);
@@ -484,26 +526,57 @@ describe('application', async () => {
           assert.strictEqual(isFound, true);
         }
       }).timeout(10000);
-      
-
-
     });
   });
-  describe("Input validation tests", async () => {
-        
-    describe("Email-id given by user is in a valid email address format.", async () => {
-    it("works");
-    });
-    
-    describe("Username input for adding a new friend is an invalid username", async () => {
-      it("works");
-      });
-      
-    describe("Post body contains unfiltered text", async () => {
-        it("works");
-        });
-        describe("Message body contains unfiltered text", async () => {
-          it("works");
-          });
+  describe('Input validation tests', async () => {
+    it('Email-id given by user is in a valid email address format.', async () => {
+      const userInput = getRandomCreateUserInput();
+      userInput.email = 'notValidEmail';
+      const resp = await registerAndCreateUser(userInput);
+      //console.log(resp.message);
+      assert.strictEqual(resp.message, 'The email address is badly formatted.');
+    }).timeout(10000);
+    it('Username input for adding a new friend is an invalid username', async () => {
+      const myUserInput = getRandomCreateUserInput();
+      resultToUser(await registerAndCreateUser(myUserInput));
+      const myUsersFriendInput = getRandomCreateUserInput();
+      const resp = await addAsFriend(myUserInput, myUsersFriendInput.userId);
+      assert.strictEqual(resp.status, 400);
+      assert.strictEqual(resp.data, 'User does not exist');
+    }).timeout(10000);
+    it('Post body contains unfiltered text', async () => {
+      const myUserInput = getRandomCreateUserInput();
+      resultToUser(await registerAndCreateUser(myUserInput));
+      const myUsersFriendInput = getRandomCreateUserInput();
+      const myUsersFriend = resultToUser(
+        await registerAndCreateUser(myUsersFriendInput),
+      );
+      await addAsFriend(myUserInput, myUsersFriend.id);
+      const createLoopResponseData = await createLoop(
+        myUserInput,
+        undefined,
+        myUsersFriend.id,
+      );
+      const createPostResponseData = await createUnfilteredPost(
+        myUserInput,
+        myUsersFriend.id,
+        createLoopResponseData._id,
+      );
+      //console.log(createPostResponseData);
+      assert.notEqual(createPostResponseData.postContent, '<script>');
+    }).timeout(10000);
+    it('Message body contains unfiltered text', async () => {
+      const myUserInput = getRandomCreateUserInput();
+      resultToUser(await registerAndCreateUser(myUserInput));
+      const myUsersFriendInput = getRandomCreateUserInput();
+      const myUsersFriend = resultToUser(
+        await registerAndCreateUser(myUsersFriendInput),
+      );
+      const message = await createUnfilteredMessage(
+        myUserInput,
+        myUsersFriend.id,
+      );
+      assert.notEqual(message.messageContent, '<script>');
+    }).timeout(10000);
   });
 });

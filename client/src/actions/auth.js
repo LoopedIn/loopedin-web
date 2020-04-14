@@ -6,6 +6,7 @@ import {
 import { serverRequests } from "../api/apiRequests";
 import firebase from "firebase/app";
 import axios from "axios";
+import { dispatches } from "../utils/dispatchUtils";
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -35,9 +36,10 @@ const receiveLogin = (user, firebaseUser) => {
   };
 };
 
-const loginError = () => {
+const loginError = (msg) => {
   return {
-    type: LOGIN_FAILURE
+    type: LOGIN_FAILURE,
+    msg
   };
 };
 
@@ -95,8 +97,7 @@ export const loginUser = (email, password) => dispatch => {
       dispatch(receiveLogin(user, firebaseUser));
     })
     .catch(error => {
-      console.log(error)
-      dispatch(loginError());
+      dispatch(loginError(error.message));
     });
 };
 
@@ -131,6 +132,7 @@ export const registerUser = (
   email,
   password
 ) => dispatch => {
+  console.log("Registering user!!")
   myFirebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
@@ -150,3 +152,10 @@ export const registerUser = (
       dispatch(registerFailure(error));
     });
 };
+export const removeRegisterToastMessage = () => async dispatch => {
+  dispatch(dispatches.auth.removeRegisterToastMessage());
+}
+
+export const removeLoginToastMessage = () => async dispatch => {
+  dispatch(dispatches.auth.removeLoginToastMessage());
+}

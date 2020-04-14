@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Scrollbar from "../../utils/Scrollbar";
 import Chip from "@material-ui/core/Chip";
 import { Paper } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ChatMessage from "./ChatMessage";
+import moment from "moment";
+import { getChatHistory } from "../../actions/direct-messages";
 
 const useStyles = makeStyles(theme => ({
   scrollBar: {
@@ -27,107 +30,57 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const messages = [
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  },
-  {
-    senderId: "Bob",
-    receivingUserId: "Alice",
-    messageType: "DM",
-    messageContent: "Hi here is my message to you 2",
-    created: "2/1/2020",
-    readAt: "2/1/2020"
-  }
-];
-
 const renderMessages = (messages, classes) => {
-  if (messages.length == 0) {
+  if (messages == undefined || messages.length == 0) {
     return <div />;
   }
-
+  let currentDate = "";
   return (
     <List className={classes.root}>
       {messages.map((values, index) => {
-        return <ChatMessage values={values} />;
+        let dateChanged = false;
+        console.log(Math.abs(moment(values.created).diff(moment(), "days")));
+        if (
+          Math.abs(moment(values.created).diff(moment(), "days")) !== 0 &&
+          currentDate != values.created
+        ) {
+          dateChanged = true;
+          currentDate = values.created;
+        }
+        return <ChatMessage dateChanged={dateChanged} values={values} />;
       })}
     </List>
   );
 };
 
-const handleLoadMore = () => {};
-
 const Chat = props => {
   const classes = useStyles();
+
+  const {
+    getChatHistory,
+
+    sentMessage,
+    selectedFriend,
+    chatHistory
+  } = props;
+
+  let scrollComponent = useRef();
+
+  useEffect(() => {
+    getChatHistory(chosenUser);
+    if (scrollComponent.current) {
+      scrollComponent.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [sentMessage, selectedFriend]);
+
+  const chosenUser = selectedFriend;
+  const [chatHistoryState, setChatHistoryState] = useState(chatHistory);
+  useEffect(() => {
+    setChatHistoryState(chatHistory);
+    if (scrollComponent.current) {
+      scrollComponent.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatHistory]);
 
   return (
     <div
@@ -145,19 +98,26 @@ const Chat = props => {
           }}
         >
           <div className={classes.root}>
-            <div className={classes.loadChipBubble}>
-              <Chip
-                label="Load more"
-                onClick={handleLoadMore}
-                className={classes.loadChip}
-              />
-            </div>
-            {renderMessages(messages, classes)}
+            {chosenUser === undefined ? (
+              <div></div>
+            ) : (
+              renderMessages(chatHistoryState, classes)
+            )}
           </div>
         </div>
+        <div ref={scrollComponent}></div>
       </Scrollbar>
     </div>
   );
 };
 
-export default Chat;
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user,
+    chatHistory: state.directMessages.chatHistory,
+    sentMessage: state.directMessages.sentMessage,
+    selectedFriend: state.directMessages.selectedFriend
+  };
+}
+
+export default connect(mapStateToProps, { getChatHistory })(Chat);

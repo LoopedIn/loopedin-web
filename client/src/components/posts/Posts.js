@@ -6,6 +6,7 @@ import List from "@material-ui/core/List";
 import Post from "./Post";
 import { red } from "@material-ui/core/colors";
 import ScrollBar from "../../utils/Scrollbar";
+import moment from "moment";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,10 +58,12 @@ const Posts = props => {
             posts.map((value, index) => {
               return (
                 <Post
-                  message={value.message}
+                  message={value.postContent}
                   firstName={value.firstName}
                   lastName={value.lastName}
-                  timeStamp={value.timeStamp}
+                  timeStamp={moment(value.created).format(
+                    "MMMM Do YYYY, h:mm a"
+                  )}
                 />
               );
             })

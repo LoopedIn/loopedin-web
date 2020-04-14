@@ -14,6 +14,6 @@ const firebaseConfig = {
 };
 
 export const myFirebase = firebase.initializeApp(firebaseConfig);
-myFirebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+myFirebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 const baseDb = myFirebase.firestore();
 export const db = baseDb;
