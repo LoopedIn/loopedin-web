@@ -20,6 +20,12 @@ import {
   getMyLoopsMessages,
   deleteLoopPost
 } from "../../actions/user-connections";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyle = makeStyles(theme => ({
   scrollbar: {
@@ -55,10 +61,26 @@ const MyPosts = props => {
     try {
       const response = await deleteLoopPost(postId);
       setLoopDeleted(Date.now());
+      setOpen(true);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event, reason) => {  
+    setOpen(false);
+  };
+
+  const toast = (message, severity) => 
+  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Alert onClose={handleClose} severity={severity}>
+      {message}
+    </Alert>
+  </Snackbar>
+
+  const toastToShow = () => toast("Deleted post", "success")
 
   const renderMyPost = (value, index) => {
     return (
@@ -105,6 +127,7 @@ const MyPosts = props => {
           </div>
         </Box>
       </ExpansionPanel>
+      {toastToShow()}
     </Fragment>
   );
 };

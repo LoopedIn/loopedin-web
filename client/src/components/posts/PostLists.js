@@ -15,6 +15,12 @@ import Scrollbar from "../../utils/Scrollbar";
 import { getLoopLists } from "../../actions/user-connections";
 import { serverRequests } from "../../api/apiRequests";
 import { Button, Toolbar, Paper, Typography } from "@material-ui/core";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,10 +88,26 @@ const PostLists = props => {
         loopIdsSelected
       );
       parentCallbackForPosts(Date.now());
+      setOpen(true);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event, reason) => {  
+    setOpen(false);
+  };
+
+  const toast = (message, severity) => 
+  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Alert onClose={handleClose} severity={severity}>
+      {message}
+    </Alert>
+  </Snackbar>
+
+  const toastToShow = () => toast("Sent post", "success")
 
   const renderLoopList = (value, index) => {
     const labelId = `checkbox-list-secondary-label-${value[0]}`;
@@ -151,6 +173,7 @@ const PostLists = props => {
           </Box>
         </Box>
       </Paper>
+      {toastToShow()}
     </Fragment>
   );
 };
