@@ -7,6 +7,8 @@ services:
       - '3000:3000'
     links:
       - mongo
+    labels:
+        kompose.service.type: LoadBalancer
 
   mongo:
     container_name: mongo
@@ -18,3 +20,5 @@ services:
     build: client/
     ports:
       - 8080:8080
+    labels:
+      kompose.service.type: LoadBalancer

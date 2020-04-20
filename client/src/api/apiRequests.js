@@ -3,7 +3,7 @@ import {
   unAuthenticatedRequest
 } from "../utils/requestUtils";
 
-export const base = "http://localhost:3000/";
+export const base = process.env.BACKEND_HOST ? process.env.BACKEND_HOST : 'http://localhost:3000/';
 
 const url = require("url");
 

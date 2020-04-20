@@ -87,7 +87,7 @@ const portnumber = process.env.MONGODB_PORT
   : '27017';
 
 mongoose
-  .connect(`mongodb://${hostname}:${portnumber}/InLooped`, {
+  .connect(`mongodb+srv://admin:DguwNPHY8XBYnN1z@cluster0-fqrdf.gcp.mongodb.net/test?retryWrites=true&w=majority/InLooped`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
