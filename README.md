@@ -65,7 +65,7 @@ The deliverables for checkpoint 2 will support a few functionalities via API and
 
 By this checkpoint we will add UI functionalities for the API end points we created for checkpoint 2, and a few more features.
 
-**Since all of the API functionality and associated tests are finished in checkpoint 3, we will most likely not be adding additional tests. If we run into bugs/corner cases as part our UI devlopment, we will consider corresponding regression tests as our only testcases deliverables**
+**Since all of the API functionality and associated tests are finished in checkpoint 3, we will only be adding tests to validate input strings in the next checkpoint. If we run into bugs/corner cases as part our UI devlopment, we will consider corresponding regression tests additionally**
 
 **New functionalities that will be supported via UI:-**
  - [x] Create/Read and Update a loop
@@ -122,6 +122,7 @@ After setting up the firebase credentials, and installing docker.
 docker-compose build
 docker-compose up
 ```
+The app should run on http://0.0.0.0:8080/
 
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side

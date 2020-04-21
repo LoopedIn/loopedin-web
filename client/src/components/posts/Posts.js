@@ -8,6 +8,8 @@ import { red } from "@material-ui/core/colors";
 import ScrollBar from "../../utils/Scrollbar";
 import moment from "moment";
 
+
+
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: "matchParent"
@@ -23,28 +25,33 @@ const Posts = props => {
   const [error, setError] = React.useState(null);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [posts, setItems] = React.useState([]);
+  //const [socket] = useSocket('http://localhost:3000');
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  const loadUserPosts = () => getUserPosts().then(
+    result => {
+      console.log(result);
+      setIsLoaded(true);
+      console.log(result);
+      setItems(result.posts);
+    },
+    // Note: it's important to handle errors here
+    // instead of a catch() block so that we don't swallow
+    // exceptions from actual bugs in components.
+    error => {
+      setIsLoaded(true);
+      setError(error);
+    }
+  );
+
   useEffect(() => {
-    getUserPosts().then(
-      result => {
-        console.log(result);
-        setIsLoaded(true);
-        console.log(result);
-        setItems(result.posts);
-      },
-      // Note: it's important to handle errors here
-      // instead of a catch() block so that we don't swallow
-      // exceptions from actual bugs in components.
-      error => {
-        setIsLoaded(true);
-        setError(error);
-      }
-    );
+    console.log("here ")
+    loadUserPosts()
   }, []);
+
 
   if (error) {
     return <div>Error: {error.message}</div>;
