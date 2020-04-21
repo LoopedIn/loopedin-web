@@ -6,6 +6,10 @@ import Home from "../home/home";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
 import Pace from "../../utils/Pace";
 import GlobalStyles from "./GlobalStyles";
+import SocketContext from '../../utils/socket-context'
+const io = require('socket.io-client');
+const socket = io('http://localhost:3000');
+socket.connect()
 import {
   BrowserRouter as Router,
   Switch,
@@ -31,12 +35,15 @@ const App = ({ isAuthenticated, isVerifying }) => {
         <Route path="/register">
           <Register />
         </Route>
+        <SocketContext.Provider value={socket}>
         <ProtectedRoute
           path="/"
           component={Home}
           isAuthenticated={isAuthenticated}
           isVerifying={isVerifying}
+          socket={socket}
         />
+        </SocketContext.Provider>
       </Switch>
     </MuiThemeProvider>
   );

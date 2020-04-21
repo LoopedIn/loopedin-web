@@ -5,6 +5,9 @@ import { logoutUser, getUserFriends } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import NavBar from "../home/NavBar";
 import Routing from "./Routing";
+import SocketContext from '../../utils/socket-context'
+
+
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -27,16 +30,17 @@ const Home = props => {
     logoutUser,
     user,
     loops,
-    friends
+    friends,
+    socket
   } = props;
 
   const classes = useStyles();
-
+  //console.log("socket "+ socket.send('hi'))
   return (
     <Fragment>
       <NavBar logoutUser={logoutUser} />
       <main className={classNames(classes.main)}>
-        <Routing />
+        <Routing socket={socket} />
       </main>
     </Fragment>
   );
