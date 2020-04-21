@@ -31,6 +31,7 @@
     "firebase-admin": "^8.10.0",
     "http-errors": "^1.7.3",
     "mongoose": "^5.9.4",
+    "socket.io": "^2.3.0",
     "superagent": "^5.2.2"
   },
   "devDependencies": {

@@ -7,6 +7,12 @@ const { check, validationResult } = require('express-validator');
 
 const router = express.Router();
 
+const {sendMessageToClient}  = require("../lib/server.js")
+
+console.log("hrer "+sendMessageToClient)
+
+
+
 const { Post, Message } = require('../models/post.js');
 
 const { User } = require('../models/user.js');
@@ -482,7 +488,9 @@ router
       }
       // console.log (req.body)
       req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
-
+      const {sendMessageToClient}  = require("../lib/server.js")
+      //const sendMessage=sendMessageToClient()
+      sendMessageToClient(req.body.receivingUserId)
       // body.post has senderId field which is the _id of the user object
       Message.create(req.body, (error, data) => {
         if (error) {
@@ -492,7 +500,10 @@ router
           return next(error);
         }
         // console.log(data);
+        sendMessageToClient(req.body.receivingUserId)
         res.status(200).json(data);
+
+        
       });
     },
   );

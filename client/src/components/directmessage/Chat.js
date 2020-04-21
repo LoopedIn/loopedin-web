@@ -9,6 +9,8 @@ import ChatMessage from "./ChatMessage";
 import moment from "moment";
 import { getChatHistory } from "../../actions/direct-messages";
 
+
+
 const useStyles = makeStyles(theme => ({
   scrollBar: {
     backgroundColor: theme.palette.background.default,
@@ -58,29 +60,52 @@ const Chat = props => {
 
   const {
     getChatHistory,
-
+    socket,
+    user,
     sentMessage,
     selectedFriend,
     chatHistory
   } = props;
 
+  //console.log("sent message "+sentMessage+" \n"+"chat history "+ JSON.stringify(chatHistory))
   let scrollComponent = useRef();
 
+  const [lastUpdatedAt,setLastUpdatedAt] = useState("")
   useEffect(() => {
+    console.log("reloading component")
     getChatHistory(chosenUser);
     if (scrollComponent.current) {
       scrollComponent.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [sentMessage, selectedFriend]);
+  }, [sentMessage, selectedFriend,lastUpdatedAt]);
 
   const chosenUser = selectedFriend;
   const [chatHistoryState, setChatHistoryState] = useState(chatHistory);
+  
   useEffect(() => {
+    console.log("setchathistory")
     setChatHistoryState(chatHistory);
     if (scrollComponent.current) {
       scrollComponent.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [chatHistory]);
+
+  useEffect(() => {
+    console.log("inside socket block")
+  //   //socket.connect()
+    console.log("Socket "+ socket.id)
+    //console.log("reloading component")
+    socket.emit('storeUserID',{userID:user._id,socketID:socket.id})
+
+    socket.on('reloadComponent', (data) => {
+      console.log("I am listening ")
+      //getChatHistory(chosenUser)
+      setLastUpdatedAt(new Date())
+   });
+  },socket.id)
+
+
+
 
   return (
     <div

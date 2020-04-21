@@ -196,5 +196,5 @@ export const dispatches = {
         msg
       };
     }
-  }
+  },
 };
