@@ -1,18 +1,9 @@
 import React, { Fragment, useState, useRef } from "react";
 import PostLists from "./PostLists";
 import MyPosts from "./MyPosts";
-import PropTypes from "prop-types";
-import {
-  Paper,
-  Typography,
-  TextField,
-  makeStyles,
-  Box
-} from "@material-ui/core";
+import { Paper, TextField, Box } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({}));
-
-const PostChat = props => {
+const PostChat = () => {
   const [postText, setPostText] = useState("");
   const [postTextForState, setPostTextForState] = useState("");
   const [disableButton, setDisableButton] = useState(true);
