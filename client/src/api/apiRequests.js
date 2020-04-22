@@ -3,7 +3,7 @@ import {
   unAuthenticatedRequest
 } from "../utils/requestUtils";
 
-export const base = "http://35.238.210.15:3000/";
+export const base = "https://backend.loopedin.site/";
 
 const url = require("url");
 

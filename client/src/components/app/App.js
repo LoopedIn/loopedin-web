@@ -8,7 +8,7 @@ import Pace from "../../utils/Pace";
 import GlobalStyles from "./GlobalStyles";
 import SocketContext from '../../utils/socket-context'
 const io = require('socket.io-client');
-const socket = io('http://localhost:3000');
+const socket = io('https://backend.loopedin.site/');
 socket.connect()
 import {
   BrowserRouter as Router,
