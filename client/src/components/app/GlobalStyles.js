@@ -1,5 +1,6 @@
 import { makeStyles, withTheme } from "@material-ui/core";
 
+// eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles(theme => ({
   "@global": {
     /**

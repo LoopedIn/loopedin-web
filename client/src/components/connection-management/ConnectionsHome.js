@@ -20,6 +20,7 @@ const ConnectionsHome = props => {
     setOpen(false);
     removeToastMessages();
   };
+  // eslint-disable-next-line no-unused-vars
   const [toastMessagesState, setToastMessageState] = useState(
     toastMessages ? toastMessages.reverse() : []
   );
