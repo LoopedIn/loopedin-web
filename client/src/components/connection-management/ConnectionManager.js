@@ -12,9 +12,6 @@ import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import Scrollbar from "../../utils/Scrollbar";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { Fab } from "@material-ui/core";
 import { getUserLoopInfo, createLoop, updateLoop } from "../../actions";
 
 const useStyles = makeStyles(theme => ({
@@ -66,18 +63,22 @@ const ConnectionManagerHome = props => {
   const [newLoop, setNewLoop] = useState("");
 
   const [selectedLoop, setSelectedLoop] = useState(
-    loopsWithContactInfo.length === 0 ? "" : Object.keys(loopsWithContactInfo)[0]
+    loopsWithContactInfo.length === 0
+      ? ""
+      : Object.keys(loopsWithContactInfo)[0]
   );
-  
+
   const [toggle, setToggle] = useState(false);
 
   const [loopVsFriendsConfig, setLoopVsFriendsConfig] = useState(
     loopsWithContactInfo
   );
-    
- useEffect(() => {setLoopVsFriendsConfig(loopsWithContactInfo)}, [loopsWithContactInfo])
- 
-  const handleListItemClick = (event, selectedLoop) => {
+
+  useEffect(() => {
+    setLoopVsFriendsConfig(loopsWithContactInfo);
+  }, [loopsWithContactInfo]);
+
+  const handleListItemClick = selectedLoop => {
     setSelectedLoop(selectedLoop);
   };
 
@@ -90,7 +91,7 @@ const ConnectionManagerHome = props => {
     updateLoop(loopVsFriendsConfig, friendsList);
   };
 
-  const renderLoopsListItem = (val, index) => {
+  const renderLoopsListItem = val => {
     return (
       <div>
         <ListItem
@@ -206,13 +207,13 @@ const ConnectionManagerHome = props => {
           </Scrollbar>
         </div>
         <div className={classes.addFAB}>
-        <Button
+          <Button
             variant="contained"
             color="secondary"
             onClick={handleSaveLoopConfigsBtnSubmit}
-            >
+          >
             Save
-        </Button>
+          </Button>
           {/* <Fab color="secondary" onClick={() => {}}>
             <AddCircleIcon className="material-icons" />
           </Fab> */}

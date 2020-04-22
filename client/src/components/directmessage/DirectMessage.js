@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import PropTypes from "prop-types";
 import { Grid } from "@material-ui/core";
 import Chat from "./Chat";
 import ChatList from "./ChatList";
@@ -14,7 +13,7 @@ const DirectMessages = props => {
         </Grid>
         <Grid item xs={12} md={8}>
           <div>
-            <Chat socket = {props.socket}/>
+            <Chat socket={props.socket} />
             <Input />
           </div>
         </Grid>

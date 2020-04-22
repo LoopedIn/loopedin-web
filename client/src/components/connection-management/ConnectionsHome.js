@@ -1,12 +1,12 @@
 import React, { useEffect, Fragment, useState } from "react";
 import { connect } from "react-redux";
 import { Grid } from "@material-ui/core";
-import PropTypes from "prop-types";
+
 import AddFriend from "./AddFriend";
 import ConnectionManager from "./ConnectionManager";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import {removeToastMessages} from "../../actions/user-connections"
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import { removeToastMessages } from "../../actions/user-connections";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -15,46 +15,50 @@ function Alert(props) {
 const ConnectionsHome = props => {
   const [open, setOpen] = React.useState(true);
 
-  const {
-    toastMessages,
-    removeToastMessages
-  } =  props;
+  const { toastMessages, removeToastMessages } = props;
 
-  const handleClose = (event, reason) => {  
+  const handleClose = () => {
     setOpen(false);
     removeToastMessages();
   };
-  const [toastMessagesState, setToastMessageState] = useState(toastMessages? toastMessages.reverse() : []);
+  const [, setToastMessageState] = useState(
+    toastMessages ? toastMessages.reverse() : []
+  );
 
-  console.log({toastMessagesState})
+  //console.log({toastMessagesState})
   useEffect(() => {
-    setToastMessageState(toastMessages? toastMessages.reverse() : [])
-    if(toastMessages.length > 0){
+    setToastMessageState(toastMessages ? toastMessages.reverse() : []);
+    if (toastMessages.length > 0) {
       setOpen(true);
     }
-  }, [toastMessages])
+  }, [toastMessages]);
 
-  const toast = (message, severity) => 
+  const toast = (message, severity) => (
     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
       <Alert onClose={handleClose} severity={severity}>
         {message}
       </Alert>
     </Snackbar>
+  );
 
-
-
-  const severity = (message) => {
-    if(message.includes("already a friend") || message.includes("error") || message.includes("does not exist")){
-      return "info"
-    } else{
-      return "success"
+  const severity = message => {
+    if (
+      message.includes("already a friend") ||
+      message.includes("error") ||
+      message.includes("does not exist")
+    ) {
+      return "info";
+    } else {
+      return "success";
     }
-  }
+  };
 
-  const toastToShow = () => 
-    toastMessages && toastMessages.length > 0 ?
-    toast(toastMessages[0], severity(toastMessages[0]))
-       : <div></div>
+  const toastToShow = () =>
+    toastMessages && toastMessages.length > 0 ? (
+      toast(toastMessages[0], severity(toastMessages[0]))
+    ) : (
+      <div></div>
+    );
 
   return (
     <Fragment>
@@ -73,8 +77,10 @@ const ConnectionsHome = props => {
 
 function mapStateToProps(state) {
   return {
-    toastMessages: state.userConnections.toastMessages,
+    toastMessages: state.userConnections.toastMessages
   };
 }
 
-export default connect(mapStateToProps,{removeToastMessages})(ConnectionsHome);
+export default connect(mapStateToProps, { removeToastMessages })(
+  ConnectionsHome
+);
