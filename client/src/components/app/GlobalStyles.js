@@ -93,7 +93,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const GlobalStyles = () => {
-  const classes = useStyles();
   return null;
 };
 

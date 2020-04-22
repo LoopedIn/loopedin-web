@@ -74,7 +74,7 @@ export const serverRequests = {
     try {
       return authenticatedRequest(r("/users/create_post"), params);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
 
