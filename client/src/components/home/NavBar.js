@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import classNames from "classnames";
 import { connect } from "react-redux";
 import compose from "recompose/compose";

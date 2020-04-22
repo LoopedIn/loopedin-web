@@ -78,7 +78,7 @@ const ConnectionManagerHome = props => {
     setLoopVsFriendsConfig(loopsWithContactInfo);
   }, [loopsWithContactInfo]);
 
-  const handleListItemClick = selectedLoop => {
+  const handleListItemClick = (event, selectedLoop) => {
     setSelectedLoop(selectedLoop);
   };
 

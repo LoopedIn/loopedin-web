@@ -13,9 +13,9 @@ import { Link as RouterLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { loginUser } from "../../actions";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { removeLoginToastMessage } from "../../actions/auth"
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import { removeLoginToastMessage } from "../../actions/auth";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -85,7 +85,7 @@ const CustomSignInSVG = withStyles({
   }
 })(LockOutlinedIcon);
 
-export const loginSide = props => {
+const LoginSide = props => {
   const classes = useStyles();
 
   const [email, setEmail] = useState("");
@@ -97,14 +97,11 @@ export const loginSide = props => {
     loginUser(email, password);
   };
 
-  const {
-    loginToast,
-    removeLoginToastMessage
-  } =  props;
+  const { loginToast, removeLoginToastMessage } = props;
 
   const [open, setOpen] = React.useState(true);
 
-  const handleClose = (event, reason) => {  
+  const handleClose = () => {
     setOpen(false);
     removeLoginToastMessage();
   };
@@ -112,110 +109,119 @@ export const loginSide = props => {
   const [toastMessagesState, setToastMessageState] = useState(loginToast);
 
   useEffect(() => {
-    setToastMessageState(loginToast)
-    if(loginToast != undefined){
+    setToastMessageState(loginToast);
+    if (loginToast != undefined) {
       setOpen(true);
     }
-  }, [loginToast])
+  }, [loginToast]);
 
-  const toast = (message, severity) => 
+  const toast = (message, severity) => (
     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
       <Alert onClose={handleClose} severity={severity}>
         {message}
       </Alert>
     </Snackbar>
+  );
 
+  const severity = () => {
+    return "info";
+  };
 
-  const severity = (message) => {
-    return "info"
-  }
-
-  const toastToShow = () => 
-    toastMessagesState ?
-    toast(toastMessagesState, severity(toastMessagesState))
-       : <div></div>
+  const toastToShow = () =>
+    toastMessagesState ? (
+      toast(toastMessagesState, severity(toastMessagesState))
+    ) : (
+      <div></div>
+    );
 
   if (isAuthenticated) {
     return <Redirect to="/" />;
   } else {
     return (
       <Fragment>
-      <Grid container component="main" className={classes.root}>
-        <Grid item xs={false} sm={4} md={7} className={classes.image} />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <div className={classes.paper}>
-            <Grid container>
-              <Grid item>
-                <Typography component="h1" variant="h3">
-                  LoopedIn
+        <Grid container component="main" className={classes.root}>
+          <Grid item xs={false} sm={4} md={7} className={classes.image} />
+          <Grid
+            item
+            xs={12}
+            sm={8}
+            md={5}
+            component={Paper}
+            elevation={6}
+            square
+          >
+            <div className={classes.paper}>
+              <Grid container>
+                <Grid item>
+                  <Typography component="h1" variant="h3">
+                    LoopedIn
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item>
+                  <Avatar className={classes.avatar}>
+                    <CustomSignInSVG />
+                  </Avatar>
+                </Grid>
+                <Grid item>
+                  <Typography component="h1" variant="h5">
+                    Sign in
+                  </Typography>
+                </Grid>
+              </Grid>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                onChange={event => setEmail(event.target.value)}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange={event => setPassword(event.target.value)}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={handleSubmit}
+              >
+                Sign In
+              </Button>
+              {loginError && (
+                <Typography component="p" className={classes.errorText}>
+                  Incorrect email or password.
                 </Typography>
+              )}
+              <Grid container>
+                <Grid item>
+                  <Link component={RouterLink} to="/register" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container>
-              <Grid item>
-                <Avatar className={classes.avatar}>
-                  <CustomSignInSVG />
-                </Avatar>
-              </Grid>
-              <Grid item>
-                <Typography component="h1" variant="h5">
-                  Sign in
-                </Typography>
-              </Grid>
-            </Grid>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={event => setEmail(event.target.value)}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={event => setPassword(event.target.value)}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={handleSubmit}
-            >
-              Sign In
-            </Button>
-            {loginError && (
-              <Typography component="p" className={classes.errorText}>
-                Incorrect email or password.
-              </Typography>
-            )}
-            <Grid container>
-              <Grid item>
-                <Link component={RouterLink} to="/register" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-            <Box mt={5}>
-              <Copyright />
-            </Box>
-          </div>
+              <Box mt={5}>
+                <Copyright />
+              </Box>
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
-            <Box>{toastToShow()}</Box>
+        <Box>{toastToShow()}</Box>
       </Fragment>
     );
   }
@@ -228,4 +234,6 @@ function mapStateToProps(state) {
     isAuthenticated: state.auth.isAuthenticated
   };
 }
-export default connect(mapStateToProps, {removeLoginToastMessage, loginUser})(loginSide);
+export default connect(mapStateToProps, { removeLoginToastMessage, loginUser })(
+  LoginSide
+);
