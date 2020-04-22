@@ -43,7 +43,7 @@ export default (state = initialState, action) => {
         toastMessages: updatedToastMessages(state, action.errorMsg)
       };
     case CREATE_LOOP_SUCCESSFUL:
-      console.log("here");
+      //console.log("here");
       return {
         ...state,
         toastMessages: updatedToastMessages(state, action.msg)
@@ -63,8 +63,7 @@ export default (state = initialState, action) => {
     case MY_POSTS_LOADED:
       return { ...state, postsLists: action.postsLists };
     case REMOVE_USER_CONNECTION_TOASTS:
-      const empty = [];
-      return { ...state, toastMessages: empty };
+      return { ...state, toastMessages: [] };
     default:
       return state;
   }
