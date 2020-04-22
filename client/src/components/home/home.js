@@ -1,13 +1,10 @@
-import React, { useEffect, Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import classNames from "classnames";
 import { logoutUser, getUserFriends } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import NavBar from "../home/NavBar";
 import Routing from "./Routing";
-import SocketContext from '../../utils/socket-context'
-
-
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -25,12 +22,7 @@ const useStyles = makeStyles(theme => ({
 const Home = props => {
   const {
     //Objects retrieved from state
-    isLoggingOut,
-    logoutError,
     logoutUser,
-    user,
-    loops,
-    friends,
     socket
   } = props;
 
