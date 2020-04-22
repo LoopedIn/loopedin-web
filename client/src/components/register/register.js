@@ -11,10 +11,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as RouterLink } from "react-router-dom";
 import { connect } from "react-redux";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import { registerUser } from "../../actions";
-import { removeRegisterToastMessage } from "../../actions/auth"
+import { removeRegisterToastMessage } from "../../actions/auth";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -58,14 +58,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const register = (props) => {
+const Register = props => {
   const classes = useStyles();
 
-  const {
-    registerToast,
-    removeRegisterToastMessage,
-    registerUser
-  } =  props;
+  const { registerToast, removeRegisterToastMessage, registerUser } = props;
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -74,13 +70,13 @@ const register = (props) => {
   const [password, setPassword] = useState("");
 
   const handleSubmit = () => {
-    console.log("Clicked register!!")
-    registerUser(firstName, lastName, userName ,email, password);
+    //console.log("Clicked register!!");
+    registerUser(firstName, lastName, userName, email, password);
   };
 
   const [open, setOpen] = React.useState(true);
 
-  const handleClose = (event, reason) => {  
+  const handleClose = () => {
     setOpen(false);
     removeRegisterToastMessage();
   };
@@ -88,32 +84,34 @@ const register = (props) => {
   const [toastMessagesState, setToastMessageState] = useState(registerToast);
 
   useEffect(() => {
-    setToastMessageState(registerToast)
-    if(registerToast != undefined){
+    setToastMessageState(registerToast);
+    if (registerToast != undefined) {
       setOpen(true);
     }
-  }, [registerToast])
+  }, [registerToast]);
 
-  const toast = (message, severity) => 
+  const toast = (message, severity) => (
     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
       <Alert onClose={handleClose} severity={severity}>
         {message}
       </Alert>
     </Snackbar>
+  );
 
-
-  const severity = (message) => {
-    if(message.includes("already in use")){
-      return "info"
-    } else{
-      return "success"
+  const severity = message => {
+    if (message.includes("already in use")) {
+      return "info";
+    } else {
+      return "success";
     }
-  }
+  };
 
-  const toastToShow = () => 
-    toastMessagesState ?
-    toast(toastMessagesState, severity(toastMessagesState))
-       : <div></div>
+  const toastToShow = () =>
+    toastMessagesState ? (
+      toast(toastMessagesState, severity(toastMessagesState))
+    ) : (
+      <div></div>
+    );
 
   return (
     <Container component="main" maxWidth="xs">
@@ -138,7 +136,6 @@ const register = (props) => {
               id="firstName"
               label="First Name"
               onChange={event => setFirstName(event.target.value)}
-              autoFocus
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -212,9 +209,7 @@ const register = (props) => {
       <Box mt={5}>
         <Copyright />
       </Box>
-      <Box>
-      {toastToShow()}
-      </Box>
+      <Box>{toastToShow()}</Box>
     </Container>
   );
 };
@@ -225,4 +220,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { registerUser, removeRegisterToastMessage })(register);
+export default connect(mapStateToProps, {
+  registerUser,
+  removeRegisterToastMessage
+})(Register);

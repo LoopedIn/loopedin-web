@@ -20,14 +20,14 @@ import {
   getMyLoopsMessages,
   deleteLoopPost
 } from "../../actions/user-connections";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const useStyle = makeStyles(theme => ({
+const useStyle = makeStyles(() => ({
   scrollbar: {
     widht: "100%",
     height: "40vh"
@@ -59,30 +59,32 @@ const MyPosts = props => {
     e.preventDefault();
     const postId = post._id;
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await deleteLoopPost(postId);
       setLoopDeleted(Date.now());
       setOpen(true);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
   const [open, setOpen] = React.useState(false);
 
-  const handleClose = (event, reason) => {  
+  const handleClose = () => {
     setOpen(false);
   };
 
-  const toast = (message, severity) => 
-  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-    <Alert onClose={handleClose} severity={severity}>
-      {message}
-    </Alert>
-  </Snackbar>
+  const toast = (message, severity) => (
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity={severity}>
+        {message}
+      </Alert>
+    </Snackbar>
+  );
 
-  const toastToShow = () => toast("Deleted post", "success")
+  const toastToShow = () => toast("Deleted post", "success");
 
-  const renderMyPost = (value, index) => {
+  const renderMyPost = value => {
     return (
       <div key={value._id}>
         <ListItem key={value}>

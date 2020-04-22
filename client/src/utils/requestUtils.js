@@ -1,5 +1,4 @@
 import axios from "axios";
-import { connect } from "react-redux";
 import { myFirebase } from "../firebase/firebase";
 
 export const authenticatedRequest = async (route, postBodyParams, isDelete) => {

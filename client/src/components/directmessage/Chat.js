@@ -2,14 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Scrollbar from "../../utils/Scrollbar";
-import Chip from "@material-ui/core/Chip";
-import { Paper } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ChatMessage from "./ChatMessage";
 import moment from "moment";
 import { getChatHistory } from "../../actions/direct-messages";
-
-
 
 const useStyles = makeStyles(theme => ({
   scrollBar: {
@@ -39,9 +35,9 @@ const renderMessages = (messages, classes) => {
   let currentDate = "";
   return (
     <List className={classes.root}>
-      {messages.map((values, index) => {
+      {messages.map(values => {
         let dateChanged = false;
-        console.log(Math.abs(moment(values.created).diff(moment(), "days")));
+        //console.log(Math.abs(moment(values.created).diff(moment(), "days")));
         if (
           Math.abs(moment(values.created).diff(moment(), "days")) !== 0 &&
           currentDate != values.created
@@ -49,7 +45,13 @@ const renderMessages = (messages, classes) => {
           dateChanged = true;
           currentDate = values.created;
         }
-        return <ChatMessage dateChanged={dateChanged} values={values} />;
+        return (
+          <ChatMessage
+            key={values.created}
+            dateChanged={dateChanged}
+            values={values}
+          />
+        );
       })}
     </List>
   );
@@ -70,20 +72,20 @@ const Chat = props => {
   //console.log("sent message "+sentMessage+" \n"+"chat history "+ JSON.stringify(chatHistory))
   let scrollComponent = useRef();
 
-  const [lastUpdatedAt,setLastUpdatedAt] = useState("")
+  const [lastUpdatedAt, setLastUpdatedAt] = useState("");
   useEffect(() => {
-    console.log("reloading component")
+    //console.log("reloading component");
     getChatHistory(chosenUser);
     if (scrollComponent.current) {
       scrollComponent.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [sentMessage, selectedFriend,lastUpdatedAt]);
+  }, [sentMessage, selectedFriend, lastUpdatedAt]);
 
   const chosenUser = selectedFriend;
   const [chatHistoryState, setChatHistoryState] = useState(chatHistory);
-  
+
   useEffect(() => {
-    console.log("setchathistory")
+    //console.log("setchathistory");
     setChatHistoryState(chatHistory);
     if (scrollComponent.current) {
       scrollComponent.current.scrollIntoView({ behavior: "smooth" });
@@ -91,21 +93,19 @@ const Chat = props => {
   }, [chatHistory]);
 
   useEffect(() => {
-    console.log("inside socket block")
-  //   //socket.connect()
-    console.log("Socket "+ socket.id)
+    //console.log("inside socket block");
+    //   //socket.connect()
+    //console.log("Socket " + socket.id);
     //console.log("reloading component")
-    socket.emit('storeUserID',{userID:user._id,socketID:socket.id})
+    socket.emit("storeUserID", { userID: user._id, socketID: socket.id });
 
-    socket.on('reloadComponent', (data) => {
-      console.log("I am listening ")
+    // eslint-disable-next-line no-unused-vars
+    socket.on("reloadComponent", data => {
+      //console.log("I am listening ");
       //getChatHistory(chosenUser)
-      setLastUpdatedAt(new Date())
-   });
-  },socket.id)
-
-
-
+      setLastUpdatedAt(new Date());
+    });
+  }, [socket.id]);
 
   return (
     <div

@@ -93,6 +93,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const GlobalStyles = () => {
+  // eslint-disable-next-line no-unused-vars
   const classes = useStyles();
   return null;
 };
