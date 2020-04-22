@@ -9,12 +9,12 @@ export const getUserFriends = () => async dispatch => {
 };
 
 export const createLoop = loopName => async dispatch => {
-  console.log("Create loop called with " + loopName);
+  //console.log("Create loop called with " + loopName);
   try {
     await serverRequests.createLoopApi(loopName);
     dispatch(dispatches.loop.createLoopSuccess("Loop created!"));
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     const errorResp = error.response.data;
     const errorMsg = errorResp.errmsg;
     if (errorMsg.includes("dup")) {
@@ -81,10 +81,7 @@ export const updateLoop = (
 };
 
 //Add another user as a friend
-export const addFriendToUser = (
-  userName,
-  userFriendsState
-) => async dispatch => {
+export const addFriendToUser = userName => async dispatch => {
   const params = {
     friendIds: [userName]
   };
@@ -129,6 +126,8 @@ export const getMyLoopsMessages = () => async dispatch => {
   dispatch(dispatches.loop.getMyLoopMessageSuccess(postLists));
 };
 
+// eslint-disable-next-line no-unused-vars
 export const deleteLoopPost = loopId => async dispatch => {
+  // eslint-disable-next-line no-unused-vars
   const deleteSuccess = (await serverRequests.deletePostMessage(loopId)).data;
 };

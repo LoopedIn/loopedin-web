@@ -63,8 +63,7 @@ export default (state = initialState, action) => {
     case MY_POSTS_LOADED:
       return { ...state, postsLists: action.postsLists };
     case REMOVE_USER_CONNECTION_TOASTS:
-      const empty = [];
-      return { ...state, toastMessages: empty };
+      return { ...state, toastMessages: [] };
     default:
       return state;
   }
