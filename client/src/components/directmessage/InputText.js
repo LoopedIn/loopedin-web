@@ -5,30 +5,30 @@ import Send from "@material-ui/icons/Send";
 import { Fab } from "@material-ui/core";
 import { createMessage } from "../../actions/direct-messages";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: "block",
-    alignItems: "row",
-    justifyContent: "center",
-    height: 10,
-    backgroundColor: theme.palette.background.main,
-    margin: 5,
-    marginBottom: 15,
-    marginRight: 15,
-    marginLeft: 15
-  },
-  inputBox: {
-    backgroundColor: theme.palette.grey[400],
-    flexGrow: 1,
-    height: 56,
-    borderRadius: 30,
-    paddingLeft: 8,
-    paddingRight: 8,
-    margin: 5
-  }
-}));
-
 const InputText = props => {
+  const useStyles = makeStyles(theme => ({
+    root: {
+      display: "block",
+      alignItems: "row",
+      justifyContent: "center",
+      height: 10,
+      backgroundColor: theme.palette.background.main,
+      margin: 5,
+      marginBottom: 15,
+      marginRight: 15,
+      marginLeft: 15
+    },
+    inputBox: {
+      backgroundColor: theme.palette.grey[400],
+      flexGrow: 1,
+      height: 56,
+      borderRadius: 30,
+      paddingLeft: 8,
+      paddingRight: 8,
+      margin: 5
+    }
+  }));
+
   const classes = useStyles();
 
   const [inputText, setInputText] = useState("");
