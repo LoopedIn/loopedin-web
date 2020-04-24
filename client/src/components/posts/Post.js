@@ -7,6 +7,8 @@ import CardActions from "@material-ui/core/CardActions";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ReplyIcon from "@material-ui/icons/Reply";
 import Linkify from "react-linkify";
@@ -25,7 +27,8 @@ const useStyles = makeStyles(theme => ({
     })
   },
   reply: {
-    marginLeft: "auto"
+    marginLeft: "auto",
+    width: "100%"
   },
   expandOpen: {
     transform: "rotate(180deg)"
@@ -73,12 +76,18 @@ const Post = props => {
       </CardContent>
 
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton className={classes.reply} aria-label="reply">
+        {/* <IconButton className={classes.reply} aria-label="reply">
           <ReplyIcon />
-        </IconButton>
+        </IconButton> */}
+        <div style={{ width: "100%" }}>
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              className={classes.reply}
+              aria-label="reply"
+              expandIcon={<ReplyIcon />}
+            ></ExpansionPanelSummary>
+          </ExpansionPanel>
+        </div>
       </CardActions>
     </Card>
   );
