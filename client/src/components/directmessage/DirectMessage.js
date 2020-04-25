@@ -14,7 +14,7 @@ const DirectMessages = props => {
         <Grid item xs={12} md={8}>
           <div>
             <Chat socket={props.socket} />
-            <Input />
+            <Input textBoxHeight="10px" sendFunction="handleSendMessage" />
           </div>
         </Grid>
       </Grid>

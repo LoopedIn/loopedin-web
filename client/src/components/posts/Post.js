@@ -110,7 +110,10 @@ const Post = props => {
               classes={replyClasses}
               expandIcon={<ReplyIcon />}
             ></ExpansionPanelSummary>
-            <InputText />
+            <InputText
+              textBoxHeight="50px"
+              sendFunction="handleSendPostReply"
+            />
           </ExpansionPanel>
         </div>
       </CardActions>
