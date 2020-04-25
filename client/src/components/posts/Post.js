@@ -10,7 +10,6 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ReplyIcon from "@material-ui/icons/Reply";
 import Linkify from "react-linkify";
-import { red } from "@material-ui/core/colors";
 import InputText from "../directmessage/InputText";
 
 const useStyles = makeStyles(theme => ({
@@ -33,7 +32,8 @@ const useStyles = makeStyles(theme => ({
     transform: "rotate(180deg)"
   },
   avatar: {
-    backgroundColor: red[500]
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.secondary.main
   },
   cardContentInner: {
     marginTop: theme.spacing(-4)
@@ -48,6 +48,9 @@ const useStyles = makeStyles(theme => ({
     "&$expanded": {
       transform: "rotate(0deg)"
     }
+  },
+  replyIconColor: {
+    color: theme.palette.tertiary.main
   }
 }));
 
@@ -108,7 +111,7 @@ const Post = props => {
             <ExpansionPanelSummary
               aria-label="reply"
               classes={replyClasses}
-              expandIcon={<ReplyIcon />}
+              expandIcon={<ReplyIcon className={classes.replyIconColor} />}
             ></ExpansionPanelSummary>
             <InputText
               textBoxHeight="50px"

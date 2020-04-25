@@ -17,6 +17,7 @@ import { serverRequests } from "../../api/apiRequests";
 import { Button, Toolbar, Paper, Typography } from "@material-ui/core";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import classNames from "classnames";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -38,12 +39,40 @@ const useStyles = makeStyles(theme => ({
     height: "33vh"
   },
   avatar: {
-    backgroundColor: theme.palette.secondary.light
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.secondary.main
+  },
+  paperColor: {
+    backgroundColor: theme.palette.common.black
+  },
+  textColor: {
+    color: theme.palette.secondary.main
   }
+}));
+
+const useStyleForBtnOvr = makeStyles(theme => ({
+  root: {
+    "&$disabled": {
+      color: theme.palette.common.grey
+    }
+  },
+  disabled: {}
+}));
+
+const useStyleForCheckBoxOvr = makeStyles(theme => ({
+  root: {
+    color: theme.palette.tertiary.main,
+    "&$checked": {
+      color: theme.palette.tertiary.main
+    }
+  },
+  checked: {}
 }));
 
 const PostLists = props => {
   const classes = useStyles();
+  const classesForBtnOver = useStyleForBtnOvr();
+  const classesForCheckBoxOver = useStyleForCheckBoxOvr();
   const {
     loopsList,
     getLoopLists,
@@ -121,10 +150,15 @@ const PostLists = props => {
               {`${value.loopName[0]}`}
             </Avatar>
           </ListItemAvatar>
-          <ListItemText id={labelId} primary={`${value.loopName}`} />
+          <ListItemText
+            className={classes.textColor}
+            id={labelId}
+            primary={`${value.loopName}`}
+          />
           <ListItemSecondaryAction>
             <Checkbox
               edge="end"
+              classes={classesForCheckBoxOver}
               onChange={handleToggle(value)}
               checked={checked.indexOf(value) !== -1}
               inputProps={{ "aria-labelledby": labelId }}
@@ -138,16 +172,16 @@ const PostLists = props => {
 
   return (
     <Fragment>
-      <Paper>
+      <Paper className={classes.paperColor}>
         <Toolbar className={classes.toolbar}>
-          <Typography variant="h5" className="header-message">
+          <Typography variant="h5" className={classes.textColor}>
             Loops
           </Typography>
 
           <Button
             variant="contained"
             color="primary"
-            className={classes.button}
+            classes={classesForBtnOver}
             onClick={sendMessageToLoop}
             disabled={disableButton}
             endIcon={<SendIcon>send</SendIcon>}
@@ -156,12 +190,15 @@ const PostLists = props => {
           </Button>
         </Toolbar>
       </Paper>
-      <Paper className={classes.paperRoot}>
+      <Paper className={classNames(classes.paperRoot, classes.paperColor)}>
         <Box pt={2} px={2} pb={4}>
           <Box display="flex" justifyContent="space-between">
             <div className={classes.scrollbar}>
               <Scrollbar>
-                <List dense className={classes.root}>
+                <List
+                  dense
+                  className={classNames(classes.root, classes.paperColor)}
+                >
                   {loopsListState !== undefined ? (
                     loopsListState.map((value, index) => {
                       return renderLoopList(value, index);
