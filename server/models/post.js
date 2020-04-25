@@ -14,6 +14,7 @@ const mongoose = require('mongoose');
     receivingUserId: {type:  String , required: true},
     messageType: {type: String, required: true, enum: ['text', 'yo', 'reply']},
     messageContent: {type: String, required: true },
+    replyToPost: {type: mongoose.Types.ObjectId, ref:'post'},
     created: { type: Date, default: () => new Date() },
     readAt: {type: Date}
   });
