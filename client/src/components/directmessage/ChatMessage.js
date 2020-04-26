@@ -142,8 +142,8 @@ const ChatMessage = props => {
                 style={{
                   fontSize: 9,
                   marginLeft: 25,
-
-                  alignSelf: "flex-end"
+                  alignSelf: "flex-end",
+                  color: "white"
                 }}
               >
                 {`${moment(created).format("h:mm a")}`}
