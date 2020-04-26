@@ -661,6 +661,7 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
               postObject['postContent'] = post.postContent;
               postObject['created'] = post.created;
               postObject['postID'] = post._id;
+              postObject['senderID'] = post.senderId;
               postObject['firstName'] =
                 resultObject[post.senderId]['firstName'];
               postObject['lastName'] = resultObject[post.senderId]['lastName'];
