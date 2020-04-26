@@ -577,13 +577,17 @@ router.route('/users/get_chat_history').post((req, res, next) => {
       { $and: [{ receivingUserId: friendID }, { senderId: userID }] },
     ])
     .sort({ created: -1 })
+    .populate({
+      path: 'replyToPost',
+      select: 'postContent -_id',
+    })
     .exec((error, data) => {
       if (error) {
-        // console.log(error);
+        //console.log(error);
         res.status(400);
         return next();
       }
-      // console.log(data);
+      //console.log(data);
       res.json(data);
       return next();
     });
