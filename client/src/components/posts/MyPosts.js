@@ -27,10 +27,16 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const useStyle = makeStyles(() => ({
+const useStyle = makeStyles(theme => ({
   scrollbar: {
     widht: "100%",
     height: "40vh"
+  },
+  expandIconColor: {
+    color: theme.palette.tertiary.main
+  },
+  deleteIcon: {
+    color: theme.palette.common.alertRed
   }
 }));
 
@@ -95,7 +101,7 @@ const MyPosts = props => {
               aria-label="delete"
               onClick={e => onDeletePost(value, e)}
             >
-              <DeleteIcon />
+              <DeleteIcon className={classes.deleteIcon} />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
@@ -106,7 +112,9 @@ const MyPosts = props => {
   return (
     <Fragment>
       <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon className={classes.expandIconColor} />}
+        >
           <Typography variant="h5" className="header-message">
             My posts
           </Typography>

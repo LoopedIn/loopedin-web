@@ -1,7 +1,16 @@
 import React, { Fragment, useState, useRef } from "react";
 import PostLists from "./PostLists";
 import MyPosts from "./MyPosts";
-import { Paper, TextField, Box } from "@material-ui/core";
+import { Paper, TextField, Box, makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles(theme => ({
+  paperBackground: {
+    backgroundColor: theme.palette.background.default
+  },
+  root: {
+    color: "white"
+  }
+}));
 
 const PostChat = () => {
   const [postText, setPostText] = useState("");
@@ -10,6 +19,7 @@ const PostChat = () => {
   const [checkBoxSelected, setCheckBoxSelected] = useState(false);
   const [loopSentTime, setloopSentTime] = useState("");
   const textBoxref = useRef();
+  const classes = useStyles();
 
   const parentCallback = btnDisabled => {
     btnDisabled == false
@@ -29,7 +39,7 @@ const PostChat = () => {
   return (
     <Fragment>
       <Box>
-        <Paper>
+        <Paper className={classes.paperBackground}>
           <TextField
             id="send-message-to-loops"
             label="Send Message to Loops"
