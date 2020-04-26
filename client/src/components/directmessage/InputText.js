@@ -6,7 +6,14 @@ import { Fab } from "@material-ui/core";
 import { createMessage } from "../../actions/direct-messages";
 
 const InputText = props => {
-  const { createMessage, selectedFriend, textBoxHeight, sendFunction } = props;
+  const {
+    createMessage,
+    selectedFriend,
+    textBoxHeight,
+    sendFunction,
+    senderId,
+    postId
+  } = props;
 
   const [inputText, setInputText] = useState("");
 
@@ -46,8 +53,8 @@ const InputText = props => {
   };
 
   const handleSendPostReply = () => {
-    createMessage(chosenUser, inputText);
-    alert(inputText);
+    createMessage(senderId, inputText, postId);
+    setInputText("");
   };
 
   return (
@@ -120,7 +127,9 @@ function mapStateToProps(state, ownProps) {
   return {
     user: state.auth.user,
     selectedFriend: state.directMessages.selectedFriend,
-    textBoxHeight: ownProps.textBoxHeight
+    textBoxHeight: ownProps.textBoxHeight,
+    senderId: ownProps.senderId,
+    postId: ownProps.postId
   };
 }
 

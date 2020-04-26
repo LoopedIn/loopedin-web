@@ -16,14 +16,23 @@ export const getRecentChats = () => async dispatch => {
 //Sends a message to user
 export const createMessage = (
   recievingUserId,
-  messageContent
+  messageContent,
+  postId
 ) => async dispatch => {
   try {
-    await serverRequests.createMessageApi(
-      recievingUserId,
-      "text",
-      messageContent
-    );
+    postId !== null
+      ? await serverRequests.createMessageApi(
+          recievingUserId,
+          "reply",
+          messageContent,
+          postId
+        )
+      : await serverRequests.createMessageApi(
+          recievingUserId,
+          "text",
+          messageContent
+        );
+
     dispatch(dispatches.directMessages.sentMessage(messageContent));
   } catch (error) {
     //console.log(error)

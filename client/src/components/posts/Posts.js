@@ -60,6 +60,8 @@ const Posts = () => {
                   message={value.postContent}
                   firstName={value.firstName}
                   lastName={value.lastName}
+                  senderId={value.senderID}
+                  postId={value.postID}
                   timeStamp={moment(value.created).format(
                     "MMMM Do YYYY, h:mm a"
                   )}
