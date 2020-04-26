@@ -23,7 +23,7 @@ const InputText = props => {
       marginLeft: 15
     },
     inputBox: {
-      backgroundColor: theme.palette.grey[400],
+      backgroundColor: theme.palette.background.default,
       flexGrow: 1,
       height: 56,
       borderRadius: 30,

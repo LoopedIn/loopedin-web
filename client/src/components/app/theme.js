@@ -7,7 +7,9 @@ const tertiary = "#2cb67d";
 const black = "#16161a";
 const darkBlack = "rgb(36, 40, 44)";
 const background = "#242629";
+const alertRed = "#ef4565";
 const grey = "#72757e";
+const textPrimary = "#94a1b2";
 const warningLight = "rgba(253, 200, 69, .3)";
 const warningMain = "rgba(253, 200, 69, .5)";
 const warningDark = "rgba(253, 200, 69, .7)";
@@ -31,10 +33,12 @@ const theme = createMuiTheme({
     primary: { main: primary },
     secondary: { main: secondary },
     tertiary: { main: tertiary },
+    textPrimary: textPrimary,
     common: {
       black,
       darkBlack,
-      grey
+      grey,
+      alertRed
     },
     warning: {
       light: warningLight,
@@ -85,10 +89,27 @@ const theme = createMuiTheme({
         }
       }
     },
+    MuiPaper: {
+      root: {
+        backgroundColor: black
+      }
+    },
     MuiDivider: {
       root: {
-        backgroundColor: borderColor,
+        backgroundColor: grey,
         height: borderWidth
+      }
+    },
+    MuiTypography: {
+      root: {
+        color: secondary
+      },
+      body1: {
+        fontSize: "1.2rem"
+      },
+      body2: {
+        fontSize: "1rem",
+        fontWeight: "600"
       }
     },
     MuiPrivateNotchedOutline: {
@@ -121,9 +142,26 @@ const theme = createMuiTheme({
           paddingRight: spacing
         }
       }
+    },
+    MuiInputLabel: {
+      root: {
+        color: secondary
+      }
+    },
+    MuiInputBase: {
+      input: {
+        color: tertiary,
+        fontFamily: "proxima-nova, sans-serif"
+      }
+    },
+    MuiCardHeader: {
+      subheader: {
+        color: textPrimary
+      }
     }
   },
   typography: {
+    fontFamily: "proxima-nova, sans-serif",
     useNextVariants: true
   }
 });

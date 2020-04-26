@@ -51,6 +51,9 @@ const useStyles = makeStyles(theme => ({
   },
   replyIconColor: {
     color: theme.palette.tertiary.main
+  },
+  contentColor: {
+    color: theme.palette.textPrimary
   }
 }));
 
@@ -92,7 +95,11 @@ const Post = props => {
 
       <CardContent>
         <Box className={classes.cardContentInner} height="50px">
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography
+            variant="body1"
+            className={classes.contentColor}
+            component="p"
+          >
             <Linkify componentDecorator={componentDecorator}>{message}</Linkify>
           </Typography>
         </Box>
