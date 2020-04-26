@@ -6,12 +6,16 @@ import { Fab } from "@material-ui/core";
 import { createMessage } from "../../actions/direct-messages";
 
 const InputText = props => {
+  const { createMessage, selectedFriend, textBoxHeight, sendFunction } = props;
+
+  const [inputText, setInputText] = useState("");
+
   const useStyles = makeStyles(theme => ({
     root: {
       display: "block",
       alignItems: "row",
       justifyContent: "center",
-      height: 10,
+      height: textBoxHeight,
       backgroundColor: theme.palette.background.main,
       margin: 5,
       marginBottom: 15,
@@ -19,7 +23,7 @@ const InputText = props => {
       marginLeft: 15
     },
     inputBox: {
-      backgroundColor: theme.palette.grey[400],
+      backgroundColor: theme.palette.background.default,
       flexGrow: 1,
       height: 56,
       borderRadius: 30,
@@ -31,10 +35,6 @@ const InputText = props => {
 
   const classes = useStyles();
 
-  const [inputText, setInputText] = useState("");
-
-  const { createMessage, selectedFriend } = props;
-
   const [chosenUser, setChosenUser] = useState(selectedFriend);
   useEffect(() => {
     setChosenUser(selectedFriend);
@@ -43,6 +43,11 @@ const InputText = props => {
   const handleSendMessage = () => {
     createMessage(chosenUser, inputText);
     setInputText("");
+  };
+
+  const handleSendPostReply = () => {
+    createMessage(chosenUser, inputText);
+    alert(inputText);
   };
 
   return (
@@ -96,7 +101,11 @@ const InputText = props => {
           </div>
           <Fab
             color={"primary"}
-            onClick={() => handleSendMessage()}
+            onClick={() => {
+              sendFunction === "handleSendPostReply"
+                ? handleSendPostReply()
+                : handleSendMessage();
+            }}
             aria-label="send"
           >
             <Send />
@@ -107,10 +116,11 @@ const InputText = props => {
   );
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     user: state.auth.user,
-    selectedFriend: state.directMessages.selectedFriend
+    selectedFriend: state.directMessages.selectedFriend,
+    textBoxHeight: ownProps.textBoxHeight
   };
 }
 
