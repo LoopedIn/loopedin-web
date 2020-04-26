@@ -150,11 +150,9 @@ const PostLists = props => {
               {`${value.loopName[0]}`}
             </Avatar>
           </ListItemAvatar>
-          <ListItemText
-            className={classes.textColor}
-            id={labelId}
-            primary={`${value.loopName}`}
-          />
+          <ListItemText className={classes.textColor} id={labelId}>
+            <Typography variant="body1">{`${value.loopName}`}</Typography>
+          </ListItemText>
           <ListItemSecondaryAction>
             <Checkbox
               edge="end"
