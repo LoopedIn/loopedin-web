@@ -21,13 +21,19 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
     maxWidth: "matchParent",
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.common.black
   },
   inline: {
-    display: "inline"
+    display: "inline",
+    color: theme.palette.textPrimary
   },
   timeStamp: {
-    float: "right"
+    float: "right",
+    color: theme.palette.textPrimary
+  },
+  avatar: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.secondary.main
   }
 }));
 
@@ -94,6 +100,7 @@ const ChatList = props => {
                         <ListItemAvatar>
                           <Avatar
                             alt={firstName}
+                            className={classes.avatar}
                             src="/static/images/avatar/"
                           />
                         </ListItemAvatar>

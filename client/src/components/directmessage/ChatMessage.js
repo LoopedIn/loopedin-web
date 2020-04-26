@@ -75,6 +75,15 @@ const useStyles = makeStyles(theme => ({
   },
   replyPostContent: {
     margin: "5px"
+  },
+  contentColor: {
+    color: theme.palette.textPrimary
+  },
+  timeStampIndent: {
+    fontSize: 9,
+    marginLeft: 25,
+    alignSelf: "flex-end",
+    color: theme.palette.textPrimary
   }
 }));
 
@@ -135,19 +144,14 @@ const ChatMessage = props => {
                 className={classes.chatBubbleInner}
               >
                 <Linkify componentDecorator={componentDecorator}>
-                  <Typography variant="body1">{messageContent}</Typography>
+                  <Typography className={classes.contentColor} variant="body2">
+                    {messageContent}
+                  </Typography>
                 </Linkify>
               </Typography>
-              <div
-                style={{
-                  fontSize: 9,
-                  marginLeft: 25,
-                  alignSelf: "flex-end",
-                  color: "white"
-                }}
-              >
-                {`${moment(created).format("h:mm a")}`}
-              </div>
+              <div className={classes.timeStampIndent}>{`${moment(
+                created
+              ).format("h:mm a")}`}</div>
             </div>
           </div>
         </div>
