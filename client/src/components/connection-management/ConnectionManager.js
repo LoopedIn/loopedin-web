@@ -41,8 +41,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const useStyleForListOvr = makeStyles(theme => ({
+  root: {
+    "&$selected": {
+      backgroundColor: theme.palette.common.grey
+    }
+  },
+  selected: {}
+}));
+
+const useStyleForCheckBoxOvr = makeStyles(theme => ({
+  root: {
+    color: theme.palette.tertiary.main,
+    "&$checked": {
+      color: theme.palette.tertiary.main
+    }
+  },
+  checked: {}
+}));
+
 const ConnectionManagerHome = props => {
   const classes = useStyles();
+  const classForListOvr = useStyleForListOvr();
+  const classesForCheckBoxOver = useStyleForCheckBoxOvr();
 
   const {
     createLoopSuccessFulMsg,
@@ -93,21 +114,18 @@ const ConnectionManagerHome = props => {
 
   const renderLoopsListItem = val => {
     return (
-      <div>
+      <Paper>
         <ListItem
           alignItems="flex-start"
           button
           selected={selectedLoop === val}
           onClick={event => handleListItemClick(event, val)}
+          classes={classForListOvr}
         >
           <ListItemText
             primary={
               <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  color="textPrimary"
-                >
+                <Typography component="span" variant="body1">
                   {val}
                 </Typography>
               </React.Fragment>
@@ -115,8 +133,8 @@ const ConnectionManagerHome = props => {
           />
         </ListItem>
 
-        <Divider variant="inset" component="li" />
-      </div>
+        <Divider component="li" />
+      </Paper>
     );
   };
 
@@ -150,10 +168,13 @@ const ConnectionManagerHome = props => {
               edge="start"
               checked={isPresent}
               tabIndex={-5}
+              classes={classesForCheckBoxOver}
               disableRipple
               inputProps={{ "aria-labelledby": labelId }}
             />
-            {name}
+            <Typography component="span" variant="body2">
+              {name}
+            </Typography>
           </Paper>
         </ListItem>
       );
@@ -183,7 +204,7 @@ const ConnectionManagerHome = props => {
         <div className={classes.marginEle}>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={handleCreateLoopBtnSubmit}
           >
             Create loop
@@ -206,10 +227,17 @@ const ConnectionManagerHome = props => {
             </List>
           </Scrollbar>
         </div>
+      </Box>
+      <Box display="flex" flexDirection="column" flexGrow="2">
+        <div className={classes.scrollBarFriend}>
+          <Scrollbar>
+            <List>{renderLoopsFriendConfig(selectedLoop)}</List>
+          </Scrollbar>
+        </div>
         <div className={classes.addFAB}>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={handleSaveLoopConfigsBtnSubmit}
           >
             Save
@@ -217,13 +245,6 @@ const ConnectionManagerHome = props => {
           {/* <Fab color="secondary" onClick={() => {}}>
             <AddCircleIcon className="material-icons" />
           </Fab> */}
-        </div>
-      </Box>
-      <Box display="flex" flexDirection="column" flexGrow="2">
-        <div className={classes.scrollBarFriend}>
-          <Scrollbar>
-            <List>{renderLoopsFriendConfig(selectedLoop)}</List>
-          </Scrollbar>
         </div>
       </Box>
     </Box>
