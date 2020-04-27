@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { Fragment, useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import classNames from "classnames";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
@@ -130,11 +130,18 @@ const NavBar = props => {
 
   let links = [];
 
+  let history = useHistory();
+
   const [selectedTab, setSelectedTab] = useState("");
 
   const openAccountSetting = () => {};
 
   const classes = useStyles();
+
+  useEffect(() => {
+    history.push("/posts");
+    setSelectedTab("Posts");
+  }, []);
 
   const menuItems = [
     {

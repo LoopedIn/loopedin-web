@@ -10,8 +10,6 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import { getUserFriends, addFriendToUser } from "../../actions";
 import Scrollbar from "../../utils/Scrollbar";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import { Fab } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -104,7 +102,7 @@ const AddFriend = props => {
         />
       </div>
       <div className={classes.addFriendBtn}>
-        <Button variant="contained" color="secondary" onClick={handleBtnSubmit}>
+        <Button variant="contained" color="primary" onClick={handleBtnSubmit}>
           Add friend
         </Button>
       </div>
@@ -124,11 +122,11 @@ const AddFriend = props => {
           </List>
         </Scrollbar>
       </div>
-      <div className={classes.addFAB}>
+      {/* <div className={classes.addFAB}>
         <Fab color="secondary" onClick={() => {}}>
           <PersonAddIcon className="material-icons" />
         </Fab>
-      </div>
+      </div> */}
     </Box>
   );
 };
