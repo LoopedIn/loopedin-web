@@ -56,11 +56,17 @@ export const serverRequests = {
   getRecentChatsApi: async () =>
     authenticatedRequest(r("/users/get_recent_chats"), {}),
 
-  createMessageApi: async (receivingUserId, messageType, messageContent) => {
+  createMessageApi: async (
+    receivingUserId,
+    messageType,
+    messageContent,
+    postId
+  ) => {
     return authenticatedRequest(r("/users/create_message"), {
       receivingUserId,
       messageType,
-      messageContent
+      messageContent,
+      ...(postId && { replyToPost: postId })
     });
   },
 

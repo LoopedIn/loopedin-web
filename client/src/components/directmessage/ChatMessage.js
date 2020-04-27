@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     margin: 1,
     marginTop: 5,
     boxShadow: theme.shadows[3],
-    backgroundColor: theme.palette.grey[300],
+    backgroundColor: theme.palette.common.black,
     color: theme.palette.text.primary,
     fontFamily: theme.typography.fontFamily
   },
@@ -56,12 +56,40 @@ const useStyles = makeStyles(theme => ({
   },
   chatBubbleMainLeft: {
     justifyContent: "flex-start"
+  },
+  replyPostRoot: {
+    margin: "10px 10px 2px 10px",
+    width: "fit-content",
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.tertiary.main,
+    display: "flex",
+    flexDirection: "row",
+    borderRadius: "10px"
+  },
+  replyPostLeftSpan: {
+    flex: "none",
+    width: "4px",
+    backgroundColor: theme.palette.primary.main,
+    borderTopLeftRadius: "7.5px",
+    borderBottomLeftRadius: "7.5px"
+  },
+  replyPostContent: {
+    margin: "5px"
+  },
+  contentColor: {
+    color: theme.palette.textPrimary
+  },
+  timeStampIndent: {
+    fontSize: 9,
+    marginLeft: 25,
+    alignSelf: "flex-end",
+    color: theme.palette.textPrimary
   }
 }));
 
 const ChatMessage = props => {
   const { dateChanged } = props;
-  const { messageContent, isSentByMe, created } = props.values;
+  const { messageContent, isSentByMe, created, replyToPost } = props.values;
 
   const classes = useStyles();
 
@@ -95,6 +123,20 @@ const ChatMessage = props => {
               classes.chatBubble
             )}
           >
+            {replyToPost !== undefined ? (
+              replyToPost.postContent ? (
+                <div className={classes.replyPostRoot}>
+                  <div className={classes.replyPostLeftSpan}></div>
+                  <div className={classes.replyPostContent}>
+                    {replyToPost.postContent}
+                  </div>
+                </div>
+              ) : (
+                <div></div>
+              )
+            ) : (
+              <div></div>
+            )}
             <div className={classes.typographyMain}>
               <Typography
                 variant="body1"
@@ -102,19 +144,14 @@ const ChatMessage = props => {
                 className={classes.chatBubbleInner}
               >
                 <Linkify componentDecorator={componentDecorator}>
-                  <Typography variant="body1">{messageContent}</Typography>
+                  <Typography className={classes.contentColor} variant="body2">
+                    {messageContent}
+                  </Typography>
                 </Linkify>
               </Typography>
-              <div
-                style={{
-                  fontSize: 9,
-                  marginLeft: 25,
-
-                  alignSelf: "flex-end"
-                }}
-              >
-                {`${moment(created).format("h:mm a")}`}
-              </div>
+              <div className={classes.timeStampIndent}>{`${moment(
+                created
+              ).format("h:mm a")}`}</div>
             </div>
           </div>
         </div>

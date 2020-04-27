@@ -5,7 +5,7 @@ const primary = "#7f5af0";
 const secondary = "#fffffe";
 const tertiary = "#2cb67d";
 const black = "#16161a";
-const darkBlack = "rgb(36, 40, 44)";
+const darkBlack = "#010101";
 const background = "#242629";
 const alertRed = "#ef4565";
 const grey = "#72757e";
@@ -108,7 +108,7 @@ const theme = createMuiTheme({
         fontSize: "1.2rem"
       },
       body2: {
-        fontSize: "1rem",
+        fontSize: "0.9rem",
         fontWeight: "600"
       }
     },

@@ -69,7 +69,7 @@ const useStyleForReply = makeStyles(() => ({
 const Post = props => {
   const classes = useStyles();
   const replyClasses = useStyleForReply();
-  const { message, firstName, lastName, timeStamp } = props;
+  const { message, firstName, lastName, timeStamp, senderId, postId } = props;
 
   const componentDecorator = (href, text, key) => (
     <a href={href} key={key} target="_blank" rel="noopener noreferrer">
@@ -123,6 +123,8 @@ const Post = props => {
             <InputText
               textBoxHeight="50px"
               sendFunction="handleSendPostReply"
+              senderId={senderId}
+              postId={postId}
             />
           </ExpansionPanel>
         </div>
