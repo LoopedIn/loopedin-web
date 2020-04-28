@@ -106,13 +106,7 @@ dist
 
 server/config/*
 
-.app-secrets.yaml
-client/build/bundle-76d01cf96bbda69af0c2.js
-client/build/bundle-94b02fc21c0f640bfc2e.js
-client/build/bundle-b120769b3848c5c66fc6.js
-client/build/index.html
-server/build/bundle-76d01cf96bbda69af0c2.js
-server/build/bundle-94b02fc21c0f640bfc2e.js
-server/build/bundle-b120769b3848c5c66fc6.js
-server/build/index.html
 app-secrets.yaml
+
+client/build/*
+server/build/*
