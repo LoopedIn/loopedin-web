@@ -2,10 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
+const path = require('path')
 const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
+app.use(express.static(path.join(__dirname, '../build/')))
 const indexRouter = require('../routes/api');
 
 /**
@@ -122,8 +124,10 @@ const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';
 
+const mongodbLink = process.env.ENVIROMENT === "prod" ? process.env.MONGODB_LINK : (hostname + ":" + portnumber);
+
 mongoose
-  .connect(`mongodb+srv://admin:DguwNPHY8XBYnN1z@cluster0-fqrdf.gcp.mongodb.net/InLooped?retryWrites=true&w=majority`, {
+  .connect(`${mongodbLink}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

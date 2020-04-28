@@ -3,7 +3,7 @@ import {
   unAuthenticatedRequest
 } from "../utils/requestUtils";
 
-export const base = "https://backend.loopedin.site/";
+export const base = "https://app.loopedin.site/";
 
 const url = require("url");
 

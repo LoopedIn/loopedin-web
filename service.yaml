@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+    annotations:
+        beta.cloud.google.com/backend-config: '{"ports": {"80":"backend-config"}}'
+    name: loopedin-service
+spec:
+    type: LoadBalancer
+    ports:
+        - port : 80
+          targetPort : 3000
+          protocol : TCP
+    selector:
+        app: loopedin

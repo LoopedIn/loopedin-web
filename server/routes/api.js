@@ -22,8 +22,8 @@ const { Loop, UserConnection } = require('../models/loop.js');
 router.use(cors());
 router.use(cookieParser());
 
-router.route('/').get((req, res) => {
-  res.send('Works');
+router.route('/api/').get((req, res) => {
+  res.send('Works' + " " + process.env.ENVIROMENT +  " " + process.env.MONGODB_LINK);
 });
 
 //Declaring here as unauthenticated

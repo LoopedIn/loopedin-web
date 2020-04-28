@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loopedin-app-deployment
+  labels:
+    app: loopedin
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: loopedin
+  template:
+    metadata:
+      labels:
+        app: loopedin
+    spec:
+      containers:
+        - name: loopedin-image
+          image: gcr.io/looped-in-274723/looped-in-backend:v8
+          env:
+            - name: ENVIROMENT 
+              valueFrom:
+                configMapKeyRef:
+                  name: env-config-prod
+                  key: environment
+            - name: MONGODB_LINK
+              valueFrom:
+                secretKeyRef:
+                    name: app-secrets
+                    key: db-link
+          volumeMounts:
+          - name: config
+            mountPath: "/config"
+            readOnly: true
+          ports:
+           - containerPort: 80
+      volumes:
+        - name: config
+          configMap:
+            name: env-config-prod
