@@ -1,5 +1,6 @@
 FROM node:10
 WORKDIR /app
+RUN cd ../client/ && npm run build && cp -r build/ ../server/build/
 COPY package.json /app
 RUN npm install
 COPY . /app
