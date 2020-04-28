@@ -1,6 +1,5 @@
-import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import React, { Fragment, useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import classNames from "classnames";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
@@ -31,7 +30,7 @@ import SettingsInputCompositeIcon from "@material-ui/icons/SettingsInputComposit
 const useStyles = makeStyles(theme => ({
   appBar: {
     boxShadow: theme.shadows[6],
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.common.black,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -99,8 +98,11 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1)
   },
-  textPrimary: {
-    color: theme.palette.primary.main
+  textTertiary: {
+    color: theme.palette.tertiary.main
+  },
+  textSecondary: {
+    color: theme.palette.secondary.main
   },
   mobileItemSelected: {
     backgroundColor: `${theme.palette.primary.main} !important`
@@ -128,11 +130,18 @@ const NavBar = props => {
 
   let links = [];
 
+  let history = useHistory();
+
   const [selectedTab, setSelectedTab] = useState("");
 
   const openAccountSetting = () => {};
 
   const classes = useStyles();
+
+  useEffect(() => {
+    history.push("/posts");
+    setSelectedTab("Posts");
+  }, []);
 
   const menuItems = [
     {
@@ -145,7 +154,7 @@ const NavBar = props => {
         desktop: (
           <TollRoundedIcon
             className={
-              selectedTab === "Posts" ? classes.textPrimary : "text-white"
+              selectedTab === "Posts" ? classes.textTertiary : "text-white"
             }
             fontSize="small"
           />
@@ -164,7 +173,7 @@ const NavBar = props => {
           <EmailRoundedIcon
             className={
               selectedTab === "Direct Message"
-                ? classes.textPrimary
+                ? classes.textTertiary
                 : "text-white"
             }
             fontSize="small"
@@ -184,7 +193,7 @@ const NavBar = props => {
           <SettingsInputCompositeIcon
             className={
               selectedTab === "Manage Connection"
-                ? classes.textPrimary
+                ? classes.textTertiary
                 : "text-white"
             }
             fontSize="small"
@@ -254,7 +263,9 @@ const NavBar = props => {
                 <ListItemText
                   className={classes.username}
                   primary={
-                    <Typography color="textPrimary">{user.userName}</Typography>
+                    <Typography color={classes.textSecondary}>
+                      {user.userName}
+                    </Typography>
                   }
                 />
               )}
@@ -262,7 +273,7 @@ const NavBar = props => {
           </Box>
           <IconButton
             onClick={openAccountSetting}
-            color="primary"
+            className={classes.textTertiary}
             aria-label="Open Account Setting"
           >
             <SupervisorAccountIcon />

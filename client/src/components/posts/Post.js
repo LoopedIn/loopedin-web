@@ -1,23 +1,16 @@
-import React, { useEffect, Fragment } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import { Card, Box } from "@material-ui/core";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ReplyIcon from "@material-ui/icons/Reply";
 import Linkify from "react-linkify";
-import { red } from "@material-ui/core/colors";
+import InputText from "../directmessage/InputText";
 
 const useStyles = makeStyles(theme => ({
   media: {
@@ -32,26 +25,51 @@ const useStyles = makeStyles(theme => ({
     })
   },
   reply: {
-    marginLeft: "auto"
+    marginLeft: "auto",
+    width: "100%"
   },
   expandOpen: {
     transform: "rotate(180deg)"
   },
   avatar: {
-    backgroundColor: red[500]
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.secondary.main
   },
   cardContentInner: {
     marginTop: theme.spacing(-4)
+  },
+  boxElevation: {
+    boxShadow: "0px 0px 0px 0px"
+  },
+  replyButtonTransform: {
+    transform: "rotate(0deg) !important"
+  },
+  expandIcon: {
+    "&$expanded": {
+      transform: "rotate(0deg)"
+    }
+  },
+  replyIconColor: {
+    color: theme.palette.tertiary.main
+  },
+  contentColor: {
+    color: theme.palette.textPrimary
   }
 }));
 
-const handleExpandClick = () => {
-  setExpanded(!expanded);
-};
+const useStyleForReply = makeStyles(() => ({
+  expandIcon: {
+    "&$expanded": {
+      transform: "rotate(0deg)"
+    }
+  },
+  expanded: {}
+}));
 
 const Post = props => {
   const classes = useStyles();
-  const { message, firstName, lastName, timeStamp } = props;
+  const replyClasses = useStyleForReply();
+  const { message, firstName, lastName, timeStamp, senderId, postId } = props;
 
   const componentDecorator = (href, text, key) => (
     <a href={href} key={key} target="_blank" rel="noopener noreferrer">
@@ -77,23 +95,39 @@ const Post = props => {
 
       <CardContent>
         <Box className={classes.cardContentInner} height="50px">
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography
+            variant="body1"
+            className={classes.contentColor}
+            component="p"
+          >
             <Linkify componentDecorator={componentDecorator}>{message}</Linkify>
           </Typography>
         </Box>
       </CardContent>
 
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton
-          className={classes.reply}
-          onClick={handleExpandClick}
-          aria-label="reply"
-        >
+        {/* <IconButton className={classes.reply} aria-label="reply">
           <ReplyIcon />
-        </IconButton>
+        </IconButton> */}
+        <div style={{ width: "100%" }}>
+          <ExpansionPanel
+            classes={{
+              root: classes.boxElevation
+            }}
+          >
+            <ExpansionPanelSummary
+              aria-label="reply"
+              classes={replyClasses}
+              expandIcon={<ReplyIcon className={classes.replyIconColor} />}
+            ></ExpansionPanelSummary>
+            <InputText
+              textBoxHeight="50px"
+              sendFunction="handleSendPostReply"
+              senderId={senderId}
+              postId={postId}
+            />
+          </ExpansionPanel>
+        </div>
       </CardActions>
     </Card>
   );

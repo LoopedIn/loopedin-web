@@ -20,8 +20,8 @@ import {
   getMyLoopsMessages,
   deleteLoopPost
 } from "../../actions/user-connections";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -31,6 +31,12 @@ const useStyle = makeStyles(theme => ({
   scrollbar: {
     widht: "100%",
     height: "40vh"
+  },
+  expandIconColor: {
+    color: theme.palette.tertiary.main
+  },
+  deleteIcon: {
+    color: theme.palette.common.alertRed
   }
 }));
 
@@ -59,30 +65,32 @@ const MyPosts = props => {
     e.preventDefault();
     const postId = post._id;
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await deleteLoopPost(postId);
       setLoopDeleted(Date.now());
       setOpen(true);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
   const [open, setOpen] = React.useState(false);
 
-  const handleClose = (event, reason) => {  
+  const handleClose = () => {
     setOpen(false);
   };
 
-  const toast = (message, severity) => 
-  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-    <Alert onClose={handleClose} severity={severity}>
-      {message}
-    </Alert>
-  </Snackbar>
+  const toast = (message, severity) => (
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity={severity}>
+        {message}
+      </Alert>
+    </Snackbar>
+  );
 
-  const toastToShow = () => toast("Deleted post", "success")
+  const toastToShow = () => toast("Deleted post", "success");
 
-  const renderMyPost = (value, index) => {
+  const renderMyPost = value => {
     return (
       <div key={value._id}>
         <ListItem key={value}>
@@ -93,7 +101,7 @@ const MyPosts = props => {
               aria-label="delete"
               onClick={e => onDeletePost(value, e)}
             >
-              <DeleteIcon />
+              <DeleteIcon className={classes.deleteIcon} />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
@@ -104,7 +112,9 @@ const MyPosts = props => {
   return (
     <Fragment>
       <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon className={classes.expandIconColor} />}
+        >
           <Typography variant="h5" className="header-message">
             My posts
           </Typography>

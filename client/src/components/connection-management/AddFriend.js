@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -7,12 +7,9 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { Typography } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import { getUserFriends, addFriendToUser } from "../../actions";
 import Scrollbar from "../../utils/Scrollbar";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import { Fab } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -61,10 +58,12 @@ const AddFriend = props => {
 
   const [userFriendsState, setUserFriendsState] = useState([]);
 
-  console.log({usersFriends})
+  //console.log({usersFriends})
   useEffect(() => {
-    setUserFriendsState(usersFriends== undefined? undefined : usersFriends["friendIds"]);
-  }, [usersFriends])
+    setUserFriendsState(
+      usersFriends == undefined ? undefined : usersFriends["friendIds"]
+    );
+  }, [usersFriends]);
 
   const handleBtnSubmit = () => {
     addFriendToUser(newUser, userFriendsState);
@@ -75,7 +74,10 @@ const AddFriend = props => {
     return (
       <Paper style={{ marginTop: "10px" }}>
         <ListItem id={friend}>
-          <ListItemText id={friend} primary={`${friend.firstName} ${friend.lastName}`} />
+          <ListItemText
+            id={friend}
+            primary={`${friend.firstName} ${friend.lastName}`}
+          />
         </ListItem>
       </Paper>
     );
@@ -100,7 +102,7 @@ const AddFriend = props => {
         />
       </div>
       <div className={classes.addFriendBtn}>
-        <Button variant="contained" color="secondary" onClick={handleBtnSubmit}>
+        <Button variant="contained" color="primary" onClick={handleBtnSubmit}>
           Add friend
         </Button>
       </div>
@@ -111,14 +113,20 @@ const AddFriend = props => {
       )}
       <div style={{ width: "50%", height: "65vh" }}>
         <Scrollbar>
-          <List>{userFriendsState != undefined ? userFriendsState.map(val => renderFriendsList(val)) : <div></div>}</List>
+          <List>
+            {userFriendsState != undefined ? (
+              userFriendsState.map(val => renderFriendsList(val))
+            ) : (
+              <div></div>
+            )}
+          </List>
         </Scrollbar>
       </div>
-      <div className={classes.addFAB}>
+      {/* <div className={classes.addFAB}>
         <Fab color="secondary" onClick={() => {}}>
           <PersonAddIcon className="material-icons" />
         </Fab>
-      </div>
+      </div> */}
     </Box>
   );
 };

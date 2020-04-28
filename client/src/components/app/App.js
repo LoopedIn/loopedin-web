@@ -37,13 +37,13 @@ const App = ({ isAuthenticated, isVerifying }) => {
           <Register />
         </Route>
         <SocketContext.Provider value={socket}>
-        <ProtectedRoute
-          path="/"
-          component={Home}
-          isAuthenticated={isAuthenticated}
-          isVerifying={isVerifying}
-          socket={socket}
-        />
+          <ProtectedRoute
+            path="/"
+            component={Home}
+            isAuthenticated={isAuthenticated}
+            isVerifying={isVerifying}
+            socket={socket}
+          />
         </SocketContext.Provider>
       </Switch>
     </MuiThemeProvider>
