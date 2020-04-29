@@ -17,7 +17,7 @@ steps:
     - CLOUDSDK_CONTAINER_CLUSTER=looped-in-1
 
 substitutions:
-    _VERSION: v2
+    _VERSION: v3
 
 options:
     substitution_option: 'ALLOW_LOOSE'

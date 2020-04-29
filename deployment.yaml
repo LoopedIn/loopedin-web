@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: loopedin-image
-          image: gcr.io/looped-in-274723/looped-in-backend:v8
+          image: gcr.io/looped-in-274723/loopedin-app:v2
           env:
             - name: ENVIROMENT 
               valueFrom:
@@ -28,6 +28,11 @@ spec:
                 secretKeyRef:
                     name: app-secrets
                     key: db-link
+            - name: FIREBASE_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                    name: firebase-service-account
+                    key: serviceAccountKey.json
           volumeMounts:
           - name: config
             mountPath: "/config"
