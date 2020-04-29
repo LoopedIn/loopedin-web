@@ -3,15 +3,15 @@ import {
   unAuthenticatedRequest
 } from "../utils/requestUtils";
 
-export const base = "http://loopedin.site/api/";
+// export const base = "http://loopedin.site/api";
 
 const url = require("url");
 
-const r = route => url.resolve(base, route);
+const r = route => url.resolve("http://loopedin.site/api", route);
 
 export const serverRequests = {
   getCurrentUserApi: async () =>
-    authenticatedRequest("http://loopedin.site/api/users/logged_in_user_info", {}),
+    authenticatedRequest(r("/users/logged_in_user_info"), {}),
 
   getUserFriendsApi: async () =>
     authenticatedRequest(r("/users/getcontacts"), {}),
