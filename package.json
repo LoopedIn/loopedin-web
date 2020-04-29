@@ -6,6 +6,9 @@
     "type": "git",
     "url": "git+https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1.git"
   },
+  "scripts": {
+    "deploy-next-tag": "node deploy.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -13,5 +16,7 @@
     "url": "https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1/issues"
   },
   "homepage": "https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1#readme",
-  "dependencies": {}
+  "dependencies": {
+    "yaml": "^1.9.2"
+  }
 }
