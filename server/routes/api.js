@@ -7,12 +7,6 @@ const { check, validationResult } = require('express-validator');
 
 const router = express.Router();
 
-const {sendMessageToClient}  = require("../lib/server.js")
-
-console.log("hrer "+sendMessageToClient)
-
-
-
 const { Post, Message } = require('../models/post.js');
 
 const { User } = require('../models/user.js');

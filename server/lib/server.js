@@ -7,7 +7,12 @@ const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../../build/')))
+
+const isProd = () => process.env.ENVIROMENT === "prod" 
+
+if(isProd()){
+  app.use(express.static(path.join(__dirname, '../../build/')))
+}
 const indexRouter = require('../routes/api');
 
 /**
@@ -40,9 +45,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/', indexRouter);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../build/index.html'));
-});
+if(isProd()){
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../build/index.html'));
+  });
+}
 
 console.log("Starting app on port " + port)
 
@@ -57,7 +64,7 @@ var socketUserIDMap = {}
 var userSocketIDMap = {}
 console.log("Server.js instantiated")
 io.on('connection', socket => {
-  socket.on('disconnect', reason => {
+  socket.on('disconnect', () => {
     delete userSocketIDMap[socketUserIDMap[socket.id]]
     delete socketUserIDMap[socket.id]
   });
