@@ -12,9 +12,12 @@ steps:
     - 'image'
     - 'deployment/loopedin-app-deployment'
     - 'loopedin-image=gcr.io/$PROJECT_ID/loopedin-cloud-build-test:${_VERSION}'
+  env:
+    - CLOUDSDK_COMPUTE_ZONE=us-central1-c
+    - CLOUDSDK_CONTAINER_CLUSTER=looped-in-1
 
 substitutions:
-    _VERSION: v2.0
+    _VERSION: v3.0
 
 options:
     substitution_option: 'ALLOW_LOOSE'
