@@ -1,23 +1,23 @@
 steps:
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/$PROJECT_ID/loopedin-cloud-build-test:${_VERSION}', '.']
+  args: ['build', '--tag=gcr.io/$PROJECT_ID/loopedin-app:${_VERSION}', '.']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/loopedin-cloud-build-test:${_VERSION}']
+  args: ['push', 'gcr.io/$PROJECT_ID/loopedin-app:${_VERSION}']
 
 - name: 'gcr.io/cloud-builders/kubectl'
   args: 
     - 'set'
     - 'image'
     - 'deployment/loopedin-app-deployment'
-    - 'loopedin-image=gcr.io/$PROJECT_ID/loopedin-cloud-build-test:${_VERSION}'
+    - 'loopedin-image=gcr.io/$PROJECT_ID/loopedin-app:${_VERSION}'
   env:
     - CLOUDSDK_COMPUTE_ZONE=us-central1-c
     - CLOUDSDK_CONTAINER_CLUSTER=looped-in-1
 
 substitutions:
-    _VERSION: v3.0
+    _VERSION: v1.0
 
 options:
     substitution_option: 'ALLOW_LOOSE'

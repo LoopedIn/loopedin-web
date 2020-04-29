@@ -26,6 +26,10 @@ router.route('/api/').get((req, res) => {
   res.send('Works' + " " + process.env.ENVIROMENT +  " " + process.env.MONGODB_LINK);
 });
 
+router.route('/version/').get((req, res) => {
+  res.send('v1.0');
+});
+
 //Declaring here as unauthenticated
 router.route('/users/create/').post((req, res, next) => {
   if (Object.keys(req.body).length === 0) {
