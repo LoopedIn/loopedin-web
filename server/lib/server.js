@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../build/')))
+app.use(express.static(path.join(__dirname, '../../build/')))
 const indexRouter = require('../routes/api');
 
 /**
@@ -124,7 +124,7 @@ const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';
 
-const mongodbLink = process.env.ENVIROMENT === "prod" ? process.env.MONGODB_LINK : (hostname + ":" + portnumber);
+const mongodbLink = process.env.ENVIROMENT === "prod" ? process.env.MONGODB_LINK : (`mongodb://${hostname}:${portnumber}`);
 
 mongoose
   .connect(`${mongodbLink}?retryWrites=true&w=majority`, {
