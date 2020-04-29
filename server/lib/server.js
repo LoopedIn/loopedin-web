@@ -51,18 +51,9 @@ const io = require('socket.io')(server);
 
 var socketUserIDMap = {}
 var userSocketIDMap = {}
-let count=0
 console.log("Server.js instantiated")
 io.on('connection', socket => {
-  count++
-  console.log('A user connected'+ JSON.stringify(socketUserIDMap) + " "+JSON.stringify(userSocketIDMap));
-  console.log("count "+count)
-
-  
-  
   socket.on('disconnect', reason => {
-    count--;
-    console.log('user disconnected');
     delete userSocketIDMap[socketUserIDMap[socket.id]]
     delete socketUserIDMap[socket.id]
   });
@@ -70,13 +61,9 @@ io.on('connection', socket => {
   socket.emit('reloadComponent',{ description: "hello" });
 
   socket.on('storeUserID',function(data){
-      console.log("User id is "+data.userID+" socket "+socket.id)
       delete socketUserIDMap[userSocketIDMap[data.userID]]
       socketUserIDMap[socket.id] =  data.userID
       userSocketIDMap[data.userID] = socket.id
-      //Delete old socketids for the userid.
-
-      console.log('A user connected'+ JSON.stringify(socketUserIDMap) + " "+JSON.stringify(userSocketIDMap));
   })
 })
 

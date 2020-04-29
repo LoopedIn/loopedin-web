@@ -5,7 +5,7 @@ metadata:
   labels:
     app: loopedin
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: loopedin
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: loopedin-image
-          image: gcr.io/looped-in-274723/loopedin-app:v2
+          image: gcr.io/looped-in-274723/loopedin-app:v4
           env:
             - name: ENVIROMENT 
               valueFrom:

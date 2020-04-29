@@ -22,6 +22,7 @@ const firebaseTokenAuthenticator = async (req, res, next) => {
     req.body.user = user;
     next();
   } else {
+    console.log(req.body.idToken)
     if (req.body.idToken) {
       admin
         .auth()
@@ -32,7 +33,8 @@ const firebaseTokenAuthenticator = async (req, res, next) => {
           req.body.user = user;
           next();
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err)
           res.status(403);
         });
     } else {
