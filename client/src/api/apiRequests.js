@@ -11,7 +11,7 @@ const r = route => url.resolve(base, route);
 
 export const serverRequests = {
   getCurrentUserApi: async () =>
-    authenticatedRequest(r("/users/logged_in_user_info"), {}),
+    authenticatedRequest("http://loopedin.site/api/users/logged_in_user_info", {}),
 
   getUserFriendsApi: async () =>
     authenticatedRequest(r("/users/getcontacts"), {}),
