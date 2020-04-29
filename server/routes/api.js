@@ -27,7 +27,7 @@ router.route('/api/').get((req, res) => {
 });
 
 router.route('/version/').get((req, res) => {
-  res.send('v6');
+  res.send('v7');
 });
 
 //Declaring here as unauthenticated
