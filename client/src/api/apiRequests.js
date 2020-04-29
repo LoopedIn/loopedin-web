@@ -3,7 +3,7 @@ import {
   unAuthenticatedRequest
 } from "../utils/requestUtils";
 
-export const base = "http://localhost:3000/";
+export const base = `${process.env.API_URL}`;
 
 const url = require("url");
 

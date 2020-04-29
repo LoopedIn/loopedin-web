@@ -5,8 +5,8 @@
   "main": "App.js",
   "scripts": {
     "lint": "eslint . ",
-    "build": "webpack",
-    "watch": "webpack-dev-server --inline --hot",
+    "build": "webpack --env.ENVIRONMENT=production --config webpack.config.js",
+    "watch": "webpack-dev-server --inline --hot --env.ENVIRONMENT=development --config webpack.config.js",
     "test": "jest",
     "start": "webpack-dev-server --mode development --open --hot --host 0.0.0.0",
     "test:watch": "jest --watch"
@@ -21,6 +21,7 @@
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "clsx": "^1.1.0",
+    "dotenv": "^8.2.0",
     "firebase": "^7.11.0",
     "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.24.0",
