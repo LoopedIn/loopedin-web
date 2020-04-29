@@ -11,7 +11,7 @@ const write = async () => await fs.writeFile('./cloudbuild.yaml', YAML.stringify
     exec("git add .", () => {
         exec(`git commit -m \" New deployment version ${process.argv[2]}\"`, () => {
             exec(`git tag ${process.argv[2]}`, () => {
-                exec(`git push`, () => {})
+                exec(`git push -f origin ${process.argv[2]}`, () => {})
             })
         });
     });
