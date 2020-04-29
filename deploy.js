@@ -9,7 +9,7 @@ parsed.substitutions._VERSION = process.argv[2]
 const write = async () => await fs.writeFile('./cloudbuild.yaml', YAML.stringify(parsed), () => {
     console.log("File updated");
     exec("git add .", (error, stdout, stderr) => {
-        exec("git commit -m \" New deployment version process.argv[2]\"", () => {});
+        exec(`git commit -m \" New deployment version ${process.argv[2]}\"`, () => {});
     });
 });
 write();
