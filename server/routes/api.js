@@ -22,7 +22,7 @@ const { Loop, UserConnection } = require('../models/loop.js');
 router.use(cors());
 router.use(cookieParser());
 
-router.route('/api/').get((req, res) => {
+router.route('/').get((req, res) => {
   res.send('Works' + " " + process.env.ENVIROMENT +  " " + process.env.MONGODB_LINK);
 });
 
@@ -31,7 +31,7 @@ router.route('/version/').get((req, res) => {
 });
 
 //Declaring here as unauthenticated
-router.route('/api/users/create/').post((req, res, next) => {
+router.route('users/create/').post((req, res, next) => {
   if (Object.keys(req.body).length === 0) {
     res.status(400);
     const error = 'The data to create user is not present';
@@ -54,13 +54,13 @@ router.route('/api/users/create/').post((req, res, next) => {
 //Registering authenticated middleware
 router.use(serverAuth.firebaseTokenAuthenticator);
 
-router.route('/api/users/logged_in_user_info').post((req, res, next) => {
+router.route('users/logged_in_user_info').post((req, res, next) => {
   res.json(req.body.user).send();
   next();
 });
 
 // Return the list of friends of a user
-router.route('/api/users/add_friend').post(async (req, res, next) => {
+router.route('users/add_friend').post(async (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
     res.status(400).send('Post data not present');
     return next('Post data not present');
@@ -134,7 +134,7 @@ router.route('/api/users/add_friend').post(async (req, res, next) => {
   }
 });
 
-router.route('/api/update-post/:id').post((req, res, next) => {
+router.route('update-post/:id').post((req, res, next) => {
   // [TODO] Get user id from session
   Post.findOneAndUpdate(
     { postId: req.params.id },
@@ -155,7 +155,7 @@ router.route('/api/update-post/:id').post((req, res, next) => {
   );
 });
 
-router.route('/api/delete-post/:id').delete((req, res, next) => {
+router.route('delete-post/:id').delete((req, res, next) => {
   // [TODO] Get user id from session
   Post.findOneAndDelete({ postId: req.params.id }, (error, data) => {
     if (error) {
@@ -167,7 +167,7 @@ router.route('/api/delete-post/:id').delete((req, res, next) => {
   });
 });
 
-router.route('/api/post/updatepost').post((req, res, next) => {
+router.route('post/updatepost').post((req, res, next) => {
   // [TODO] Get user id from session for validation
 
   // senderId is the _id object of user
@@ -190,7 +190,7 @@ router.route('/api/post/updatepost').post((req, res, next) => {
 
 // Create a loop for a user
 router
-  .route('/api/users/create_loop')
+  .route('users/create_loop')
   .post(
     createValidationFor('loop'),
     checkValidationResult,
@@ -225,7 +225,7 @@ router
   );
 
 // Get the loops the user has created
-router.route('/api/loops').post((req, res, next) => {
+router.route('loops').post((req, res, next) => {
   // [TODO] get user id from session for validation
   // userID is the _id object of the user
   let { userID } = req.body;
@@ -242,7 +242,7 @@ router.route('/api/loops').post((req, res, next) => {
 });
 
 // update loop of a user
-router.route('/api/loops/:loop_id/update_loop').post((req, res, next) => {
+router.route('loops/:loop_id/update_loop').post((req, res, next) => {
   // [TODO] Get user id from session
   // const userID = '';
   const { body } = req;
@@ -271,7 +271,7 @@ router.route('/api/loops/:loop_id/update_loop').post((req, res, next) => {
 });
 
 // Return the members of a loop for a user
-router.route('/api/loops/:loop_id/get_contacts').post((req, res, next) => {
+router.route('loops/:loop_id/get_contacts').post((req, res, next) => {
   let { loop_id } = req.params;
   // [TODO] Get user id from session for validation
   // const userID = '';
@@ -304,7 +304,7 @@ router.route('/api/loops/:loop_id/get_contacts').post((req, res, next) => {
 //   });
 // });
 
-router.route('/api/users/getcontacts').post((req, res, next) => {
+router.route('users/getcontacts').post((req, res, next) => {
   const userid = req.body.userID;
   UserConnection.find({ userId: userid }, { friendIds: 1 })
     .populate({
@@ -322,7 +322,7 @@ router.route('/api/users/getcontacts').post((req, res, next) => {
 });
 
 // // Get list of messages between two persons
-// router.route('/api/users/show_messages_persons').post((req, res, next) => {
+// router.route('users/show_messages_persons').post((req, res, next) => {
 //   // [TODO] Get user id from session for validation
 //   // const userID = '';
 //   if (Object.keys(req.body).length === 0) {
@@ -418,7 +418,7 @@ function createValidationFor(route) {
 }
 // Creates a post for the user
 router
-  .route('/api/users/create_post')
+  .route('users/create_post')
   .post(
     createValidationFor('post'),
     checkValidationResult,
@@ -450,7 +450,7 @@ router
   );
 
 // /users/user_posts
-router.route('/api/users/user_posts').post((req, res, next) => {
+router.route('users/user_posts').post((req, res, next) => {
   validateBody(req);
   const userid = req.body.userID;
   Post.find({ senderId: userid }, (error, data) => {
@@ -464,7 +464,7 @@ router.route('/api/users/user_posts').post((req, res, next) => {
 });
 
 // /posts/:post_id/delete
-router.route('/api/posts/:post_id/delete').delete((req, res, next) => {
+router.route('posts/:post_id/delete').delete((req, res, next) => {
   const userid = req.body.userID;
   Post.findOneAndDelete(
     { _id: req.params.post_id, senderId: userid },
@@ -480,7 +480,7 @@ router.route('/api/posts/:post_id/delete').delete((req, res, next) => {
 });
 
 router
-  .route('/api/users/create_message')
+  .route('users/create_message')
   .post(
     createValidationFor('message'),
     checkValidationResult,
@@ -522,7 +522,7 @@ function validateBody(req, res, next) {
 }
 
 //Get_recent_chats
-router.route('/api/users/get_recent_chats').post(async (req, res, next) => {
+router.route('users/get_recent_chats').post(async (req, res, next) => {
   validateBody(req);
 
   const userID = req.body.userID; // TODO: change
@@ -568,7 +568,7 @@ router.route('/api/users/get_recent_chats').post(async (req, res, next) => {
 });
 
 //get_chat_history
-router.route('/api/users/get_chat_history').post((req, res, next) => {
+router.route('users/get_chat_history').post((req, res, next) => {
   validateBody(req);
   // console.log( req.body.userID)
   const userID = req.body.userID; // TODO: change
@@ -612,7 +612,7 @@ function getLoopsContainingUser(userID) {
   });
 }
 
-router.route('/api/posts/get_recent_posts').post((req, res, next) => {
+router.route('posts/get_recent_posts').post((req, res, next) => {
   validateBody(req);
   // console.log( req.body.userID)
   const userID = req.body.userID; // TODO: change

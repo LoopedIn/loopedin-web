@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 app.use('/api/', indexRouter);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../build/index.html'));
+  res.sendFile(path.join(__dirname, '../../build/build/index.html'));
 });
 
 console.log("Starting app on port " + port)
