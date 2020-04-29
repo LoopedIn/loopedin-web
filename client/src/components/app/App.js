@@ -6,11 +6,20 @@ import Home from "../home/home";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
 import Pace from "../../utils/Pace";
 import GlobalStyles from "./GlobalStyles";
-import SocketContext from "../../utils/socket-context";
-const io = require("socket.io-client");
-const socket = io("http://localhost:3000");
-socket.connect();
-import { Switch, Route } from "react-router-dom";
+import SocketContext from '../../utils/socket-context'
+const io = require('socket.io-client');
+const socket = io('http://loopedin.site');
+
+socket.connect()
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation
+} from "react-router-dom";
 import { connect } from "react-redux";
 import theme from "./theme";
 

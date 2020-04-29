@@ -7,12 +7,6 @@ const { check, validationResult } = require('express-validator');
 
 const router = express.Router();
 
-const {sendMessageToClient}  = require("../lib/server.js")
-
-console.log("hrer "+sendMessageToClient)
-
-
-
 const { Post, Message } = require('../models/post.js');
 
 const { User } = require('../models/user.js');
@@ -23,7 +17,11 @@ router.use(cors());
 router.use(cookieParser());
 
 router.route('/').get((req, res) => {
-  res.send('Works');
+  res.send('Works' + " " + process.env.ENVIROMENT +  " " + process.env.MONGODB_LINK);
+});
+
+router.route('/version/').get((req, res) => {
+  res.send('v8');
 });
 
 //Declaring here as unauthenticated
@@ -284,7 +282,7 @@ router.route('/loops/:loop_id/get_contacts').post((req, res, next) => {
 });
 
 // // Stores a message send from one user to another
-// router.route('/users/send_message').post((req, res, next) => {
+// router.route('/api/users/send_message').post((req, res, next) => {
 //   // [TODO] Get user id from session
 //   // const userID = '';
 //   const { MessageObject } = req.body;
@@ -318,7 +316,7 @@ router.route('/users/getcontacts').post((req, res, next) => {
 });
 
 // // Get list of messages between two persons
-// router.route('/users/show_messages_persons').post((req, res, next) => {
+// router.route('/api/users/show_messages_persons').post((req, res, next) => {
 //   // [TODO] Get user id from session for validation
 //   // const userID = '';
 //   if (Object.keys(req.body).length === 0) {

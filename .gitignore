@@ -105,3 +105,8 @@ dist
 .tern-port
 
 server/config/*
+
+app-secrets.yaml
+
+client/build/*
+server/build/*

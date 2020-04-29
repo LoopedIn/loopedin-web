@@ -2,10 +2,17 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
+const path = require('path')
 const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
+
+const isProd = () => process.env.ENVIROMENT === "prod" 
+
+if(isProd()){
+  app.use(express.static(path.join(__dirname, '../../build/')))
+}
 const indexRouter = require('../routes/api');
 
 /**
@@ -36,7 +43,13 @@ const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/', indexRouter);
+app.use('/api/', indexRouter);
+
+if(isProd()){
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../build/index.html'));
+  });
+}
 
 console.log("Starting app on port " + port)
 
@@ -49,18 +62,9 @@ const io = require('socket.io')(server);
 
 var socketUserIDMap = {}
 var userSocketIDMap = {}
-let count=0
 console.log("Server.js instantiated")
 io.on('connection', socket => {
-  count++
-  console.log('A user connected'+ JSON.stringify(socketUserIDMap) + " "+JSON.stringify(userSocketIDMap));
-  console.log("count "+count)
-
-  
-  
-  socket.on('disconnect', reason => {
-    count--;
-    console.log('user disconnected');
+  socket.on('disconnect', () => {
     delete userSocketIDMap[socketUserIDMap[socket.id]]
     delete socketUserIDMap[socket.id]
   });
@@ -68,13 +72,9 @@ io.on('connection', socket => {
   socket.emit('reloadComponent',{ description: "hello" });
 
   socket.on('storeUserID',function(data){
-      console.log("User id is "+data.userID+" socket "+socket.id)
       delete socketUserIDMap[userSocketIDMap[data.userID]]
       socketUserIDMap[socket.id] =  data.userID
       userSocketIDMap[data.userID] = socket.id
-      //Delete old socketids for the userid.
-
-      console.log('A user connected'+ JSON.stringify(socketUserIDMap) + " "+JSON.stringify(userSocketIDMap));
   })
 })
 
@@ -122,8 +122,10 @@ const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';
 
+const mongodbLink = process.env.ENVIROMENT === "prod" ? process.env.MONGODB_LINK : (`mongodb://${hostname}:${portnumber}`);
+
 mongoose
-  .connect(`mongodb://${hostname}:${portnumber}/InLooped`, {
+  .connect(`${mongodbLink}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

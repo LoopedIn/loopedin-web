@@ -7,7 +7,7 @@ export const base = `${process.env.API_URL}`;
 
 const url = require("url");
 
-const r = route => url.resolve(base, route);
+const r = route => `http://loopedin.site/api${route}`;
 
 export const serverRequests = {
   getCurrentUserApi: async () =>
@@ -89,7 +89,7 @@ export const serverRequests = {
   },
 
   deletePostMessage: async postId => {
-    const route = `posts/${postId}/delete`;
+    const route = `/posts/${postId}/delete`;
     return authenticatedRequest(r(route), {}, true);
   }
 };
