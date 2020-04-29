@@ -28,7 +28,7 @@ myFirebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 describe('application', async () => {
   let client = {};
   axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = `http://localhost:${PORT}/`;
+  axios.defaults.baseURL = `http://localhost:${PORT}/api`;
   axios.defaults.validateStatus = () => true;
 
   before(async () => {
@@ -215,7 +215,7 @@ describe('application', async () => {
     };
     const response = await sendAuthenticatedRequest(
       myUserInput,
-      'users/add_friend',
+      '/users/add_friend',
       addFriendInput,
     );
     return response;
