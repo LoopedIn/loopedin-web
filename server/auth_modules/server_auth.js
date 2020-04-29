@@ -35,10 +35,10 @@ const firebaseTokenAuthenticator = async (req, res, next) => {
         })
         .catch((err) => {
           console.log(err)
-          res.status(403);
+          res.status(403).send(err);
         });
     } else {
-      res.status(403).send();
+      res.status(403).send(req.body);
     }
   }
 };
