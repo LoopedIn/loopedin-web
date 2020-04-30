@@ -1,24 +1,18 @@
-version: '3'
+version: '4'
+
 services:
   app:
     container_name: looped-in
-    build: server/
+    build: 
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - '3000:3000'
+      - '80:80'
     links:
       - mongo
-    labels:
-        kompose.service.type: LoadBalancer
 
   mongo:
     container_name: mongo
     image: mongo
     ports:
       - '27017:27017'
-
-  react:
-    build: client/
-    ports:
-      - 8080:8080
-    labels:
-      kompose.service.type: LoadBalancer
