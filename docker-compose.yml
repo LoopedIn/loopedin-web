@@ -5,7 +5,7 @@ services:
     container_name: looped-in
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: local.Dockerfile
     ports:
       - '3000:3000'
     links:

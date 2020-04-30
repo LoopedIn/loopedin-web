@@ -8,7 +8,9 @@ const mongoose = require('mongoose');
 const app = express();
 app.use(cors());
 
-const isProd = () => process.env.ENVIROMENT === "prod" 
+const isProd = () => process.env.ENVIROMENT === "prod"  || process.env.ENVIROMENT === "dev-docker"
+
+console.log("Environment is " + process.env.ENVIROMENT);
 
 if(isProd()){
   app.use(express.static(path.join(__dirname, '../../build/')))
