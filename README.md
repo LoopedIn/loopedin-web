@@ -127,7 +127,6 @@ docker-compose up
 ```
 The app should run on http://localhost:3000/
 
-We are live on https://loopedin.site/
 
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
