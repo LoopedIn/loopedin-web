@@ -8,7 +8,7 @@ import Pace from "../../utils/Pace";
 import GlobalStyles from "./GlobalStyles";
 import SocketContext from '../../utils/socket-context'
 const io = require('socket.io-client');
-const socket = io('http://loopedin.site');
+const socket = io(`${process.env.API_URL}`);
 
 socket.connect()
 import {

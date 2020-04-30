@@ -5,7 +5,10 @@ import {
 
 export const base = `${process.env.API_URL}`;
 
-const r = route => base + `${route}` + "/api";
+const r = route => {
+  return base + "/api" + `${route}`;
+}
+
 
 export const serverRequests = {
   getCurrentUserApi: async () =>
