@@ -7,7 +7,7 @@ export const base = `${process.env.API_URL}`;
 
 const url = require("url");
 
-const r = route => `http://loopedin.site/api${route}`;
+const r = route => base + `/${route}`;
 
 export const serverRequests = {
   getCurrentUserApi: async () =>
