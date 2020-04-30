@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const serverAuth = require('../auth_modules/server_auth.js');
 const mongoose = require('mongoose');
 const { check, validationResult } = require('express-validator');
+const fs = require('fs')
 
 const router = express.Router();
 
@@ -17,11 +18,13 @@ router.use(cors());
 router.use(cookieParser());
 
 router.route('/').get((req, res) => {
-  res.send('Works' + " " + process.env.ENVIROMENT +  " " + process.env.MONGODB_LINK);
+  res.send(process.env.ENVIROMENT? process.env.ENVIROMENT : "dev");
 });
 
 router.route('/version/').get((req, res) => {
-  res.send('v8');
+  const path = process.cwd() + '/version.txt';
+  let rawdata = fs.readFileSync(path);
+  res.send(rawdata.toString());
 });
 
 //Declaring here as unauthenticated
