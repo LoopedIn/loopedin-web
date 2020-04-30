@@ -5,7 +5,8 @@
   "main": "App.js",
   "scripts": {
     "lint": "eslint . ",
-    "build": "webpack --env.ENVIRONMENT=development --config webpack.config.js",
+    "build": "webpack --config webpack.config.js",
+    "build-dev": "webpack --env.ENVIRONMENT=development --config webpack.config.js",
     "watch": "webpack-dev-server --inline --hot --env.ENVIRONMENT=development --config webpack.config.js",
     "test": "jest",
     "start": "webpack-dev-server --mode development --open --hot --host 0.0.0.0",

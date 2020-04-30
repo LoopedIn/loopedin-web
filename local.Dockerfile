@@ -4,7 +4,7 @@ WORKDIR /project/app
 
 COPY /client/ /project/
 WORKDIR /project/client/
-RUN npm install && npm run build
+RUN npm install && npm run build-dev
 
 WORKDIR /project/app
 COPY /server/package.json /project/app/
