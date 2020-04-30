@@ -18,6 +18,6 @@ steps:
       - CLOUDSDK_COMPUTE_ZONE=us-central1-c
       - CLOUDSDK_CONTAINER_CLUSTER=looped-in-1
 substitutions:
-  _VERSION: v9.8.1
+  _VERSION: v9.8.3
 options:
   substitution_option: ALLOW_LOOSE
