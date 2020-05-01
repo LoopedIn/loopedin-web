@@ -7,7 +7,7 @@ const serviceAccount = process.env.FIREBASE_PRIVATE_KEY
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://loopedin-269607.firebaseio.com',
+  databaseURL: 'https://looped-in-274723.firebaseio.com/',
 });
 
 async function tokenIdToDbUser(tokenUid) {
@@ -33,7 +33,7 @@ const firebaseTokenAuthenticator = async (req, res, next) => {
           next();
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           res.status(403).send(err);
         });
     } else {

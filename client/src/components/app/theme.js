@@ -158,6 +158,11 @@ const theme = createMuiTheme({
       subheader: {
         color: textPrimary
       }
+    },
+    MuiOutlinedInput: {
+      notchedOutline: {
+        borderColor: secondary
+      }
     }
   },
   typography: {

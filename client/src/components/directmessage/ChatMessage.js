@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
-import Chip from "@material-ui/core/Chip";
+//import Chip from "@material-ui/core/Chip";
 import Typography from "@material-ui/core/Typography";
 import classNames from "classnames";
 import moment from "moment";
@@ -108,12 +108,12 @@ var decodeEntities = (function() {
   };
 })();
 const ChatMessage = props => {
-  const { dateChanged } = props;
+  //const { dateChanged } = props;
   const { messageContent, isSentByMe, created, replyToPost } = props.values;
 
   const classes = useStyles();
 
-  const days = moment(created).diff(moment(), "days");
+  //const days = moment(created).diff(moment(), "days");
 
   const componentDecorator = (href, text, key) => (
     <a href={href} key={key} target="_blank" rel="noopener noreferrer">
@@ -124,11 +124,11 @@ const ChatMessage = props => {
   return (
     <div>
       <ListItem>
-        {dateChanged && (
+        {/* {dateChanged && (
           <div className={classes.timeStamp}>
             <Chip label={Math.abs(days)} />
           </div>
-        )}
+        )} */}
         <div
           className={classNames(
             isSentByMe
