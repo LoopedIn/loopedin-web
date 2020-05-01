@@ -7,6 +7,8 @@ import classNames from "classnames";
 import moment from "moment";
 import Linkify from "react-linkify";
 
+
+
 const useStyles = makeStyles(theme => ({
   timeStamp: {
     width: "100%",
@@ -86,7 +88,25 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.textPrimary
   }
 }));
-
+var decodeEntities = (function() {
+  var cache = {},
+      character,
+      e = document.createElement('div');
+  
+  return function(html) {
+    return html.replace(/([&][^&; ]+[;])/g, function(entity) {
+      character = cache[entity];
+			if (!character) {
+        e.innerHTML = entity;
+        if (e.childNodes[0])
+          character = cache[entity] = e.childNodes[0].nodeValue;
+        else
+          character = '';
+      }
+      return character;
+    });
+  };
+})();
 const ChatMessage = props => {
   const { dateChanged } = props;
   const { messageContent, isSentByMe, created, replyToPost } = props.values;
@@ -145,7 +165,7 @@ const ChatMessage = props => {
               >
                 <Linkify componentDecorator={componentDecorator}>
                   <Typography className={classes.contentColor} variant="body2">
-                    {messageContent}
+                    {decodeEntities(messageContent)}
                   </Typography>
                 </Linkify>
               </Typography>

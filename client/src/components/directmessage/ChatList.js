@@ -17,6 +17,7 @@ import {
 } from "../../actions/direct-messages";
 import moment from "moment";
 
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
@@ -114,7 +115,7 @@ const ChatList = props => {
                                 className={classes.inline}
                                 color="textPrimary"
                               >
-                                {messageContent}
+                                {decodeEntities(messageContent)}
                               </Typography>
                               <Typography
                                 component="span"
@@ -143,6 +144,26 @@ const ChatList = props => {
     </div>
   );
 };
+
+var decodeEntities = (function() {
+  var cache = {},
+      character,
+      e = document.createElement('div');
+  
+  return function(html) {
+    return html.replace(/([&][^&; ]+[;])/g, function(entity) {
+      character = cache[entity];
+			if (!character) {
+        e.innerHTML = entity;
+        if (e.childNodes[0])
+          character = cache[entity] = e.childNodes[0].nodeValue;
+        else
+          character = '';
+      }
+      return character;
+    });
+  };
+})();
 
 function mapStateToProps(state) {
   return {
