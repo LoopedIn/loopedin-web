@@ -154,7 +154,7 @@ const LoginSide = props => {
               <Grid container>
                 <Grid item>
                   <Typography component="h1" variant="h3">
-                    LoopedIn - 3
+                    LoopedIn
                   </Typography>
                 </Grid>
               </Grid>
