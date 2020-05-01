@@ -57,6 +57,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+var decodeEntities = (function() {
+  var cache = {},
+      character,
+      e = document.createElement('div');
+  
+  return function(html) {
+    return html.replace(/([&][^&; ]+[;])/g, function(entity) {
+      character = cache[entity];
+			if (!character) {
+        e.innerHTML = entity;
+        if (e.childNodes[0])
+          character = cache[entity] = e.childNodes[0].nodeValue;
+        else
+          character = '';
+      }
+      return character;
+    });
+  };
+})();
+
 const useStyleForReply = makeStyles(() => ({
   expandIcon: {
     "&$expanded": {
@@ -100,7 +120,7 @@ const Post = props => {
             className={classes.contentColor}
             component="p"
           >
-            <Linkify componentDecorator={componentDecorator}>{message}</Linkify>
+            <Linkify componentDecorator={componentDecorator}>{decodeEntities(message)}</Linkify>
           </Typography>
         </Box>
       </CardContent>
