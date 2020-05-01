@@ -119,7 +119,9 @@ See [this](https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1/b
 
 **Running the app**:
 
-After setting up the firebase credentials, and installing docker. In the home path of the project (final-project-cookie-crumbs-1/), run:- 
+*If you want to just test the app with minimal setup*
+
+In the home path of the project (final-project-cookie-crumbs-1/), run:- 
 
 ```bash
 docker-compose build
@@ -127,6 +129,20 @@ docker-compose up
 ```
 The app should run on http://localhost:3000/
 
+*If you want to develop and test with your own mongodb setup in your local, with live reload of the react code*
+
+In final-project-cookie-crumbs-1/client/
+```bash
+npm run install
+npm run watch
+```
+
+In final-project-cookie-crumbs-1/server/
+```bash
+npm run install
+npm run watch
+```
+The app should run on http://localhost:8080/
 
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
