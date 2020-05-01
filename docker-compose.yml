@@ -1,8 +1,11 @@
 version: '3'
+
 services:
   app:
     container_name: looped-in
-    build: server/
+    build: 
+      context: .
+      dockerfile: local.Dockerfile
     ports:
       - '3000:3000'
     links:
@@ -13,8 +16,3 @@ services:
     image: mongo
     ports:
       - '27017:27017'
-
-  react:
-    build: client/
-    ports:
-      - 8080:8080

@@ -5,8 +5,9 @@
   "main": "App.js",
   "scripts": {
     "lint": "eslint . ",
-    "build": "webpack",
-    "watch": "webpack-dev-server --inline --hot",
+    "build": "webpack --env.ENVIRONMENT=production --config webpack.config.js",
+    "build-dev": "webpack --env.ENVIRONMENT=development --config webpack.config.js",
+    "watch": "webpack-dev-server --inline --hot --env.ENVIRONMENT=development --config webpack.config.js",
     "test": "jest",
     "start": "webpack-dev-server --mode development --open --hot --host 0.0.0.0",
     "test:watch": "jest --watch"
@@ -21,6 +22,7 @@
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "clsx": "^1.1.0",
+    "dotenv": "^8.2.0",
     "firebase": "^7.11.0",
     "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.24.0",
@@ -35,7 +37,9 @@
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "use-socket.io-client": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -47,6 +51,7 @@
     "@testing-library/user-event": "^10.0.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -60,7 +65,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "enzyme-to-json": "^3.4.4",
-    "eslint": "^6.8.0",
+    "eslint": "^4.19.1",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",

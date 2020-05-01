@@ -12,9 +12,6 @@ import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import Scrollbar from "../../utils/Scrollbar";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { Fab } from "@material-ui/core";
 import { getUserLoopInfo, createLoop, updateLoop } from "../../actions";
 
 const useStyles = makeStyles(theme => ({
@@ -44,8 +41,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const useStyleForListOvr = makeStyles(theme => ({
+  root: {
+    "&$selected": {
+      backgroundColor: theme.palette.common.grey
+    }
+  },
+  selected: {}
+}));
+
+const useStyleForCheckBoxOvr = makeStyles(theme => ({
+  root: {
+    color: theme.palette.tertiary.main,
+    "&$checked": {
+      color: theme.palette.tertiary.main
+    }
+  },
+  checked: {}
+}));
+
 const ConnectionManagerHome = props => {
   const classes = useStyles();
+  const classForListOvr = useStyleForListOvr();
+  const classesForCheckBoxOver = useStyleForCheckBoxOvr();
 
   const {
     createLoopSuccessFulMsg,
@@ -66,17 +84,21 @@ const ConnectionManagerHome = props => {
   const [newLoop, setNewLoop] = useState("");
 
   const [selectedLoop, setSelectedLoop] = useState(
-    loopsWithContactInfo.length === 0 ? "" : Object.keys(loopsWithContactInfo)[0]
+    loopsWithContactInfo.length === 0
+      ? ""
+      : Object.keys(loopsWithContactInfo)[0]
   );
-  
+
   const [toggle, setToggle] = useState(false);
 
   const [loopVsFriendsConfig, setLoopVsFriendsConfig] = useState(
     loopsWithContactInfo
   );
-    
- useEffect(() => {setLoopVsFriendsConfig(loopsWithContactInfo)}, [loopsWithContactInfo])
- 
+
+  useEffect(() => {
+    setLoopVsFriendsConfig(loopsWithContactInfo);
+  }, [loopsWithContactInfo]);
+
   const handleListItemClick = (event, selectedLoop) => {
     setSelectedLoop(selectedLoop);
   };
@@ -90,23 +112,20 @@ const ConnectionManagerHome = props => {
     updateLoop(loopVsFriendsConfig, friendsList);
   };
 
-  const renderLoopsListItem = (val, index) => {
+  const renderLoopsListItem = val => {
     return (
-      <div>
+      <Paper>
         <ListItem
           alignItems="flex-start"
           button
           selected={selectedLoop === val}
           onClick={event => handleListItemClick(event, val)}
+          classes={classForListOvr}
         >
           <ListItemText
             primary={
               <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  color="textPrimary"
-                >
+                <Typography component="span" variant="body1">
                   {val}
                 </Typography>
               </React.Fragment>
@@ -114,8 +133,8 @@ const ConnectionManagerHome = props => {
           />
         </ListItem>
 
-        <Divider variant="inset" component="li" />
-      </div>
+        <Divider component="li" />
+      </Paper>
     );
   };
 
@@ -149,10 +168,13 @@ const ConnectionManagerHome = props => {
               edge="start"
               checked={isPresent}
               tabIndex={-5}
+              classes={classesForCheckBoxOver}
               disableRipple
               inputProps={{ "aria-labelledby": labelId }}
             />
-            {name}
+            <Typography component="span" variant="body2">
+              {name}
+            </Typography>
           </Paper>
         </ListItem>
       );
@@ -182,7 +204,7 @@ const ConnectionManagerHome = props => {
         <div className={classes.marginEle}>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={handleCreateLoopBtnSubmit}
           >
             Create loop
@@ -205,24 +227,24 @@ const ConnectionManagerHome = props => {
             </List>
           </Scrollbar>
         </div>
-        <div className={classes.addFAB}>
-        <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleSaveLoopConfigsBtnSubmit}
-            >
-            Save
-        </Button>
-          {/* <Fab color="secondary" onClick={() => {}}>
-            <AddCircleIcon className="material-icons" />
-          </Fab> */}
-        </div>
       </Box>
       <Box display="flex" flexDirection="column" flexGrow="2">
         <div className={classes.scrollBarFriend}>
           <Scrollbar>
             <List>{renderLoopsFriendConfig(selectedLoop)}</List>
           </Scrollbar>
+        </div>
+        <div className={classes.addFAB}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSaveLoopConfigsBtnSubmit}
+          >
+            Save
+          </Button>
+          {/* <Fab color="secondary" onClick={() => {}}>
+            <AddCircleIcon className="material-icons" />
+          </Fab> */}
         </div>
       </Box>
     </Box>

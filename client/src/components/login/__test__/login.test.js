@@ -1,5 +1,5 @@
+/* eslint-disable no-undef */
 import React from "react";
-import ReactDOM from "react-dom";
 import LoginSide from "../login";
 import { shallow } from "enzyme";
 

@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const serverAuth = require('../auth_modules/server_auth.js');
 const mongoose = require('mongoose');
 const { check, validationResult } = require('express-validator');
+const fs = require('fs')
 
 const router = express.Router();
 
@@ -17,7 +18,13 @@ router.use(cors());
 router.use(cookieParser());
 
 router.route('/').get((req, res) => {
-  res.send('Works');
+  res.send(process.env.ENVIROMENT? process.env.ENVIROMENT : "dev");
+});
+
+router.route('/version/').get((req, res) => {
+  const path = process.cwd() + '/version.txt';
+  let rawdata = fs.readFileSync(path);
+  res.send(rawdata.toString());
 });
 
 //Declaring here as unauthenticated
@@ -278,7 +285,7 @@ router.route('/loops/:loop_id/get_contacts').post((req, res, next) => {
 });
 
 // // Stores a message send from one user to another
-// router.route('/users/send_message').post((req, res, next) => {
+// router.route('/api/users/send_message').post((req, res, next) => {
 //   // [TODO] Get user id from session
 //   // const userID = '';
 //   const { MessageObject } = req.body;
@@ -312,7 +319,7 @@ router.route('/users/getcontacts').post((req, res, next) => {
 });
 
 // // Get list of messages between two persons
-// router.route('/users/show_messages_persons').post((req, res, next) => {
+// router.route('/api/users/show_messages_persons').post((req, res, next) => {
 //   // [TODO] Get user id from session for validation
 //   // const userID = '';
 //   if (Object.keys(req.body).length === 0) {
@@ -482,7 +489,9 @@ router
       }
       // console.log (req.body)
       req.body.senderId = mongoose.Types.ObjectId(req.body.userID);
-
+      const {sendMessageToClient}  = require("../lib/server.js")
+      //const sendMessage=sendMessageToClient()
+      sendMessageToClient(req.body.receivingUserId)
       // body.post has senderId field which is the _id of the user object
       Message.create(req.body, (error, data) => {
         if (error) {
@@ -492,7 +501,10 @@ router
           return next(error);
         }
         // console.log(data);
+        sendMessageToClient(req.body.receivingUserId)
         res.status(200).json(data);
+
+        
       });
     },
   );
@@ -566,13 +578,17 @@ router.route('/users/get_chat_history').post((req, res, next) => {
       { $and: [{ receivingUserId: friendID }, { senderId: userID }] },
     ])
     .sort({ created: -1 })
+    .populate({
+      path: 'replyToPost',
+      select: 'postContent -_id',
+    })
     .exec((error, data) => {
       if (error) {
-        // console.log(error);
+        //console.log(error);
         res.status(400);
         return next();
       }
-      // console.log(data);
+      //console.log(data);
       res.json(data);
       return next();
     });
@@ -649,6 +665,8 @@ router.route('/posts/get_recent_posts').post((req, res, next) => {
               postObject['postType'] = post.postType;
               postObject['postContent'] = post.postContent;
               postObject['created'] = post.created;
+              postObject['postID'] = post._id;
+              postObject['senderID'] = post.senderId;
               postObject['firstName'] =
                 resultObject[post.senderId]['firstName'];
               postObject['lastName'] = resultObject[post.senderId]['lastName'];

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,7 +11,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Scrollbar from "../../utils/Scrollbar";
-import PropTypes from "prop-types";
 import {
   dispatchUserSelected,
   getRecentChats
@@ -22,13 +21,19 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
     maxWidth: "matchParent",
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.common.black
   },
   inline: {
-    display: "inline"
+    display: "inline",
+    color: theme.palette.textPrimary
   },
   timeStamp: {
-    float: "right"
+    float: "right",
+    color: theme.palette.textPrimary
+  },
+  avatar: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.secondary.main
   }
 }));
 
@@ -84,16 +89,18 @@ const ChatList = props => {
                   const { _id, firstName, lastName } = record.sender;
                   const { messageContent, created } = record;
                   return (
-                    <div>
+                    <div key={created}>
                       <ListItem
                         alignItems="flex-start"
                         button
                         selected={selectedFriendState === _id}
+                        // eslint-disable-next-line no-unused-vars
                         onClick={event => handleFriendSelection(_id)}
                       >
                         <ListItemAvatar>
                           <Avatar
                             alt={firstName}
+                            className={classes.avatar}
                             src="/static/images/avatar/"
                           />
                         </ListItemAvatar>

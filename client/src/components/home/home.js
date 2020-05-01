@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import classNames from "classnames";
 import { logoutUser, getUserFriends } from "../../actions";
@@ -20,23 +20,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Home = props => {
-  const {
-    //Objects retrieved from state
-    isLoggingOut,
-    logoutError,
-    logoutUser,
-    user,
-    loops,
-    friends
-  } = props;
+  const { logoutUser, socket } = props;
 
   const classes = useStyles();
-
+  //console.log("socket "+ socket.send('hi'))
   return (
     <Fragment>
       <NavBar logoutUser={logoutUser} />
       <main className={classNames(classes.main)}>
-        <Routing />
+        <Routing socket={socket} />
       </main>
     </Fragment>
   );

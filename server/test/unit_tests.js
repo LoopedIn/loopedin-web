@@ -12,14 +12,14 @@ const PORT = 3000;
 const firebase = require('firebase');
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyC6TeyOiJlhVEtjjqkAnJ2-8Z6N8wT9E8k',
-  authDomain: 'loopedinauth.firebaseapp.com',
-  databaseURL: 'https://loopedinauth.firebaseio.com',
-  projectId: 'loopedinauth',
-  storageBucket: 'loopedinauth.appspot.com',
-  messagingSenderId: '660168003334',
-  appId: '1:660168003334:web:8ce7ed9ea45aed347c9887',
-  measurementId: 'G-RWPPQQFLE5',
+  apiKey: "AIzaSyA7IYES3jUgEZdYtUYIjQydZQBrFDAVFFE",
+  authDomain: "looped-in-274723.firebaseapp.com",
+  databaseURL: "https://looped-in-274723.firebaseio.com",
+  projectId: "looped-in-274723",
+  storageBucket: "looped-in-274723.appspot.com",
+  messagingSenderId: "390540936470",
+  appId: "1:390540936470:web:300e311ca95c657c907c37",
+  measurementId: "G-8RZ5GK2XFL"
 };
 
 const myFirebase = firebase.initializeApp(firebaseConfig);
@@ -28,7 +28,7 @@ myFirebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 describe('application', async () => {
   let client = {};
   axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = `http://localhost:${PORT}/`;
+  axios.defaults.baseURL = `http://localhost:${PORT}/api`;
   axios.defaults.validateStatus = () => true;
 
   before(async () => {
@@ -215,7 +215,7 @@ describe('application', async () => {
     };
     const response = await sendAuthenticatedRequest(
       myUserInput,
-      'users/add_friend',
+      '/users/add_friend',
       addFriendInput,
     );
     return response;

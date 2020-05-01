@@ -1,14 +1,12 @@
-import React, { useEffect, Fragment } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
 import { getUserPosts } from "../../utils/posts";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Post from "./Post";
-import { red } from "@material-ui/core/colors";
 import ScrollBar from "../../utils/Scrollbar";
 import moment from "moment";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     maxWidth: "matchParent"
   },
@@ -17,23 +15,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Posts = props => {
+const Posts = () => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [posts, setItems] = React.useState([]);
+  //const [socket] = useSocket('http://localhost:3000');
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
-  useEffect(() => {
+  const loadUserPosts = () =>
     getUserPosts().then(
       result => {
-        console.log(result);
+        //console.log(result);
         setIsLoaded(true);
-        console.log(result);
+        //console.log(result);
         setItems(result.posts);
       },
       // Note: it's important to handle errors here
@@ -44,6 +38,10 @@ const Posts = props => {
         setError(error);
       }
     );
+
+  useEffect(() => {
+    //console.log("here ")
+    loadUserPosts();
   }, []);
 
   if (error) {
@@ -55,12 +53,15 @@ const Posts = props => {
       <ScrollBar className={classes.scrollbar}>
         <List dense className={classes.root}>
           {posts != undefined ? (
-            posts.map((value, index) => {
+            posts.map(value => {
               return (
                 <Post
+                  key={value.created}
                   message={value.postContent}
                   firstName={value.firstName}
                   lastName={value.lastName}
+                  senderId={value.senderID}
+                  postId={value.postID}
                   timeStamp={moment(value.created).format(
                     "MMMM Do YYYY, h:mm a"
                   )}

@@ -32,11 +32,12 @@ const firebaseTokenAuthenticator = async (req, res, next) => {
           req.body.user = user;
           next();
         })
-        .catch(() => {
-          res.status(403);
+        .catch((err) => {
+          console.log(err)
+          res.status(403).send(err);
         });
     } else {
-      res.status(403).send();
+      res.status(403).send(req.body);
     }
   }
 };

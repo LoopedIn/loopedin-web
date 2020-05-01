@@ -3,11 +3,12 @@ import {
   unAuthenticatedRequest
 } from "../utils/requestUtils";
 
-export const base = "http://localhost:3000/";
+export const base = `${process.env.API_URL}`;
 
-const url = require("url");
+const r = route => {
+  return base + "/api" + `${route}`;
+}
 
-const r = route => url.resolve(base, route);
 
 export const serverRequests = {
   getCurrentUserApi: async () =>
@@ -56,11 +57,17 @@ export const serverRequests = {
   getRecentChatsApi: async () =>
     authenticatedRequest(r("/users/get_recent_chats"), {}),
 
-  createMessageApi: async (receivingUserId, messageType, messageContent) => {
+  createMessageApi: async (
+    receivingUserId,
+    messageType,
+    messageContent,
+    postId
+  ) => {
     return authenticatedRequest(r("/users/create_message"), {
       receivingUserId,
       messageType,
-      messageContent
+      messageContent,
+      ...(postId && { replyToPost: postId })
     });
   },
 
@@ -74,7 +81,7 @@ export const serverRequests = {
     try {
       return authenticatedRequest(r("/users/create_post"), params);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   },
 
@@ -83,7 +90,7 @@ export const serverRequests = {
   },
 
   deletePostMessage: async postId => {
-    const route = `posts/${postId}/delete`;
+    const route = `/posts/${postId}/delete`;
     return authenticatedRequest(r(route), {}, true);
   }
 };

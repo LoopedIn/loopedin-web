@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
 import Posts from "../posts/PostHome";
@@ -82,7 +81,11 @@ const Routing = props => {
         <PropsRoute path="/manageconnection" component={ConnectionHome} />
         <div className={classes.wrapper}>
           <PropsRoute path="/posts" component={Posts} />
-          <PropsRoute path="/directmessage" component={DirectMessages} />
+          <PropsRoute
+            path="/directmessage"
+            component={DirectMessages}
+            socket={props.socket}
+          />
         </div>
       </Switch>
     </div>

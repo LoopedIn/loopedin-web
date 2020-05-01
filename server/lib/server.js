@@ -2,10 +2,19 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
+const path = require('path')
 const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
+
+const isProd = () => process.env.ENVIROMENT === "prod"  || process.env.ENVIROMENT === "dev-docker"
+
+console.log("Environment is " + process.env.ENVIROMENT);
+
+if(isProd()){
+  app.use(express.static(path.join(__dirname, '../../build/')))
+}
 const indexRouter = require('../routes/api');
 
 /**
@@ -36,7 +45,13 @@ const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/', indexRouter);
+app.use('/api/', indexRouter);
+
+if(isProd()){
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../build/index.html'));
+  });
+}
 
 console.log("Starting app on port " + port)
 
@@ -45,7 +60,30 @@ console.log("Starting app on port " + port)
  */
 
 const server = http.createServer(app);
+const io = require('socket.io')(server);
 
+var socketUserIDMap = {}
+var userSocketIDMap = {}
+console.log("Server.js instantiated")
+io.on('connection', socket => {
+  socket.on('disconnect', () => {
+    delete userSocketIDMap[socketUserIDMap[socket.id]]
+    delete socketUserIDMap[socket.id]
+  });
+
+  socket.emit('reloadComponent',{ description: "hello" });
+
+  socket.on('storeUserID',function(data){
+      delete socketUserIDMap[userSocketIDMap[data.userID]]
+      socketUserIDMap[socket.id] =  data.userID
+      userSocketIDMap[data.userID] = socket.id
+  })
+})
+
+const sendMessageToClient = (userID) => {
+
+  io.sockets.to(userSocketIDMap[userID]).emit('reloadComponent')
+}
 /**
  * Event listener for HTTP server "error" event.
  */
@@ -86,11 +124,14 @@ const portnumber = process.env.MONGODB_PORT
   ? process.env.MONGODB_PORT
   : '27017';
 
+const mongodbLink = process.env.ENVIROMENT === "prod" ? process.env.MONGODB_LINK : (`mongodb://${hostname}:${portnumber}`);
+
 mongoose
-  .connect(`mongodb://${hostname}:${portnumber}/InLooped`, {
+  .connect(`${mongodbLink}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .catch((err) => console.error(err));
 
-module.exports = { mongoose, serverListener };
+// eslint-disable-next-line max-len
+module.exports = { mongoose, serverListener, sendMessageToClient};
