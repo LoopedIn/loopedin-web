@@ -105,7 +105,7 @@ const ConnectionManagerHome = props => {
 
   const handleCreateLoopBtnSubmit = () => {
     createLoop(newLoop);
-    window.location.reload(true);
+    getUserLoopInfo();
   };
 
   const handleSaveLoopConfigsBtnSubmit = () => {

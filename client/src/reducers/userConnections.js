@@ -45,7 +45,6 @@ export default (state = initialState, action) => {
         toastMessages: updatedToastMessages(state, action.errorMsg)
       };
     case CREATE_LOOP_SUCCESSFUL:
-      //console.log("here");
       return {
         ...state,
         toastMessages: updatedToastMessages(state, action.msg)
@@ -85,6 +84,6 @@ export default (state = initialState, action) => {
 };
 
 const updatedToastMessages = (state, newMessage) => {
-  const newToastMessages = [...state.toastMessages, newMessage];
+  const newToastMessages = state.toastMessages? [...state.toastMessages, newMessage] : [newMessage];
   return newToastMessages;
 };

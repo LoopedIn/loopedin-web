@@ -1,7 +1,7 @@
 
 # Cookie-crumbs Final Project
 
-# LoopedIn
+# LoopedIn 
 
 ## Description
 
@@ -12,6 +12,8 @@ We also force the engagement with a post to be personal and organic. This means 
 To keep our target app realistic, the features we will provide our:-
 -   Post sharing
 -   Private messaging
+
+If you want to try it out, we are live at https://loopedin.site/.
 
 ## We will support:
 
@@ -80,9 +82,9 @@ By this checkpoint we will add UI functionalities for the API end points we crea
 
 **New functionalities that will be supported via UI:-**
 -   [x] View news feed
--   [ ] Reply to a post in the news feed
--   [ ] Chat will use socket for instant messaging
--   [ ] Deploying apps via GCP
+-   [x] Reply to a post in the news feed
+-   [x] Chat will use socket for instant messaging
+-   [x] Deploying apps via GCP
 -   [X] ~~Using Cloud-Native Functions~~ (We are using google firebase for authentication, don't forsee any features that will require cloud native functions)
     
 
@@ -117,12 +119,30 @@ See [this](https://github.com/ckanich-classrooms/final-project-cookie-crumbs-1/b
 
 **Running the app**:
 
-After setting up the firebase credentials, and installing docker.
+*If you want to just test the app with minimal setup*
+
+In the home path of the project (final-project-cookie-crumbs-1/), run:- 
+
 ```bash
 docker-compose build
 docker-compose up
 ```
-The app should run on http://0.0.0.0:8080/
+The app should run on http://localhost:3000/
+
+*If you want to develop and test with your own mongodb setup in your local, with live reload of the react code*
+
+In final-project-cookie-crumbs-1/client/
+```bash
+npm run install
+npm run watch
+```
+
+In final-project-cookie-crumbs-1/server/
+```bash
+npm run install
+npm run watch
+```
+The app should run on http://localhost:8080/
 
 # References
 - https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
