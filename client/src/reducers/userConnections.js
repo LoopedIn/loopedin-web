@@ -11,6 +11,8 @@ import {
   MY_POSTS_LOADED
 } from "../utils/dispatchUtils";
 
+import { LOGOUT_SUCCESS } from "../actions";
+
 const initialState = {
   userLoops: [],
   userFriends: [],
@@ -64,6 +66,19 @@ export default (state = initialState, action) => {
       return { ...state, postsLists: action.postsLists };
     case REMOVE_USER_CONNECTION_TOASTS:
       return { ...state, toastMessages: [] };
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        userLoops: [],
+        userFriends: [],
+        loopLists: [],
+        toastMessages: [],
+        addFriendToUserActionMsg: "",
+        createLoopFailedMsg: "",
+        createLoopSuccessFulMsg: "",
+        postsLists: [],
+        friendsList: []
+      };
     default:
       return state;
   }
