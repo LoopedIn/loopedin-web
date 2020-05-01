@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
-
+//console.log("Is production "+process.env.ENVIROMENT )
 const isProd = () => process.env.ENVIROMENT === "prod"  || process.env.ENVIROMENT === "dev-docker"
 
 console.log("Environment is " + process.env.ENVIROMENT);

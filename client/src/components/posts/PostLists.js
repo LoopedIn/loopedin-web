@@ -130,6 +130,26 @@ const PostLists = props => {
     setOpen(false);
   };
 
+  var decodeEntities = (function() {
+    var cache = {},
+        character,
+        e = document.createElement('div');
+    
+    return function(html) {
+      return html.replace(/([&][^&; ]+[;])/g, function(entity) {
+        character = cache[entity];
+        if (!character) {
+          e.innerHTML = entity;
+          if (e.childNodes[0])
+            character = cache[entity] = e.childNodes[0].nodeValue;
+          else
+            character = '';
+        }
+        return character;
+      });
+    };
+  })();
+
   const toast = (message, severity) => (
     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
       <Alert onClose={handleClose} severity={severity}>
@@ -147,11 +167,11 @@ const PostLists = props => {
         <ListItem button>
           <ListItemAvatar>
             <Avatar aria-label="loop-name" className={classes.avatar}>
-              {`${value.loopName[0]}`}
+              {`${decodeEntities(value.loopName[0])}`}
             </Avatar>
           </ListItemAvatar>
           <ListItemText className={classes.textColor} id={labelId}>
-            <Typography variant="body1">{`${value.loopName}`}</Typography>
+            <Typography variant="body1">{`${decodeEntities(value.loopName)}`}</Typography>
           </ListItemText>
           <ListItemSecondaryAction>
             <Checkbox
