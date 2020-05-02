@@ -8,12 +8,10 @@ import {
   VERIFY_REQUEST,
   VERIFY_SUCCESS,
   REGISTER_FAILURE,
-  REGISTER_SUCCESS,
+  REGISTER_SUCCESS
 } from "../actions/";
 
-import {
-  REMOVE_REGISTER_TOAST
-} from "../utils/dispatchUtils"
+import { REMOVE_REGISTER_TOAST } from "../utils/dispatchUtils";
 
 const initialState = {
   isLoggingIn: false,
@@ -26,13 +24,10 @@ const initialState = {
   registerSuccess: false,
   user: {},
   registerToast: "",
-  loginToast: "",
-}
+  loginToast: ""
+};
 
-export default (
-  state = initialState,
-  action
-) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
       return {
@@ -67,7 +62,10 @@ export default (
         ...state,
         isLoggingOut: false,
         isAuthenticated: false,
-        user: {}
+        user: {},
+        firebaseUser: {},
+        registerToast: "",
+        loginToast: ""
       };
     case LOGOUT_FAILURE:
       return {
@@ -102,11 +100,11 @@ export default (
         registerError: true,
         registerToast: action.error.message
       };
-    case REMOVE_REGISTER_TOAST:{
+    case REMOVE_REGISTER_TOAST: {
       return {
         ...state,
         registerToast: ""
-      }
+      };
     }
     default:
       return state;

@@ -11,6 +11,8 @@ import {
   MY_POSTS_LOADED
 } from "../utils/dispatchUtils";
 
+import { LOGOUT_SUCCESS } from "../actions";
+
 const initialState = {
   userLoops: [],
   userFriends: [],
@@ -30,7 +32,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         userLoops: action.userLoops,
-        friendsList: action.friendsList
+        frinedsList: action.friendsList
       };
     case ADD_USER_SUCESS:
       return {
@@ -43,6 +45,7 @@ export default (state = initialState, action) => {
         toastMessages: updatedToastMessages(state, action.errorMsg)
       };
     case CREATE_LOOP_SUCCESSFUL:
+      //console.log("here");
       return {
         ...state,
         toastMessages: updatedToastMessages(state, action.msg)
@@ -63,12 +66,27 @@ export default (state = initialState, action) => {
       return { ...state, postsLists: action.postsLists };
     case REMOVE_USER_CONNECTION_TOASTS:
       return { ...state, toastMessages: [] };
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        userLoops: [],
+        userFriends: [],
+        loopLists: [],
+        toastMessages: [],
+        addFriendToUserActionMsg: "",
+        createLoopFailedMsg: "",
+        createLoopSuccessFulMsg: "",
+        postsLists: [],
+        friendsList: []
+      };
     default:
       return state;
   }
 };
 
 const updatedToastMessages = (state, newMessage) => {
-  const newToastMessages = state.toastMessages? [...state.toastMessages, newMessage] : [newMessage];
+  const newToastMessages = state.toastMessages
+    ? [...state.toastMessages, newMessage]
+    : [newMessage];
   return newToastMessages;
 };
