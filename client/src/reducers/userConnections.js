@@ -32,7 +32,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         userLoops: action.userLoops,
-        frinedsList: action.friendsList
+        friendsList: action.friendsList
       };
     case ADD_USER_SUCESS:
       return {
