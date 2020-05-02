@@ -143,7 +143,7 @@ const ChatMessage = props => {
               classes.chatBubble
             )}
           >
-            {replyToPost !== undefined && null? (
+            {(replyToPost !== undefined && replyToPost !== null) ? (
               replyToPost.postContent ? (
                 <div className={classes.replyPostRoot}>
                   <div className={classes.replyPostLeftSpan}></div>
