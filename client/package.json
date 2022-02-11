@@ -26,7 +26,7 @@
     "firebase": "^7.11.0",
     "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.13.0",
